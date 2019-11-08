@@ -1,0 +1,817 @@
+/* 轮播图 */
+swiper,
+block,
+swiper-item,
+image {
+    width: 750rpx;
+    height: 750rpx;
+}
+
+swiper {
+    position: relative;
+}
+
+.current {
+    position: absolute;
+    top: 688rpx;
+    right: 30rpx;
+    width: 60rpx;
+    height: 32rpx;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 8rpx;
+    line-height: 32rpx;
+    font-size: 22rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+    text-align: center;
+}
+
+/* 产品简介 */
+.productIntro {
+    box-sizing: border-box;
+    height: 210rpx;
+    padding-left: 30rpx;
+    padding-top: 6rpx;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 20rpx;
+}
+
+.productIntroPrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 86rpx;
+}
+
+.productIntroPrice text:first-child {
+    font-size: 48rpx;
+    font-weight: 600;
+    color: rgba(247, 55, 2, 1);
+}
+
+.productIntroPrice view:last-child {
+    display: flex;
+    align-items: center;
+    width: 122rpx;
+    height: 40rpx;
+    background: rgba(243, 248, 241, 1);
+    border-radius: 42rpx 0rpx 0rpx 42rpx;
+}
+
+.productIntroPrice view:last-child image {
+    width: 24rpx;
+    height: 24rpx;
+    vertical-align: middle;
+    margin-left: 12rpx;
+    margin-right: 8rpx;
+}
+
+.productIntroPrice view:last-child view {
+    font-size: 22rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+}
+
+.productIntroName {
+    height: 44rpx;
+    font-size: 32rpx;
+    font-weight: 400;
+    line-height: 44rpx;
+    color: rgba(66, 76, 80, 1);
+    margin-bottom: 8rpx;
+}
+
+.productIntroMes {
+    height: 32rpx;
+    font-size: 22rpx;
+    font-weight: 400;
+    line-height: 32rpx;
+    color: rgba(172, 187, 188, 1);
+}
+
+/* 产品属性 */
+.productAttr {
+    box-sizing: border-box;
+    padding-top: 8rpx;
+    height: 150rpx;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 20rpx;
+}
+
+.productAttrPush {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30rpx 0 26rpx;
+    height: 72rpx;
+}
+
+.productAttrPush text:first-child {
+    width: 60rpx;
+    font-size: 26rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    margin-right: 24rpx;
+}
+
+.productAttrPush text:nth-child(2) {
+    flex: 1;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.productAttrPush image {
+    width: 24rpx;
+    height: 24rpx;
+}
+
+.productAttrSelect {
+    display: flex;
+    height: 46rpx;
+    padding-left: 100rpx;
+}
+
+.productAttrSelect text {
+    box-sizing: border-box;
+    padding: 8rpx 14rpx 6rpx;
+    height: 46rpx;
+    font-size: 22rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    background: rgba(243, 248, 241, 1);
+    border-radius: 8rpx;
+    margin-right: 16rpx;
+}
+
+/* 产品参数 */
+.productParams {
+    display: flex;
+    align-items: center;
+    padding: 0 30rpx 0 24rpx;
+    height: 88rpx;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 20rpx;
+}
+
+.productParams text:first-child {
+    width: 60rpx;
+    font-size: 26rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    margin-right: 34rpx;
+}
+
+.productParams text:nth-child(2) {
+    flex: 1;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.productParams image {
+    width: 24rpx;
+    height: 24rpx;
+}
+
+/* 发货店铺 */
+.shipments {
+    display: flex;
+    align-items: center;
+    padding-left: 28rpx;
+    height: 88rpx;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 8rpx;
+}
+
+.shipments text:first-child {
+    width: 60rpx;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    margin-right: 34rpx;
+}
+
+.shipments text:last-child {
+    flex: 1;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+/* tips */
+.tips {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 38rpx 0 30rpx;
+    height: 98rpx;
+}
+
+.tips text:first-child {
+    width: 144rpx;
+    font-size: 36rpx;
+    font-weight: 500;
+    color: rgba(66, 76, 80, 1);
+    margin-right: 16rpx;
+}
+
+.tips text:nth-child(2) {
+    flex: 1;
+    font-size: 22rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+}
+
+.tips navigator {
+    width: 88rpx;
+    font-size: 22rpx;
+    font-weight: 400;
+    color: rgba(121, 146, 98, 1);
+}
+
+/* 打卡信息 */
+.clockWapper {
+    box-sizing: border-box;
+    padding: 40rpx 40rpx 42rpx;
+    width: 690rpx;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 20rpx;
+    margin: 0 auto 140rpx;
+}
+
+.clockWapper.length {
+    padding-bottom: 33rpx;
+    margin-bottom: 0;
+}
+
+.clockTitleBar {
+    display: flex;
+    justify-content: space-between;
+    height: 78rpx;
+    margin-bottom: 24rpx;
+}
+
+.clockTitleBarLeft,
+.clockTitleBarRight {
+    display: flex;
+    height: 78rpx;
+    align-items: center;
+}
+
+.clockTitleBarLeft image {
+    width: 78rpx;
+    height: 78rpx;
+    margin-right: 41rpx;
+}
+
+.clockTitleBarLeft text {
+    font-size: 34rpx;
+    font-weight: 600;
+    color: rgba(66, 76, 80, 1);
+}
+
+.clockTitleBarRight image {
+    width: 32rpx;
+    height: 32rpx;
+    margin-right: 16rpx;
+}
+
+.clockTitleBarRight text {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(121, 146, 98, 1);
+}
+
+.clockContent {
+    position: relative;
+    height: 180rpx;
+    line-height: 36rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+    margin-bottom: 36rpx;
+}
+
+.clockContent.none {
+    height: auto;
+}
+
+.clockContent text {
+    position: absolute;
+    bottom: 3rpx;
+    right: 0;
+    width: 52rpx;
+    height: 37rpx;
+    font-size: 26rpx;
+    font-family: PingFang SC;
+    font-weight: 400;
+    line-height: 37rpx;
+    color: rgba(121, 146, 98, 1);
+    z-index: 5;
+    background-color: #fff;
+}
+
+.clockImg {
+    margin-bottom: 4rpx;
+}
+
+.clockImg.length {
+    margin-bottom: 36rpx;
+}
+
+.clockImg image {
+    width: 180rpx;
+    height: 180rpx;
+    margin-right: 34rpx;
+}
+
+.clockImg image:nth-child(3n) {
+    margin-right: 0;
+}
+
+.TorderMes {
+    box-sizing: content-box;
+    display: flex;
+    height: 160rpx;
+    padding-top: 32rpx;
+    border-top: 1rpx dashed rgba(215, 224, 224, 1);
+}
+
+.TorderMesPhoto {
+    width: 160rpx;
+    height: 160rpx;
+    margin-right: 28rpx;
+}
+
+.TorderMesTip {
+    width: 416rpx;
+}
+
+.TorderMesTipTitle {
+    height: 45rpx;
+    font-size: 32rpx;
+    font-weight: 400;
+    line-height: 45rpx;
+    color: rgba(66, 76, 80, 1);
+    margin-bottom: 10rpx;
+}
+
+.TorderMesPrice {
+    display: flex;
+    align-items: center;
+    height: 45rpx;
+    margin-bottom: 21rpx;
+}
+
+.TorderMesPrice text:first-child {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: rgba(247, 55, 2, 1);
+    margin-right: 12rpx;
+}
+
+.TorderMesPrice text:last-child {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+}
+
+.TorderMesTipAttr {
+    /* display: flex;
+    align-items: center; */
+    display: inline-block;
+    height: 46rpx;
+    background: rgba(243, 248, 241, 1);
+    border-radius: 8rpx;
+    padding: 0 14rpx;
+}
+
+.TorderMesTipAttr text {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    margin-right: 6rpx;
+}
+
+.TorderMesTipAttr image {
+    width: 24rpx;
+    height: 24rpx;
+}
+
+/* 底部 */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100rpx;
+    background: rgba(255, 255, 255, 1);
+    padding: 0 40rpx 0 30rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+button{
+  position:  absolute;
+  opacity: 0;
+  padding: 0;
+}
+button::after {
+  border: none;
+  background-color: #fff;
+  border-radius: 0;
+  color: #999999;
+}
+.payAction {
+    display: flex;
+    align-items: center;
+    width: 472rpx;
+    height: 70rpx;
+    background: rgba(237, 87, 53, 1);
+    border-radius: 70rpx;
+}
+
+.service {
+    width: 44rpx;
+    height: 74rpx;
+    margin-right: 48rpx;
+}
+
+.service image {
+    width: 44rpx;
+    height: 44rpx;
+    vertical-align: middle;
+    /* margin-bottom: 2rpx; */
+}
+
+.service view {
+    height: 28rpx;
+    font-size: 20rpx;
+    font-weight: 400;
+    line-height: 28rpx;
+    color: rgba(85, 98, 102, 1);
+    text-align: center;
+}
+
+.payAction text:first-child {
+    flex: 1;
+    background: linear-gradient(94deg, rgba(239, 222, 175, 1) 0%, rgba(237, 87, 53, 1) 100%);
+    border-radius: 70rpx 0rpx 0rpx 70rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    text-align: center;
+    font-size: 32rpx;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+.payAction text:nth-child(2) {
+    width: 2rpx;
+    height: 70rpx;
+    background-color: rgba(208, 56, 21, 1);
+}
+
+.payAction text:last-child {
+    flex: 1;
+    text-align: center;
+    font-size: 30rpx;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+/* 产品规格模态框 */
+.specModal {
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .3);
+    z-index: 10;
+}
+
+.specWapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+}
+
+.specWapper .close {
+    position: absolute;
+    top: 30rpx;
+    right: 30rpx;
+    width: 31rpx;
+    height: 31rpx;
+    z-index: 5;
+}
+
+.spec_bg {
+    position: absolute;
+    top: 30rpx;
+    left: 30rpx;
+    width: 180rpx;
+    height: 180rpx;
+    box-sizing: content-box;
+    background: #fff;
+    border-radius: 10rpx;
+}
+
+.specImg {
+    width: 100%;
+    height: 100%;
+}
+
+.specAttr {
+    box-sizing: border-box;
+    padding: 24rpx 30rpx 16rpx 234rpx;
+    height: 180rpx;
+    margin-bottom: 32rpx;
+}
+
+.specAttrPrice {
+    height: 44rpx;
+    line-height: 44rpx;
+    font-size: 32rpx;
+    font-weight: 600;
+    color: rgba(247, 55, 2, 1);
+    margin-bottom: 12rpx;
+}
+
+.specAttrRepertory {
+    height: 34rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    line-height: 34rpx;
+    color: rgba(172, 187, 188, 1);
+    margin-bottom: 12rpx;
+}
+
+.specAttrClass {
+    height: 34rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    line-height: 34rpx;
+    color: rgba(85, 98, 102, 1);
+}
+
+.specAttrClass text {
+    margin-right: 14rpx;
+}
+
+.specSelect {
+    padding: 24rpx 32rpx 0;
+}
+
+.specSelectTitle {
+    height: 34rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    line-height: 34rpx;
+    color: #556266;
+    margin-bottom: 12rpx;
+}
+
+.specSelectItem {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.specSelectItem text {
+    box-sizing: border-box;
+    width: 200rpx;
+    height: 40rpx;
+    background: #F3F8F1;
+    border-radius: 4rpx;
+    text-align: center;
+    font-size: 20rpx;
+    font-weight: 400;
+    line-height: 40rpx;
+    color: #556266;
+    margin-bottom: 12rpx;
+    padding: 0 15rpx;
+}
+
+.specSelectItem text.active {
+    background: rgba(243, 248, 241, 1);
+    border: 2rpx solid #799262;
+    color: #799262;
+}
+
+.specSelectItem text.disable {
+    background: rgba(243, 248, 241, 1);
+    color: #ACBBBC;
+    border: 0;
+}
+
+.specNumber {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 88rpx;
+    padding: 0 32rpx;
+}
+
+.specNumber view:nth-child(1) {
+    font-size: 22rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.specNumber view:nth-child(2) {
+    display: flex;
+    align-items: center;
+    width: 160rpx;
+    height: 40rpx;
+    background: rgba(255, 255, 255, 1);
+    border: 2rpx solid rgba(242, 242, 243, 1);
+    border-radius: 4rpx;
+}
+
+.specNumber view:nth-child(2) text:nth-child(1),
+.specNumber view:nth-child(2) text:nth-child(3) {
+    width: 46rpx;
+    height: 40rpx;
+    text-align: center;
+    background: rgba(243, 248, 241, 1);
+}
+
+.specNumber view:nth-child(2) text:nth-child(2) {
+    flex: 1;
+    text-align: center;
+    height: 40rpx;
+    line-height: 40rpx;
+    border-right: 2rpx solid rgba(242, 242, 243, 1);
+    border-left: 2rpx solid rgba(242, 242, 243, 1);
+    background: rgba(215, 224, 224, 1);
+}
+
+.specNumber view:nth-child(2) text {
+    font-size: 20rpx;
+    font-weight: 400;
+    color: rgba(153, 153, 153, 1);
+}
+
+.specHandle {
+    width: 690rpx;
+    height: 88rpx;
+    margin: 0 auto;
+    background: rgba(237, 87, 53, 1);
+    border-radius: 88rpx;
+    font-size: 36rpx;
+    font-weight: 400;
+    line-height: 88rpx;
+    color: rgba(255, 255, 255, 1);
+    text-align: center;
+    margin-bottom: 28rpx;
+}
+
+.detailsModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.detailsModal .detailsWap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 790rpx;
+    background: white;
+    border-radius: 20rpx 20rpx 0 0;
+}
+
+.detailsModal .detailsWap .detailsWapTitle {
+    position: relative;
+    height: 92rpx;
+    line-height: 92rpx;
+    font-size: 30rpx;
+    font-weight: 400;
+    color: #333333;
+    border-bottom: 2rpx solid #F2F2F3;
+    text-align: center;
+}
+
+.detailsModal .detailsWap .detailsWapTitle view {
+    /* margin-left: 99rpx; */
+}
+
+.detailsModal .detailsWap .detailsWapTitle image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 31rpx;
+    height: 31rpx;
+    padding: 31rpx 34rpx 26rpx;
+}
+
+.detailsModal .detailsWap .detailsCon {
+    padding: 0 30rpx 0 30rpx;
+}
+
+.detailsModal .detailsWap .detailsCon .detailsConTop {
+    padding: 34rpx 0 10rpx 0;
+    border-bottom: 2rpx dashed #eeeeee;
+    margin-bottom: 24rpx;
+}
+
+.detailsModal .detailsWap .detailsCon .detailsConTop view {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40rpx;
+    margin-bottom: 20rpx;
+}
+
+.detailsModal .detailsWap .detailsCon .detailsConTop view span {
+    font-size: 28rpx;
+    font-weight: 400;
+    color: #999999;
+    width: 300rpx;
+}
+
+.detailsModal .detailsWap .detailsCon .detailsConTop view span:nth-child(2) {
+    flex: 1;
+    text-align: right;
+    color: #333333;
+}
+
+.detailsModal .detailsWap .detailsCon .detailsConDes {
+    height: 40rpx;
+    line-height: 40rpx;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: #999999;
+    margin-bottom: 4rpx;
+}
+
+.detailsModal .detailsWap .detailsCon .detailsConintroduce {
+    width: 690rpx;
+    height: 368rpx;
+    line-height: 38rpx;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: #999999;
+    margin-bottom: 330rpx;
+    overflow-y: auto;
+}
+
+/* 客服模态框 */
+.serviceModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 20;
+}
+
+.serviceModal .serviceWap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 540rpx;
+    height: 332rpx;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 24rpx;
+}
+
+.serviceModal .serviceWap .serviceClose {
+    position: absolute;
+    top: 26rpx;
+    right: 26rpx;
+    width: 31rpx;
+    height: 31rpx;
+}
+
+.serviceModal .serviceWap .serviceTitle {
+    box-sizing: border-box;
+    padding: 56rpx 0 38rpx;
+    height: 142rpx;
+    font-size: 34rpx;
+    font-weight: 600;
+    line-height: 48rpx;
+    color: #333333;
+    text-align: center;
+}
+
+.serviceModal .serviceWap .serviceContent {
+    height: 128rpx;
+    line-height: 42.6666rpx;
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #999999;
+    text-align: center;
+}

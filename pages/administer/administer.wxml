@@ -1,0 +1,79 @@
+<!-- 管理操作 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 店铺 -->
+    <view class="store">
+        <text>所属店铺</text>
+        <text>店名 {{list.shopName}}</text>
+    </view>
+    <!-- 店铺 -->
+    <view class="store">
+        <text>预约接单</text>
+        <switch checked="{{list.appointmentStatus}}" bindchange="switch1Change"/>
+    </view>
+    <!-- 操作 -->
+    <view class="operate">
+        <view class="operateTop">
+            <navigator url="/pages/queryOrder/queryOrder" hover-class="none" open-type="navigate" class="operateTopItem">
+                <image src="/assets/image/user/operate1.png"></image>
+                <text>查询订单</text>
+            </navigator>
+            <navigator url="/pages/queryUsers/queryUsers?type=1" hover-class="none" open-type="navigate" class="operateTopItem">
+                <image src="/assets/image/user/operate2.png"></image>
+                <text>定向开单</text>
+            </navigator>
+            <navigator url="/pages/queryUsers/queryUsers?type=2" hover-class="none" open-type="navigate" class="operateTopItem">
+                <image src="/assets/image/user/operate3.png"></image>
+                <text>定向邀请</text>
+            </navigator>
+            <navigator url="/pages/editorShelf/editorShelf" hover-class="none" open-type="navigate" class="operateTopItem">
+                <image src="/assets/image/user/operate4.png"></image>
+                <text>上架编辑</text>
+            </navigator>
+        </view>
+        <view class="operateBottom">
+          <navigator url="/pages/backPickup/backPickup" hover-class="none" open-type="navigate">
+              <view class="operateBottomItem">
+                  <view class="operateBottomItemL">到店取货</view>
+                  <view class="operateBottomItemR">
+                      <text>{{list.receiveCount}}</text>
+                      <image src="/assets/image/productDetails/more.png"></image>
+                  </view>
+              </view>
+            </navigator>
+            <navigator url="/pages/backDeliver/backDeliver" hover-class="none" open-type="navigate">
+              <view class="operateBottomItem">
+                  <view class="operateBottomItemL">未发货订单</view>
+                  <view class="operateBottomItemR">
+                      <text>{{list.expressCount}}</text>
+                      <image src="/assets/image/productDetails/more.png"></image>
+                  </view>
+              </view>
+            </navigator>
+            <view class="operateBottomItem">
+                <view class="operateBottomItemL">未支付订单</view>
+                <view class="operateBottomItemR">
+                    <text>{{list.tobePayCount}}</text>
+                    <image src="/assets/image/productDetails/more.png"></image>
+                </view>
+            </view>
+            <navigator url="/pages/backRefund/backRefund" hover-class="none" open-type="navigate">
+              <view class="operateBottomItem">
+                  <view class="operateBottomItemL">待退款订单</view>
+                  <view class="operateBottomItemR">
+                      <text>{{list.tobeRefundCount}}</text>
+                      <image src="/assets/image/productDetails/more.png"></image>
+                  </view>
+              </view>
+            </navigator>
+            <navigator url="/pages/backMake/backMake" hover-class="none" open-type="navigate">
+              <view class="operateBottomItem">
+                  <view class="operateBottomItemL">预约订单</view>
+                  <view class="operateBottomItemR">
+                      <text>{{list.appointmentCount }}</text>
+                      <image src="/assets/image/productDetails/more.png"></image>
+                  </view>
+              </view>
+            </navigator>
+        </view>
+    </view>
+</scroll-view>

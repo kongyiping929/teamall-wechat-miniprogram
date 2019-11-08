@@ -1,0 +1,79 @@
+<!-- 订单查询 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 查询栏 -->
+    <view class="queryBar">
+        <view class="queryBtnBox">
+            <view class="{{!queryType ? 'active' : ''}}" bind:tap="changeQueryType" data-value="{{0}}">
+                查预约
+            </view>
+            <view class="{{queryType ? 'active' : ''}}" bind:tap="changeQueryType" data-value="{{1}}">
+                查订单
+            </view>
+        </view>
+        <view class="querySecrch">
+            <input value="{{keyword}}" type="text" placeholder="输入订单编号" placeholder-style="color: rgba(172, 187, 188, 0.5)" />
+            <text>搜索</text>
+        </view>
+    </view>
+    <!-- 预约列表 -->
+    <view class="subscribe">
+        <view class="subscribeTimeMes">
+            <image src="/assets/image/find/clock.png"></image>
+            <text>2019-03-06  晚间 7:00-9:00</text>
+            <text>待确认</text>
+        </view>
+        <view class="subscribeTitle one-txt-cut">茶叶名称</view>
+        <view class="subscribeAttr">
+            <text>一饼 , 590g , 包装1</text>
+            <image src="/assets/image/user/downArrows.png"></image>
+        </view>
+        <view class="subscribePrice">¥700.00</view>
+        <view class="subscribeAddress">
+            <image src="/assets/image/confirmMake/location.png"></image>
+            <text class="one-txt-cut">广州中山北路78号中环店</text>
+            <text></text>
+            <text>预约人数</text>
+            <text>99人</text>
+        </view>
+        <view class="subscribeNumber">
+            <text>预约创建时间: 2019-09-18</text>
+            <text>从属销售:销售 IDxxxxx</text>
+        </view>
+    </view>
+    <!-- 订单 -->
+    <view class="subscribe">
+        <view class="subscribeOrderNum">
+            <text>订单编号:2019010110101021321</text>
+            <text>已完成</text>
+        </view>
+        <view class="subscribeTitle one-txt-cut">茶叶名称</view>
+        <view class="subscribePrice2">
+            <text>¥700.00</text>
+            <text>x 1</text>
+        </view>
+        <view class="subscribeAttr subscribeAttr2">
+            <text>一饼 , 590g , 包装1</text>
+            <image src="/assets/image/user/downArrows.png"></image>
+        </view>
+        <view class="subscribeAddress2">
+            <text>取货店铺:店铺名称</text>
+            <text>2019-09-08 18:00</text>
+        </view>
+        <view class="subscribeProson">
+            <image src="/assets/image/confirmMake/location.png"></image>
+            <text>冬瓜的</text>
+            <text>130xxxxxxxxxx</text>
+        </view>
+        <view class="subscribeConsignee">
+            <text>地址</text>
+            <text>广东省 深圳市 南山区 某某街道广东省 深圳市 南山区 某某街道广东省 深圳市 南山区 某某街道</text>
+        </view>
+        <view class="subscribeNumber2">
+            <view>
+                <text>订单合计:</text>
+                <text>¥2,300</text>
+            </view>
+            <text>从属销售:销售 IDxxxxx</text>
+        </view>
+    </view>
+</scroll-view>

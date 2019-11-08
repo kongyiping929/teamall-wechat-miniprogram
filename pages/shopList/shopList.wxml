@@ -1,0 +1,33 @@
+<!-- 店铺信息 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 定位 -->
+    <view class="location">
+        <text>当前位置: </text>
+        <image src="/assets/image/confirmMake/location.png"></image>
+        <text>{{cityName}}</text>
+    </view>
+    <!-- 附近店铺 -->
+    <view class="nearby">
+        <view class="nearbyTitle">附近店铺</view>
+        <view class="nearbyItem" wx:for="{{nearbyShopList}}" wx:key="{{index}}" bind:tap="selectStore" data-id="{{item.shopId}}">
+            <view class="nearbyItemT">
+                <text>{{item.cityName}}</text>
+                <text>距离您 {{item.distance}}{{item.distanceUnit}}</text>
+            </view>
+            <view class="nearbyItemAddress">{{item.detailAddress}}</view>
+        </view>
+    </view>
+    <!-- 全国店铺 -->
+    <view class="nearby" wx:for="{{allShopList}}" wx:key="{{index}}">
+        <view class="nearbyTitle">
+            <text>全国门店</text>
+            <text>({{index}})</text>
+        </view>
+        <view class="nearbyItem" wx:for="{{allShopList[index]}}" wx:key="{{index}}" bind:tap="{{selectStore}}" data-id="{{index}}" wx:for-item="shopList">
+            <view class="nearbyItemT">
+                <text>{{shopList.cityName}}</text>
+            </view>
+            <view class="nearbyItemAddress">{{shopList.detailAddress}}</view>
+        </view>
+    </view>
+</scroll-view>

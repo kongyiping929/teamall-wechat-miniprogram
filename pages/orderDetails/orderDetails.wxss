@@ -1,0 +1,493 @@
+/* 订单详情 */
+
+/* 顶部Bar */
+.topBar {
+    display: flex;
+    height: 218rpx;
+    background-color: #799262;
+}
+
+.topBarL {
+    box-sizing: border-box;
+    padding-left: 58rpx;
+    width: 480rpx;
+    height: 218rpx;
+}
+
+.topBarLTitle {
+    padding-top: 32rpx;
+    height: 66rpx;
+    font-size: 48rpx;
+    font-weight: 500;
+    line-height: 66rpx;
+    color: rgba(255, 255, 255, 1);
+    margin-bottom: 24rpx;
+}
+
+.topBarLTip {
+    height: 34rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    line-height: 34rpx;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.topBarR {
+    box-sizing: border-box;
+    padding: 34rpx 110rpx 24rpx 0;
+    width: 270rpx;
+    height: 218rpx;
+}
+
+.topBarR image {
+    width: 100%;
+    height: 100%;
+}
+
+/* 地址信息 */
+.address {
+    padding: 32rpx 30rpx 0;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 20rpx;
+}
+
+.addressContacts {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8rpx;
+    height: 40rpx;
+}
+
+.addressContacts image {
+    width: 32rpx;
+    height: 32rpx;
+    margin-right: 12rpx;
+}
+
+.addressContacts text:nth-child(2) {
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(66, 76, 80, 1);
+    margin-right: 16rpx;
+}
+
+.addressContacts text:last-child {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.addressMes {
+    padding-left: 42rpx;
+    line-height: 34rpx;
+    padding-bottom: 32rpx;
+    border-bottom: 2rpx dashed rgba(242, 242, 243, 1);
+}
+
+.addressMes text:first-child {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(140, 153, 155, 1);
+    margin-right: 16rpx;
+}
+
+.addressMes text:last-child {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.addressStore {
+    padding: 24rpx 30rpx 22rpx;
+}
+
+.addressStoreItem {
+    display: flex;
+    align-items: center;
+    height: 40rpx;
+    margin-bottom: 16rpx;
+}
+
+.addressStoreItem:last-child {
+    margin-bottom: 8rpx;
+}
+
+.addressStoreItem text:first-child {
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+    margin-right: 32rpx;
+}
+
+.addressStoreItem text:last-child {
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(121, 146, 98, 1);
+}
+
+/* 产品介绍 */
+.product {
+    background-color: #fff;
+    padding: 24rpx 30rpx 32rpx;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.productPhoto {
+    width: 160rpx;
+    height: 160rpx;
+    margin-right: 24rpx;
+}
+
+.productWapper {
+    width: 506rpx;
+    height: 160rpx;
+}
+
+.productTitle {
+    height: 44rpx;
+    font-size: 32rpx;
+    font-weight: 400;
+    line-height: 44rpx;
+    color: rgba(66, 76, 80, 1);
+    margin-bottom: 14rpx;
+}
+
+.productPrice {
+    height: 44rpx;
+    font-size: 32rpx;
+    font-weight: 600;
+    line-height: 44rpx;
+    color: rgba(247, 55, 2, 1);
+    margin-bottom: 12rpx;
+}
+
+.productSelect {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 11rpx 14rpx;
+    line-height: 24rpx;
+    height: 46rpx;
+    background: rgba(243, 248, 241, 1);
+    border-radius: 4rpx;
+}
+
+.productSelect text {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    margin-right: 4rpx;
+}
+
+.productSelect image {
+    width: 24rpx;
+    height: 24rpx;
+    vertical-align: middle;
+}
+
+/* 属性 */
+.attrWapper {
+    background-color: #fff;
+    padding: 0 30rpx 24rpx;
+    margin-bottom: 20rpx;
+}
+
+.attr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 34rpx;
+    margin-bottom: 8rpx;
+}
+
+.attr text:first-child {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.attr text:last-child {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+/* 备注 */
+.remark {
+    display: flex;
+    padding: 24rpx 30rpx;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 20rpx;
+}
+
+.remark text:first-child {
+    width: 110rpx;
+    font-size: 28rpx;
+    font-weight: 400;
+    line-height: 40rpx;
+    color: rgba(85, 98, 102, 1);
+}
+
+.remark text:last-child {
+    width: 580rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    line-height: 40rpx;
+    color: rgba(66, 76, 80, 1);
+}
+
+/* 订单信息 */
+.orderMes {
+    box-sizing: border-box;
+    padding: 24rpx 30rpx 20rpx;
+    background: rgba(255, 255, 255, 1);
+    margin-bottom: 140rpx;
+}
+
+.orderTile {
+    height: 40rpx;
+    font-size: 28rpx;
+    font-weight: 400;
+    line-height: 40rpx;
+    color: rgba(85, 98, 102, 1);
+    margin-bottom: 12rpx;
+}
+
+.orderItem {
+    height: 34rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    line-height: 34rpx;
+    color: rgba(172, 187, 188, 1);
+    margin-bottom: 12rpx;
+}
+
+/* 底部 0 待支付 */
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100rpx;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+}
+
+.footer.status1 view:first-child {
+    display: flex;
+    align-items: center;
+    height: 100rpx;
+}
+
+.footer.status1 view:first-child text:first-child {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #666666;
+}
+
+.footer.status1 view:first-child text:last-child {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #ED5735;
+}
+
+.footer.status1 view:last-child {
+    width: 236rpx;
+    height: 72rpx;
+    line-height: 72rpx;
+    text-align: center;
+    border-radius: 36rpx;
+    background-color: #ED5735;
+    color: #fff;
+    font-size: 32rpx;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+/* 底部 2 待发货 3 卖家已发货 */
+.footer.status2 .footerIcon, .footer.status3 .footerIcon {
+    box-sizing: border-box;
+    padding: 14rpx 0 10rpx;
+    width: 44rpx;
+    height: 100rpx;
+}
+
+.footer.status2 .footerIcon image, .footer.status3 .footerIcon image {
+    width: 44rpx;
+    height: 44rpx;
+    vertical-align: middle;
+    margin-bottom: 2rpx;
+}
+
+.footer.status2 .footerIcon view, .footer.status3 .footerIcon view {
+    height: 28rpx;
+    font-size: 20rpx;
+    font-weight: 400;
+    line-height: 28rpx;
+    color: rgba(85, 98, 102, 1);
+}
+
+.footer.status2 .footerBtn2, .footer.status3 .footerBtn3 {
+    width: 236rpx;
+    height: 72rpx;
+    line-height: 72rpx;
+    text-align: center;
+    background: rgba(223, 223, 223, 1);
+    border-radius: 36rpx;
+    font-size: 32rpx;
+    font-family: PingFang SC;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+.footer.status3 .footerBtn3 {
+    background-color: #799262;
+    color: #FFFFFF;
+}
+
+/* 底部 4 交易成功 */
+.footer.status4 .footerIcon {
+    box-sizing: border-box;
+    padding: 14rpx 0 10rpx;
+    width: 44rpx;
+    height: 100rpx;
+}
+
+.footer.status4 .footerIcon image {
+    width: 44rpx;
+    height: 44rpx;
+    vertical-align: middle;
+    margin-bottom: 2rpx;
+}
+
+.footer.status4 .footerIcon view {
+    height: 28rpx;
+    font-size: 20rpx;
+    font-weight: 400;
+    line-height: 28rpx;
+    color: rgba(85, 98, 102, 1);
+}
+
+/* 底部 5 退款申请中 */
+.footer.status5 .footerIcon {
+    box-sizing: border-box;
+    padding: 14rpx 0 10rpx;
+    width: 44rpx;
+    height: 100rpx;
+}
+
+.footer.status5 .footerIcon image {
+    width: 44rpx;
+    height: 44rpx;
+    vertical-align: middle;
+    margin-bottom: 2rpx;
+}
+
+.footer.status5 .footerIcon view {
+    height: 28rpx;
+    font-size: 20rpx;
+    font-weight: 400;
+    line-height: 28rpx;
+    color: rgba(85, 98, 102, 1);
+}
+
+.footer.status5 .footerBtn2 {
+    width: 236rpx;
+    height: 72rpx;
+    line-height: 72rpx;
+    text-align: center;
+    background: rgba(223, 223, 223, 1);
+    border-radius: 36rpx;
+    font-size: 32rpx;
+    font-family: PingFang SC;
+    font-weight: 400;
+    color: rgba(85, 98, 102, 1);
+}
+
+/* 底部 6 退款成功 7 退款失败 */
+.footer.status5 .footerIcon, .footer.status6 .footerIcon, .footer.status7 .footerIcon {
+    box-sizing: border-box;
+    padding: 14rpx 10rpx 10rpx;
+    width: 60rpx;
+    height: 100rpx;
+}
+
+.footer.status5 .footerIcon image, .footer.status6 .footerIcon image, .footer.status7 .footerIcon image {
+    width: 44rpx;
+    height: 44rpx;
+    vertical-align: middle;
+    margin-bottom: 2rpx;
+}
+
+.footer.status5 .footerIcon view, .footer.status6 .footerIcon view, .footer.status7 .footerIcon view {
+    height: 28rpx;
+    font-size: 20rpx;
+    font-weight: 400;
+    line-height: 28rpx;
+    color: rgba(85, 98, 102, 1);
+}
+
+/* 客服模态框 */
+.serviceModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 20;
+}
+
+.serviceModal .serviceWap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 540rpx;
+    height: 332rpx;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 24rpx;
+}
+
+.serviceModal .serviceWap .serviceClose {
+    position: absolute;
+    top: 26rpx;
+    right: 26rpx;
+    width: 31rpx;
+    height: 31rpx;
+}
+
+.serviceModal .serviceWap .serviceTitle {
+    box-sizing: border-box;
+    padding: 56rpx 0 38rpx;
+    height: 142rpx;
+    font-size: 34rpx;
+    font-weight: 600;
+    line-height: 48rpx;
+    color: #333333;
+    text-align: center;
+}
+
+.serviceModal .serviceWap .serviceContent {
+    height: 128rpx;
+    line-height: 42.6666rpx;
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #999999;
+    text-align: center;
+}
+button{
+  position:  absolute;
+  opacity: 0;
+  padding: 0;
+}
+button::after {
+  border: none;
+  background-color: #fff;
+  border-radius: 0;
+  color: #999999;
+}

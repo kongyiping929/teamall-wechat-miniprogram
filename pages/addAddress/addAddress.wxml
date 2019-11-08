@@ -1,0 +1,27 @@
+<!-- pages/addAddress/addAddress.wxml -->
+<view class="tip">温馨提示: 请确保收件人为真实姓名,否则可能无法收货</view>
+<view class="item">
+    <text>收货人</text>
+    <input type="text" placeholder-style="color: rgba(153,153,153, .5)" placeholder="请输入收货人姓名" value="{{recipients}}" bindinput="changeField" data-field="recipients" maxlength="{{5}}" />
+</view>
+<view class="item">
+    <text>手机号</text>
+    <input type="number" placeholder-style="color: rgba(153,153,153, .5)" placeholder="请输入收货人手机号码"  value="{{phone}}" bindinput="changeField" data-field="phone" maxlength="{{11}}" />
+</view>
+<view class="item">
+    <text>选择省市区</text>
+        <view class="picker"><region-picker bind:change="regionChange" province="{{province}}" city="{{city}}" county="{{county}}" regionId="{{regionId}}"></region-picker></view>
+</view>
+
+<view class="item">
+    <text>详细地址</text>
+    <input type="text" placeholder-style="color: rgba(153,153,153, .5)" placeholder="请输入详细街道地址" value="{{address}}" bindinput="changeField" data-field="address" maxlength="{{40}}" />
+</view>
+<view class="itemSwitch" style="margin-bottom: 80rpx;">
+    <text>默认地址</text>
+    <switch checked="{{status}}" bindchange="changeSwitch" />
+</view>
+
+<view class="handle" bind:tap="handle">
+    保存
+</view>

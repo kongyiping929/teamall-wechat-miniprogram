@@ -1,0 +1,94 @@
+<!-- 每日打卡 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 打卡信息 -->
+    <view class="cardMes">
+        <view class="cardMesTop">
+            <image class="cardMesTopImg" src="/assets/image/dayCard/dayCardIcon.png"></image>
+            <view class="cardMesTopTip">
+                <view class="cardMesTopTipNum">
+                    <text>本月打卡次数:</text>
+                    <text>31</text>
+                </view>
+                <view class="cardMesTopTipTicket">本次打卡可获得奖品:优惠券</view>
+            </view>
+        </view>
+        <picker bindchange="bindPickerChange" value="{{productTypeIndex}}" range="{{productTypeArr}}" range-key="squareName"
+        data-id='{{productTypeArr[productTypeIndex].squareId}}'>
+            <view class="cardMesBottom">
+                <view class="cardMesBottomL">打卡微广场选择</view>
+                <view class="cardMesBottomR">
+                    <text>{{productTypeArr[productTypeIndex].squareName}}</text>
+                    <image src="/assets/image/productDetails/more.png"></image>
+                </view>
+            </view>
+        </picker>
+    </view>
+    <!-- 打卡输入 -->
+    <view class="inputBox">
+        <view class="inputWapper">
+            <textarea placeholder="每天打卡是一种态度" placeholder-class="placeholderStyle" maxlength="{{200}}" auto-focus="{{true}}" bindinput="changeRemark" focus="{{true}}" value="{{remark}}" auto-height="{{true}}" />
+        </view>
+        <view class="addImageBox">
+            <view class="addImageItem" wx:for="{{userImage}}" wx:key="{{index}}">
+                <image src="{{item}}"></image>
+            </view>
+            <view class="addImage" bind:tap="selectImage" wx:if="{{userImage.length < 3}}"></view>
+        </view>
+    </view>
+    <!-- 产品信息 -->
+    <view class="product">
+        <view class="productName">打卡产品</view>
+        <view class="productMes">
+            <image class="productPhoto" src="/assets/image/index/productPhoto.png"></image>
+            <view class="productWapper">
+                <view class="productTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="productPrice">
+                    <text>¥2,300</text>
+                    <text>¥900.00</text>
+                </view>
+                <view class="productSelect">
+                    <text>一饼 , 590g , 包装1</text>
+                    <image src="/assets/image/user/downArrows.png"></image>
+                </view>
+            </view>
+        </view>
+    </view>
+    <!-- 打卡按钮 -->
+    <view class="btn" bind:tap="changeModal" data-status="{{true}}">打卡</view>
+</scroll-view>
+<!-- 打卡成功模态框 -->
+<view class="modal" wx:if="{{modal}}">
+    <view class="modalWapper">
+        <view class="modalTitle">打卡成功!</view>
+        <view class="modalMes" wx:if="{{true}}">
+            <view class="modalMesBg">
+                <image src="/assets/image/dayCard/modalBg.png"></image>
+            </view>
+            <view class="modalMesTip">打卡姿势不对,尽然没捞到优惠券!</view>
+        </view>
+        <view class="modalRollBox" wx:else>
+            <view class="modalRoll">
+                <image src="/assets/image/dayCard/bg.png"></image>
+                <view class="modalRollTop">
+                    <view class="modalRollTopL">
+                        <view>优惠券</view>
+                        <view>有效期至 2019-09-09</view>
+                    </view>
+                    <view class="modalRollTopR">
+                        <text>2.8</text>
+                        <text>折</text>
+                    </view>
+                </view>
+                <view class="modalRollBottom">
+                    <text>产品类型</text>
+                    <text>满减额度 100元使用</text>
+                </view>
+            </view>
+        </view>
+        <view class="modalFooter">
+            <text bind:tap="changeModal" data-status="{{false}}">取消</text>
+            <text></text>
+            <text bind:tap="changeModal" data-status="{{false}}" data-confirm="{{true}}">确定</text>
+        </view>
+    </view>
+</view>

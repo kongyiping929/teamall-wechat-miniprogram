@@ -1,0 +1,20 @@
+<!-- 我的收藏 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 列表 -->
+    <view class="list">
+        <view class="item" wx:for="{{10}}" wx:key="{{index}}" bind:tap="goProductDetails" data-orderid="{{index}}">
+            <image class="itemProductImg" src="/assets/image/index/productPhoto.png"></image>
+            <view class="itemPd">
+                <view class="itemPdTitle more-txt-cut">
+                    茶叶名称,太长的话就在这换行…名话就在这换行…茶叶名称,太长的话就在这换行…名话就在这换行…茶叶名称,太长的话就在这换行…名话就在这换行…
+                </view>
+                <view class="itemPdAttr one-txt-cut">炒青绿茶,最长10个字炒青绿茶,最长10个字</view>
+                <view class="itemPdPrice">¥700.00</view>
+                <view class="itemPdNum">
+                    <text>¥900.00</text>
+                    <text>当前已售 989</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</scroll-view>

@@ -1,0 +1,243 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"enhance": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.7.0",
+	"appid": "wxf427c5136f98202e",
+	"projectname": "tea",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 8,
+			"list": [
+				{
+					"id": -1,
+					"name": "个人中心",
+					"pathName": "pages/user/user",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "发现",
+					"pathName": "pages/find/find",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "产品类型",
+					"pathName": "pages/productType/productType",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "产品列表",
+					"pathName": "pages/productList/productList",
+					"query": "type=0",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "商品详情",
+					"pathName": "pages/productDetails/productDetails",
+					"query": "id=1155821825200140289",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "打卡记录",
+					"pathName": "pages/cardRecord/cardRecord",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "预约确认",
+					"pathName": "pages/confirmMake/confirmMake",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "每日打卡",
+					"pathName": "pages/dayCard/dayCard",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 8,
+					"name": "订单确认",
+					"pathName": "pages/confirmOrder/confirmOrder",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "修改地址",
+					"pathName": "pages/addAddress/addAddress",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 10,
+					"name": "订单详情",
+					"pathName": "pages/orderDetails/orderDetails",
+					"query": "status=7",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "产品微广场",
+					"pathName": "pages/productPlaza/productPlaza",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "店铺信息",
+					"pathName": "pages/shopList/shopList",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的预存",
+					"pathName": "pages/myPrestore/myPrestore",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "提现(我的红包)",
+					"pathName": "pages/myRedPacket/myRedPacket",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 15,
+					"name": "订单列表",
+					"pathName": "pages/orderList/orderList",
+					"query": "id=6",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的收藏",
+					"pathName": "pages/myCollect/myCollect",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "管理操作",
+					"pathName": "pages/administer/administer",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "订单查询",
+					"pathName": "pages/queryOrder/queryOrder",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "用户查询",
+					"pathName": "pages/queryUsers/queryUsers",
+					"query": "type=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "用户选择产品",
+					"pathName": "pages/userSelectProduct/userSelectProduct",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "上架编辑",
+					"pathName": "pages/editorShelf/editorShelf",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 22,
+					"name": "上架商品详情",
+					"pathName": "pages/editorShelfDetails/editorShelfDetails",
+					"query": "productId=1187695640242036737",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "预约订单",
+					"pathName": "pages/backMake/backMake",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "授权",
+					"pathName": "pages/getUserInfo/getUserInfo",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 25,
+					"name": "地址",
+					"pathName": "pages/addressList/addressList",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

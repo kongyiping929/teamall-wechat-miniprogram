@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "region-picker": "../../component/region-picker/region-picker"
+  },
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "修改地址",
+  "backgroundColor": "#F4F4F4"
+}

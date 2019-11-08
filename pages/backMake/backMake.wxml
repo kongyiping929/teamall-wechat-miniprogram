@@ -1,0 +1,29 @@
+<!-- 订单查询 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 预约列表 -->
+    <view class="subscribe">
+        <view class="subscribeTimeMes">
+            <image src="/assets/image/find/clock.png"></image>
+            <text>2019-03-06  晚间 7:00-9:00</text>
+            <text>待确认</text>
+        </view>
+        <view class="subscribeTitle one-txt-cut">茶叶名称</view>
+        <view class="subscribeAttr">
+            <text>一饼 , 590g , 包装1</text>
+            <image src="/assets/image/user/downArrows.png"></image>
+        </view>
+        <view class="subscribePrice">¥700.00</view>
+        <view class="subscribeAddress">
+            <image src="/assets/image/confirmMake/location.png"></image>
+            <text class="one-txt-cut">广州中山北路78号中环店</text>
+            <text></text>
+            <text>预约人数</text>
+            <text>99人</text>
+        </view>
+        <view class="subscribeNumber">
+            <text>预约创建时间: 2019-09-18</text>
+            <view class="confirm">确认预约</view>
+            <view>去支付</view>
+        </view>
+    </view>
+</scroll-view>

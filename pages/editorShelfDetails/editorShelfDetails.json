@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "showModel": "../../component/model/model"
+  }
+}

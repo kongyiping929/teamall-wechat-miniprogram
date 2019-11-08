@@ -1,0 +1,31 @@
+<!-- 订单查询 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 查询栏 -->
+    <view class="queryBar">
+        <view class="queryBtnBox">
+            <view class="{{type==0 ? 'active' : ''}}" bind:tap="changeQueryType" data-value="{{0}}">
+                上架
+            </view>
+            <view class="{{type==1 ? 'active' : ''}}" bind:tap="changeQueryType" data-value="{{1}}">
+                未上架
+            </view>
+        </view>
+         <!-- 列表 -->
+        <navigator wx:for="{{product.list}}" wx:key="{{index}}" url="/pages/editorShelfDetails/editorShelfDetails?productId={{item.productId}}" hover-class="none" open-type="navigate">
+          <view class="account" bind:tap="selectProduct">
+            <view >
+              <text class="title">{{item.productName}}</text>
+              <view class="subscribeAttr">
+                  <text>{{item.typeName}}</text>
+              </view>
+            </view>
+            <view>
+                <text class="type">{{showType[item.showType-1]}}</text>
+                <text class="type color" wx:if='{{item.showStatus == 1}}'>首</text>
+                <image src="/assets/image/productDetails/more.png"></image>
+            </view>
+          </view>
+        </navigator>
+    </view>
+   
+</scroll-view>

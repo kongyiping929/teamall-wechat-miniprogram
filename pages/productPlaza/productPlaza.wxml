@@ -1,0 +1,49 @@
+<!-- 产品微广场 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 产品banner -->
+    <view class="banner">
+        <image src="/assets/image/productDetails/productPlazaBanner.png"></image>
+    </view>
+    <!-- 产品简介 -->
+    <view class="synopsis">
+        <view>产品分类简介</view>
+        <view>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient…</view>
+    </view>
+    <!-- 打卡信息 -->
+    <view class="clockWapper {{2 === index + 1 ? 'length' : ''}}" wx:for="{{5}}" wx:key="{{index}}">
+        <view class="clockTitleBar">
+            <view class="clockTitleBarLeft">
+                <image src="/assets/image/find/userPhoto.png"></image>
+                <text>J***C</text>
+            </view>
+            <view class="clockTitleBarRight">
+                <image src="/assets/image/find/goodIcon.png"></image>
+                <text>+324</text>
+            </view>
+        </view>
+        <view class="clockContent {{contentState ? 'none' : 'text-cut' }}">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
+            <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text>
+        </view>
+        <view class="clockImg {{2 === index + 1 ? 'length' : ''}}">
+            <image src="/assets/image/find/productBg.png"></image>
+            <image src="/assets/image/find/productBg.png"></image>
+            <image src="/assets/image/find/productBg.png"></image>
+        </view>
+        <view class="TorderMes" wx:if="{{2 === index + 1}}">
+            <image class="TorderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+            <view class="TorderMesTip">
+                <view class="TorderMesTipTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="TorderMesPrice">
+                    <text>¥700.00</text>
+                    <text>¥900.00</text>
+                </view>
+                <view class="TorderMesTipAttr">
+                    <text>一饼 , 590g , 包装1</text>
+                    <image src="/assets/image/user/downArrows.png"></image>
+                </view>
+            </view>
+        </view>
+    </view>
+</scroll-view>

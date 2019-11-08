@@ -1,0 +1,61 @@
+<view class="account" bind:tap="selectProduct">
+  <view >
+    <text class="title">{{product.productName}}</text>
+    <view class="subscribeAttr">
+        <text>{{product.typeName}}</text>
+    </view>
+  </view>
+</view>
+<view class="specifications" wx:for="{{product.specInfoVoList}}" wx:key="{{index}}">
+  <view class="info">
+    <view>
+      <text class="title">规格</text>
+      <text class="title">{{item.specName}}</text>
+    </view>
+    <view>
+      <text class="title black">价格:</text>
+      <text class="red">¥{{item.basePrice }}</text>
+    </view>
+  </view>
+  <view class="infoTip">
+        <text>细分规格</text>
+        <text>价格</text>
+  </view>
+  <view class="infoTip details" wx:for="{{item.lineList}}" wx:key="{{index}}">
+        <text>{{item.name }}</text>
+        <text>+ ¥{{item.addPrice }}</text>
+  </view>
+  <view class="line"></view>
+  <view class="info">
+    <view>
+      <text class="title">包装</text>
+    </view>
+  </view>
+  <view class="infoTip">
+        <text>细分规格</text>
+        <text>库存</text>
+        <text>包装价格</text>
+        <text>操作</text>
+  </view>
+  <view class="infoTip details edit" wx:for="{{item.packageList}}" wx:key="{{index}}">
+        <text>{{item.name}}</text>
+        <text>{{item.stockNum || 0}}</text>
+        <text>+ ¥{{item.addPrice}}</text>
+        <text bindtap="editStock" data-index="{{index}}">库存编辑</text>
+  </view>
+
+  <view class="line"></view>
+  <view class="info state">
+    <view>
+      <text class="title">可预约</text>
+      <text class="title black"> 预约单价:¥{{item.appointmentPrice }}/人</text>
+    </view>
+    <view>
+      <text class="title red"> 预约编辑</text>
+    </view>
+  </view>
+</view>
+<!-- 底部 -->
+    <view class="footer">下架</view>
+    <showModel showModal="{{showModal}}" switch="{{false}}" showStock="{{true}}"  data="{{modalData}}"
+    bind:inputChange="inputChange"></showModel>

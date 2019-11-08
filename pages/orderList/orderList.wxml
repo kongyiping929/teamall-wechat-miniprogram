@@ -1,0 +1,54 @@
+<!-- 订单列表 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 标题栏 -->
+    <view class="bar">
+        <text wx:for="{{orderStatusList}}" wx:key="{{index}}" wx:if="{{item && item !== ''}}" class="{{id == index ? 'active' : ''}}" bind:tap="changeId" data-id="{{index}}">{{item}}</text>
+    </view>
+    <!-- 列表 -->
+    <view class="item" wx:for="{{5}}" wx:key="{{index}}">
+        <view class="itemTop">
+            <text>订单编号:2019010110101021321</text>
+            <text class="{{id - 0 == 4 ? 'id4' : id - 0 == 5 ? 'id5' : id - 0 == 6 ? 'id6' : id - 0 == 7 ? 'id7' : ''}}">{{orderStatusArr[id-0]}}</text>
+        </view>
+        <view class="itemMes">
+            <image class="itemMesBg" src="/assets/image/index/productPhoto.png"></image>
+            <view class="itemMesDes">
+                <view class="itemMesDesTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="itemMesDesPrice">
+                    <text>¥2,300</text>
+                    <text>x 1</text>
+                </view>
+                <view class="itemMesDesAttr">
+                    <text>一饼 , 590g , 包装1</text>
+                    <image src="/assets/image/user/downArrows.png"></image>
+                </view>
+            </view>
+        </view>
+        <view class="itemPerson">
+            <image src="/assets/image/confirmMake/location.png"></image>
+            <text>冬瓜的</text>
+            <text>130xxxxxxxxxx</text>
+            <text>2019-09-08 18:00</text>
+        </view>
+        <view class="itemAddress">
+            <text>地址</text>
+            <text>广东省 深圳市 南山区 某某街道</text>
+        </view>
+        <view class="itemBottom">
+            <view class="itemBottomL">
+                <text>订单合计:</text>
+                <text>¥2,300</text>
+            </view>
+            <view class="itemBottomR1 {{id == 4 ? 'id4' : ''}}" wx:if="{{id == 1 || id == 4}}">
+                <text bind:tap="goOrderDetails" data-id="{{id}}">{{orderStatusArr[id-0]}}</text>
+            </view>
+            <view class="itemBottomR2" wx:elif="{{id == 2 || id == 3}}">
+                <text>联系客服</text>
+                <text bind:tap="goOrderDetails" data-id="{{id}}">{{orderStatusArr[id-0]}}</text>
+            </view>
+            <view class="itemBottomR5" wx:else>
+                <text bind:tap="goOrderDetails" data-id="{{id}}">联系客服</text>
+            </view>
+        </view>
+    </view>
+</scroll-view>

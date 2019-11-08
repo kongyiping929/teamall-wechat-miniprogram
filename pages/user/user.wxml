@@ -1,0 +1,118 @@
+<!-- 个人中心 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 用户信息 -->
+    <view class="userMes">
+        <view class="userInfo">
+            <image class="userInfo_photo" src="/assets/image/user/photo.png"></image>
+            <view class="userInfo_attribute">
+                <view class="userInfo_attribute_name">{{user.nickName}}</view>
+                <view class="userInfo_attribute_level">Lv.1</view>
+            </view>
+            <view class="userInfo_code">
+                <text>邀请码: {{user.inviteCode}}</text>
+                <text></text>
+                <image src="/assets/image/user/user_code.png"></image>
+            </view>
+        </view>
+        <view class="userParams">
+            <view class="userParamsAccount one-txt-cut" style="width: 160rpx;">
+                <text>用户ID</text>
+                <text>tea01</text>
+            </view>
+            <view class="userParamsBorder"></view>
+            <view class="userParamsAccount">
+                <text>手机号</text>
+                <text>{{phone}}</text>
+            </view>
+            <navigator url="/pages/editPhone/editPhone?first=无" open-type="navigate" hover-class="none" class="userParamsEditPhont">更绑手机号</navigator>
+        </view>
+    </view>
+    <!-- 金钱状态 -->
+    <view class="price">
+        <view class="price_item">
+            <view class="price_item_bar">
+                <text>我的红包</text>
+                <text bind:tap="goMyRedPacket">提取</text>
+            </view>
+            <view class="price_balance">¥{{user.withdrawBalance}}</view>
+        </view>
+        <view class="price_halving"></view>
+        <view class="price_item" style="margin-left: 30rpx;">
+            <view class="price_item_bar">
+                <text>我的预存</text>
+                <text bind:tap="goMyPrestore">提取</text>
+            </view>
+            <view class="price_balance">¥{{user.prechargeBalance}}</view>
+        </view>
+    </view>
+    <!-- 订单状态 -->
+    <view class="order">
+        <view class="orderBar" bind:tap="goOrderList">
+            <view class="orderBarTitle">我的订单</view>
+            <view class="orderBarAction">
+                <text>查看订单</text>
+                <image src="/assets/image/user/greenArrows.png"></image>
+            </view>
+        </view>
+        <view class="orderWapper">
+            <view class="orderNav">
+                <navigator class="orderNavItem" url="/pages/orderList/orderList?id={{index+1}}" hover-class="none" open-type="navigate" wx:for="{{orderList}}" wx:key="{{index}}">
+                    <image src="{{item.src}}"></image>
+                    <text>{{item.text}}</text>
+                </navigator>
+            </view>
+            <view wx:if="{{user.productOrderListVo}}">
+                <view class="order_number">
+                    <text>订单编号:{{user.productOrderListVo.orderNo}}</text>
+                    <text>{{user.productOrderListVo.createdTime }}</text>
+                </view>
+                <view class="orderMes">
+                    <image class="orderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+                    <view class="orderMesTip">
+                        <view class="orderMesTipTitle one-txt-cut">{{user.productOrderListVo.productName}}</view>
+                        <view class="orderMesTipAttr">
+                            <text> {{user.productOrderListVo.specName}}</text>
+                            <image src="/assets/image/user/downArrows.png"></image>
+                        </view>
+                    </view>
+                </view>
+                <view class="orderPay">
+                    <view>
+                        <text>订单合计:</text>
+                        <text>¥{{user.productOrderListVo.payAmount}}</text>
+                    </view>
+                    <view>去支付</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <!-- 选择器 -->
+    <view class="select">
+        <view class="selectItem">
+            <view class="selectItemLeft">我的收件地址</view>
+            <view class="selectItemRight">
+                <image src="/assets/image/tabBar/rightArrows.png"></image>
+            </view>
+        </view>
+        <view class="selectItem" bind:tap="goMyCollect">
+            <view class="selectItemLeft">我的收藏</view>
+            <view class="selectItemRight">
+                <text>{{user.collectionCount}}</text>
+                <image src="/assets/image/tabBar/rightArrows.png"></image>
+            </view>
+        </view>
+        <view class="selectItem">
+            <view class="selectItemLeft">我的优惠券</view>
+            <view class="selectItemRight">
+                <text>可用数量{{user.couponCount}}张</text>
+                <image src="/assets/image/tabBar/rightArrows.png"></image>
+            </view>
+        </view>
+        <view class="selectItem" bind:tap="goAdminister">
+            <view class="selectItemLeft">管理模块</view>
+            <view class="selectItemRight">
+                <image src="/assets/image/tabBar/rightArrows.png"></image>
+            </view>
+        </view>
+    </view>
+</scroll-view>

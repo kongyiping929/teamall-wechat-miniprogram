@@ -1,0 +1,14 @@
+<!-- 产品类型 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- banner -->
+    <view class="banner">
+        <image src="/assets/image/productType/productType.png"></image>
+    </view>
+    <!-- 产品列表 -->
+    <view class="productIcon">
+        <view class="productIconItem" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{index}}">
+            <image src="{{item.url}}"></image>
+            <view class="one-txt-cut">{{item.typeName}}</view>
+        </view>
+    </view>
+</scroll-view>

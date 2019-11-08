@@ -1,0 +1,36 @@
+<!-- 提现 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 顶部 -->
+    <view class="topBar">
+        <view class="topBarMes">
+            <image src="/assets/image/user/moneyIcon_2.png"></image>
+            <view class="topBarMesTip">
+                <view class="topBarMesTipTitle">我的红包</view>
+                <view class="topBarMesTipPrice">¥232,343.00</view>
+            </view>
+        </view>
+        <view class="topBarBtn">申请领取</view>
+    </view>
+    <!-- 列表 -->
+    <view class="list">
+        <view class="listTitle">红包领取记录</view>
+        <view class="item" wx:for="{{10}}" wx:key="{{index}}">
+            <view class="itemTime">
+                <text>订单编号: 3345625457569</text>
+                <text>2019-02-24 23:32:05</text>
+            </view>
+            <view class="itemMes">
+                <view class="itemMesPrice">
+                    <view class="itemMesPriceAdd">
+                        <text>充值额度: </text>
+                        <text>¥999.99</text>
+                    </view>
+                    <view class="itemMesPriceminus">
+                        手续费: - ¥1.00
+                    </view>
+                </view>
+                <view class="itemMesStatus {{orderStatusArr[index].class}}">{{orderStatusArr[index].text}}</view>
+            </view>
+        </view>
+    </view>
+</scroll-view>

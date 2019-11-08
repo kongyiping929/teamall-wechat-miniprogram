@@ -1,0 +1,39 @@
+<!-- 我的预存 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 顶部 -->
+    <view class="top">
+        <view class="topMes">
+            <image class="topMesImage" src="/assets/image/user/moneyIcon_1.png"></image>
+            <view class="topMesCon">
+                <view class="topMesTitle">我的预存</view>
+                <view class="topMesPrice">¥232,343.00</view>
+            </view>
+        </view>
+        <view class="select">
+            <view class="selectTitle">预存充值</view>
+            <view class="selectWap">
+                <view class="selectItem" wx:for="{{selectArr}}" wx:key="{{index}}" bind:tap="changeSelectArr" data-index="{{index}}">
+                    <image src="{{item.status ? '/assets/image/confirmMake/selectActive.png' : '/assets/image/confirmMake/select.png'}}"></image>
+                    <view class="selectItemPrcie">{{item.price}}</view>
+                </view>
+            </view>
+            <view class="selectBtn">充值</view>
+        </view>
+    </view>
+    <!-- 列表 -->
+    <view class="list">
+        <view class="listTitle">我的充值</view>
+        <view class="item" wx:for="{{10}}" wx:key="{{index}}">
+            <view class="itemTime">
+                <text>订单编号:  3345625457569</text>
+                <text>2019-02-24 23:32:05</text>
+            </view>
+            <view class="itemPrice">
+                <text>充值额度: </text>
+                <text> ¥999.99</text>
+                <text>实际支付: </text>
+                <text> ¥999.99</text>
+            </view>
+        </view>
+    </view>
+</scroll-view>

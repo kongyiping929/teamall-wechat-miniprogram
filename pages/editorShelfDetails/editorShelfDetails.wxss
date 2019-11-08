@@ -1,0 +1,131 @@
+.account {
+    font-size: 24rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 700rpx;
+    height: 112rpx;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 20rpx;
+    margin: 40rpx auto 20rpx;
+    padding: 0 32rpx;
+}
+.subscribeAttr {
+    display: inline-block;
+    align-items: center;
+    padding: 4rpx 14rpx 4rpx;
+    height: 34rpx;
+    line-height: 34rpx;
+    background: rgba(243, 248, 241, 1);
+    border-radius: 8rpx;
+}
+.specifications{
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 1);
+  width: 700rpx;
+  margin: 40rpx auto 20rpx;
+  padding: 30rpx 32rpx;
+  border-radius: 20rpx;
+}
+.line{
+  height: 2rpx;
+  background: #F4F4F4;
+  margin: 30rpx 0
+}
+.info {
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.type{
+  color: #fff;  
+  padding: 12rpx 18rpx;
+  background-color: #9DAF84;
+  border-radius: 50%;
+   margin-right: 8rpx
+}
+
+.infoTip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20rpx 40rpx;
+    margin: 30rpx 0 20rpx;
+    height: 34rpx;
+    line-height: 34rpx;
+    background: rgba(243, 248, 241, 1);
+    border-radius: 8rpx;
+}
+
+.subscribeAttr text,.infoTip text {
+    font-size: 24rpx;
+    font-weight: 400;
+    color: rgba(172, 187, 188, 1);
+    margin-right: 8rpx;
+}
+
+.details{
+  background-color: #fff;
+  margin: 0;
+  padding: 20rpx 10rpx
+}
+.details text{
+  color: #556266;
+  flex: 1;
+  text-align: center;
+}
+.details text:first-child{
+  max-width: 120rpx;
+}
+
+.details text:nth-child(3)
+,.infoTip text:nth-child(3){
+  min-width: 174rpx;
+  text-align: center
+}
+.details text:last-child,.infoTip text:last-child{
+  min-width: 84rpx;
+  max-width: 194rpx;
+  text-align: center
+}
+.edit text:last-child{
+  border:1px #799262 solid;
+  color: #799262;
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  max-width: 120rpx;
+}
+.title{
+  font-size: 32rpx;
+  margin-right: 8rpx;
+  margin-left: 6rpx;
+}
+.red{
+  font-size: 28rpx;
+  color: #ED5735;
+}
+.black{
+  color: #424C50
+}
+.state{
+  font-size: 28rpx;
+  color: #556266
+}
+.footer {
+  position: fixed;
+  width: 94%;
+  height: 90rpx;
+  bottom: 10rpx;
+  left:3%;
+  line-height: 90rpx;
+  color: #fff;
+  box-sizing: border-box;
+  font-size: 32rpx;
+  font-weight: 600;
+  background-color: #ED5735;
+  text-align: center;
+  border-radius: 12rpx;
+}

@@ -1,0 +1,94 @@
+<!-- 首页 -->
+<!-- <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" lang="zh_CN">获取用户信息</button>
+<button open-type="openSetting" bindopensetting="openSetting" lang="zh_CN">打开设置</button> -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+  <!-- 地址 -->
+  <view class="address" bind:tap="goShopList">
+    <image src="/assets/image/index/map.png"></image>
+    <text>{{shopName}}</text>
+    <text>></text>
+    <!-- <image src="/assets/image/productDetails/more.png"></image> -->
+  </view>
+  <!-- 轮播图 -->
+  <swiper indicator-dots indicator-color="rgba(255,255,255,0.7)" indicator-active-color="#fff" autoplay interval="{{3000}}" circular>
+    <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+      <swiper-item>
+        <image src="{{item}}" class="slide-image" width="355" height="150" />
+      </swiper-item>
+    </block>
+  </swiper>
+  <!-- 导航 -->
+  <view class="nav">
+    <navigator url="{{item.path}}" hover-class="none" open-type="navigate" wx:for="{{navList}}" wx:key="{{index}}">
+      <image src="{{item.src}}"></image>
+      <text>{{item.text}}</text>
+    </navigator>
+  </view>
+  <!-- 签到 -->
+  <view class="signIn" bind:tap="goDayCard">
+    <image src="/assets/image/index/signIn.png"></image>
+  </view>
+  <!-- 最新上架 -->
+  <view class="newReleases">
+    <view class="newReleasesTitle">最新上架</view>
+    <view class="newReleasesWap">
+      <navigator url="/pages/productDetails/productDetails?id={{item.productId}}" open-type="navigate" hover-class="none" class="newReleasesItem" wx:for="{{newList}}" wx:key="{{index}}">
+        <image class="newReleasesItem_newIcon" src="/assets/image/index/new_icon.png"></image>
+        <image class="newReleasesItem_productPhoto" src="/assets/image/index/productPhoto.png"></image>
+        <view class="newReleasesItem_Title">{{item.productName }}</view>
+        <view class="newReleasesItem_Price">
+          <text>¥{{item.basePrice}}</text>
+          <text>¥{{item.marketPrice }}</text>
+        </view>
+        <view class="newReleasesItem_sales">
+          <text>出售 {{item.saleNum }}</text>
+          <text>{{item.typeName }}</text>
+        </view>
+      </navigator>
+    </view>
+  </view>
+  <!-- 佳节礼品 -->
+  <view class="festivalGift">
+    <image class="festivalGift_bg" src="/assets/image/index/festivalGift_bg.png"></image>
+    <navigator class="festivalGiftWap" url="/pages/productDetails/productDetails?id={{index}}" open-type="navigate" hover-class="none">
+      <view class="festivalGiftItem" wx:for="{{2}}" wx:key="{{index}}">
+        <image class="festivalGiftItem_bg" src="/assets/image/index/productPhoto.png"></image>
+        <view class="festivalGiftItem_tip">
+          <view class="festivalGiftItem_tip_name">茶叶名称</view>
+          <view class="festivalGiftItem_tip_price">
+            <text>¥700.00</text>
+            <text>¥900.00</text>
+          </view>
+        </view>
+        <view style="width: 100%; height: 1rpx; background-color: #D7E0E0;" wx:if="{{index === 0}}"></view>
+      </view>
+    </navigator>
+  </view>
+  <!-- 优惠不断 -->
+  <view class="preferentialConstantly">
+    <view class="preferentialConstantly_title">优惠不断</view>
+    <view class="preferentialConstantly_wap">
+      <navigator url="/pages/productDetails/productDetails?id={{index}}" open-type="navigate" hover-class="none" class="preferentialConstantlyItem" wx:for="{{5}}" wx:key="{{index}}">
+        <view class="pli_img">
+          <image class="pli_img_main" src="/assets/image/index/productPhoto.png"></image>
+          <image class="pli_img_icon" src="/assets/image/index/benefit_icon.png"></image>
+        </view>
+        <view class="pli_mes">
+          <view class="pli_mes_title more-txt-cut">
+            茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换
+          </view>
+          <view class="pli_mes_synopsis one-txt-cut">
+            炒青绿茶,最长10个字炒青绿茶,最长10个字炒青绿茶,最长10个字炒青绿茶,最长10个字
+          </view>
+          <view class="pli_mes_price">¥700.00</view>
+          <view class="pli_mes_make">
+            <text>¥900.00</text>
+            <text>当前已售 989</text>
+          </view>
+        </view>
+      </navigator>
+    </view>
+  </view>
+  <!-- 底部 -->
+  <view class="footer">我也是有底线的~~</view>
+</scroll-view>

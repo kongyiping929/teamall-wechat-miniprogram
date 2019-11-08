@@ -1,0 +1,100 @@
+<!-- 发现 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 预约tip -->
+    <view class="titleTip">
+        <text>我的预约</text>
+        <navigator url="/pages/makeList/makeList" open-type="navigate" hover-class="none">查看更多</navigator>
+    </view>
+    <!-- 预约订单 -->
+    <view class="order">
+        <view class="orderTime">
+            <image src="/assets/image/find/clock.png"></image>
+            <text>2019-03-06  晚间 7:00-9:00</text>
+        </view>
+        <view class="orderMes">
+            <image class="orderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+            <view class="orderMesTip">
+                <view class="orderMesTipTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="orderMesTipAttr">
+                    <text>一饼 , 590g , 包装1</text>
+                    <image src="/assets/image/user/downArrows.png"></image>
+                </view>
+            </view>
+        </view>
+        <view class="orderAddress">
+            <image src="/assets/image/index/map.png"></image>
+            <text class="one-txt-cut">广州中山北路78号中环店</text>
+            <text></text>
+            <view class="one-txt-cut">
+                <text>预约人数</text>
+                <text>99人</text>
+            </view>
+            <text></text>
+            <text class="one-txt-cut">茶艺师名字</text>
+        </view>
+        <view class="orderPay">
+            <view>预约创建时间: 2019-09-18</view>
+            <view bind:tap="goConfirmMake" data-id="1">去支付</view>
+        </view>
+    </view>
+    <!-- 微广场tip -->
+    <view class="titleTip square">
+        <text>微广场</text>
+        <navigator url="/pages/productType/productType" open-type="navigate" hover-class="none">查看更多</navigator>
+    </view>
+    <!-- 产品类型 -->
+    <view class="productIcon">
+        <view class="productIconItem" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{index}}">
+            <image src="{{item.url}}"></image>
+            <view class="one-txt-cut">{{item.squareName}}</view>
+        </view>
+    </view>
+    <!-- 分割线 -->
+    <view class="halving"></view>
+    <!-- 我的打卡tip -->
+    <view class="titleTip clock">
+        <text>我的打卡</text>
+        <navigator url="/pages/cardRecord/cardRecord" open-type="navigate" hover-class="none">查看更多</navigator>
+    </view>
+    <!-- 打卡信息 -->
+    <view class="clockWapper {{2 === index + 1 ? 'length' : ''}}" wx:for="{{2}}" wx:key="{{index}}">
+        <view class="clockTitleBar">
+            <view class="clockTitleBarLeft">
+                <image src="/assets/image/find/userPhoto.png"></image>
+                <text>J***C</text>
+            </view>
+            <view class="clockTitleBarRight">
+                <image src="/assets/image/find/goodIcon.png"></image>
+                <text>+324</text>
+            </view>
+        </view>
+        <view class="clockContent {{contentState ? 'none' : 'text-cut' }}">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
+            <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text>
+        </view>
+        <view class="clockImg {{2 === index + 1 ? 'length' : ''}}">
+            <image src="/assets/image/find/productBg.png"></image>
+            <image src="/assets/image/find/productBg.png"></image>
+            <image src="/assets/image/find/productBg.png"></image>
+        </view>
+        <view class="TorderMes" wx:if="{{2 === index + 1}}">
+            <image class="TorderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+            <view class="TorderMesTip">
+                <view class="TorderMesTipTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="TorderMesPrice">
+                    <text>¥700.00</text>
+                    <text>¥900.00</text>
+                </view>
+                <view class="TorderMesTipAttr">
+                    <text>一饼 , 590g , 包装1</text>
+                    <image src="/assets/image/user/downArrows.png"></image>
+                </view>
+            </view>
+        </view>
+    </view>
+    <!-- 底部 -->
+    <view class="footer">
+        我也是有底线的~~
+    </view>
+</scroll-view>

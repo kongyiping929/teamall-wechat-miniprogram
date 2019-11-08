@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/find/find",
+    "pages/user/user",
+    "pages/editPhone/editPhone",
+    "pages/productType/productType",
+    "pages/productList/productList",
+    "pages/productDetails/productDetails",
+    "pages/cardRecord/cardRecord",
+    "pages/confirmOrder/confirmOrder",
+    "pages/confirmMake/confirmMake",
+    "pages/dayCard/dayCard",
+    "pages/addAddress/addAddress",
+    "pages/addressList/addressList",
+    "pages/orderDetails/orderDetails",
+    "pages/makeList/makeList",
+    "pages/productPlaza/productPlaza",
+    "pages/shopList/shopList",
+    "pages/myPrestore/myPrestore",
+    "pages/myRedPacket/myRedPacket",
+    "pages/orderList/orderList",
+    "pages/myCollect/myCollect",
+    "pages/administer/administer",
+    "pages/queryOrder/queryOrder",
+    "pages/queryUsers/queryUsers",
+    "pages/editorShelf/editorShelf",
+    "pages/editorShelfDetails/editorShelfDetails",
+    "pages/backMake/backMake",
+    "pages/backPickup/backPickup",
+    "pages/backDeliver/backDeliver",
+    "pages/getUserInfo/getUserInfo",
+    "pages/backRefund/backRefund",
+    "pages/userSelectProduct/userSelectProduct"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位附近店铺之间距离使用"
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "茶多芳",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#556266",
+    "selectedColor": "#556266",
+    "backgroundColor": "#F4F4F4",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "茶多芳",
+        "iconPath": "/assets/image/tabBar/home.png",
+        "selectedIconPath": "/assets/image/tabBar/home_select.png"
+      },
+      {
+        "pagePath": "pages/find/find",
+        "text": "发现",
+        "iconPath": "/assets/image/tabBar/find.png",
+        "selectedIconPath": "/assets/image/tabBar/find_select.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "/assets/image/tabBar/user.png",
+        "selectedIconPath": "/assets/image/tabBar/user_select.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

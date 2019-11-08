@@ -1,0 +1,73 @@
+.addressList{
+  padding-bottom: 88rpx;
+}
+.item {
+  position:relative;
+  font-size: 24rpx;
+  color: #424C50;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 1);
+  border-bottom: 2rpx solid #F2F2F3;
+  padding: 30rpx 40rpx;
+  margin: 20rpx 0;
+}
+
+.item .name {
+  font-size: 32rpx;
+  font-weight: 400;
+  color: rgba(60, 58, 57, 1);
+  padding-right: 10rpx;
+}
+.item .phone {
+  color: #ACBBBC;
+}
+.item .address {
+  position: relative;
+  color: #556266;
+  padding-right: 30rpx;
+  line-height: 40rpx;
+  flex:3;
+}
+.item .address ::after{
+  content: '';                 /*CSS伪类用法*/
+  position: absolute;         /*定位背景横线的位置*/
+  right: 10rpx;
+  top:0rpx;
+  background: #f0f0f0;       /*宽和高做出来的背景横线*/
+  height: 40rpx;
+  width: 2rpx;
+}
+.item image{
+  padding-top: 6rpx;
+}
+.item .addressImg{
+  width: 30rpx;
+  height: 30rpx;
+  padding-left: 30rpx;
+}
+.item .active{
+  width: 68rpx;
+  height: 34rpx;
+  padding-right: 20rpx;
+}
+.item .info{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 20rpx;
+}
+.handle {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 88rpx;
+  background: #799262;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  margin: 0 auto;
+}
