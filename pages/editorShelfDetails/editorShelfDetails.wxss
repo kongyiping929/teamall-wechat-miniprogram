@@ -1,3 +1,6 @@
+.shelfDetails{
+  padding-bottom: 100rpx;
+}
 .account {
     font-size: 24rpx;
     box-sizing: border-box;
@@ -78,7 +81,7 @@
   text-align: center;
 }
 .details text:first-child{
-  max-width: 120rpx;
+  max-width: 148rpx;
 }
 
 .details text:nth-child(3)
@@ -88,10 +91,10 @@
 }
 .details text:last-child,.infoTip text:last-child{
   min-width: 84rpx;
-  max-width: 194rpx;
+  max-width: 170rpx;
   text-align: center
 }
-.edit text:last-child{
+.edit .btn{
   border:1px #799262 solid;
   color: #799262;
   padding: 8rpx 14rpx;

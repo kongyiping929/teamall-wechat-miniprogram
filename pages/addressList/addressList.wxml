@@ -1,5 +1,5 @@
 <view class="addressList">
-  <view class="item" wx:for="{{list}}" wx:key="{{index}}" data-id="{{item.id }}" bindtap="goAddress">
+  <view class="item" wx:for="{{list}}" wx:key="{{index}}" data-item="{{item }}" bindtap="goAddress">
     <view>
       <text class="name">{{item.consignee}}</text>
       <text class="phone">{{item.mobile }}</text>
@@ -10,7 +10,7 @@
         <image class="addressImg" src="/assets/image/address/address.png"></image>
       </view>
   </view>
-  <view class="handle" bind:tap="handle">
+  <view class="handle" bind:tap="goAddress">
       添加地址
   </view>
 </view>

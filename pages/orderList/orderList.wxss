@@ -118,6 +118,7 @@ page {
     line-height: 34rpx;
     background: rgba(243, 248, 241, 1);
     border-radius: 8rpx;
+    overflow: hidden
 }
 
 .itemMesDesAttr text {

@@ -1,18 +1,53 @@
 // pages/backMake/backMake.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 Page({
-
+ 
   /**
    * 页面的初始数据
    */
   data: {
+    orderNo: ""
+  },
 
+  init() {
+    const { id } = this.data;
+    ajax.post('/app/user/manage/getappointment', { shopId: app.globalData.shopId })
+      .then(res => {
+        let list = res.data.list;
+        for (let k in list) {
+          if (list[k].userAddressInfo) {
+            list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
+          }
+        }
+        this.setData({ list })
+      })
+  },
+
+  payEdit(e) {
+    const { orderNo } = this.data;
+    console.log(e, orderNo)
+    ajax.post('/app/user/manage/updamount', {
+      orderNo, amount: e.detail.payValue
+    })
+      .then(res => {
+        wx.showToast({
+          title: '修改成功！',
+          icon: 'none',
+          duration: 2000
+        });
+        this.hideModel()
+        setTimeout(() => {
+          this.init()
+        }, 800);
+      })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.init() 
   },
 
   /**

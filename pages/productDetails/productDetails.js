@@ -27,6 +27,7 @@ Page({
     urltype: 1, // 购买跳转的url 1 预约确认 2 订单确认
     service: false, // 客服模态框,
     collection: false,
+    price:0,//总价格 
     imgList: [
       "/assets/image/productDetails/starSelect.png",
       "/assets/image/productDetails/star.png",
@@ -35,17 +36,15 @@ Page({
 
   // 初始化
   init() {
-    console.log(app.globalData)
     let returnData = {
-      productPackSpecs: [{ id: 0, name: '廖老板19', unitPrice: 0.01 }],
-      productSpecs: [{ id: 0, name: '廖老板1', unitPrice: 0.01 }],
+      productPackSpecs: [],
+      productSpecs: [],
       productSubdivisionSpecs: null
     }
     let { productPackSpecs, productSpecs, productSubdivisionSpecs } = returnData;
     const {id} = this.data;
     ajax.post('/app/product/findInfo', { id })
       .then(res => {
-        
         this.setData({ list: res.data, collection: res.data.isCollection });
         console.log(this.data.collection)
       })
@@ -97,15 +96,8 @@ Page({
   // 显示/隐藏产品规格模态框
   changeSpecModal(e) {
     let { status, urltype } = e.currentTarget.dataset;
-    const { id } = this.data;
-    let that = this;
-    ajax.post('/app/product/getOrderConfirmInfo', { id })
-      .then(res => {
-        console.log(res)
-        this.setData({ specModal: status, urltype });
-      }).then(() => {
-        that.specList()
-      })
+    this.setData({ specModal: status, urltype });
+    this.specList();
     
   },
 
@@ -114,7 +106,10 @@ Page({
     const { id } = this.data;
     ajax.post('/app/product/findSpecInfo', { id })
       .then(res => {
-        console.log(res.data.list[0].packageList)
+        console.log(res.data.list[0].packageList[0])
+        let data = res.data.list[0];
+        let price = parseFloat(data.basePrice) + parseFloat(data.packageList[0].addPrice) +
+          parseFloat(data.lineList[0].addPrice) 
         this.setData({ 
           specList: res.data.list, 
           productSpecs: res.data.list,
@@ -122,7 +117,8 @@ Page({
           productPackSpecs: res.data.list[0].packageList ,
           productSpecsItem: res.data.list[0],
           productPackSpecsItem: res.data.list[0].packageList[0],
-          productSubdivisionSpecsItem: res.data.list[0].lineList[0]
+          productSubdivisionSpecsItem: res.data.list[0].lineList[0],
+          price
         });
       })
   },
@@ -170,7 +166,7 @@ Page({
       list,
       pics,
       urltype,
-      id
+      id,
     } = this.data;
     if (productSpecsItem === null) return wx.showToast({
       title: '请选择产品规格',
@@ -195,9 +191,11 @@ Page({
       specLineId: productSubdivisionSpecsItem.id,
       specPackageId: productPackSpecsItem.id,
       specPayNum,
+      shopName: list.shopName,
     }
     console.log(product)
-    wx.navigateTo({ url: urltype === 1 ? '/pages/confirmMake/confirmMake' :
+    wx.navigateTo({
+      url: urltype === 1 ? '/pages/confirmMake/confirmMake?item=' + JSON.stringify(product)  :
       '/pages/confirmOrder/confirmOrder?item=' + JSON.stringify(product)  });
   },
 

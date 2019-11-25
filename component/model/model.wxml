@@ -1,19 +1,35 @@
 <view wx:if='{{showModal}}'>
-  <view class='mask_layer' bindtap='modal_click_Hidden' />
+  <view class='mask_layer' bindtap='cancel' />
   <view class='modal_box'>
-    <view class="title">温馨提示</view>
-    <view class='content'>
-      <view class="box" wx:if='{{showSwitch}}'>
-        <text>预约开关：</text>
-        <switch class="wx-switch-input" checked="true" bindchange="switch1Change"/>
+    <view class="title">{{!type?"温馨提示":"确认上架后,该商品将显示于商城中."}}</view>
+    <view class='content' wx:if='{{!type}}'>
+      <view  wx:if='{{!showStock}}'>
+        <view class="box">
+          <text>预约开关：</text>
+          <switch class="wx-switch-input" checked="{{checked}}" bindchange="switchChange"/>
+        </view>
+        <input class='input_show1' bindinput='inputChange' wx:if="{{checked}}" value='{{modalMsg}}'  placeholder='输入预约价格'></input>
       </view>
       <view wx:if='{{showStock}}'>
         <text class="data">当前库存：<text>{{data.stockNum || 0}}</text></text>
         <input class='input_show1' bindinput='inputChange' value='{{modalMsg}}'  placeholder='输入库存'></input>
       </view>
     </view>
+    <view class='content' wx:if='{{type}}'>
+      <view class=" {{item.active?'selected active':'selected'}}" wx:for="{{typeList}}" data-index="{{index}}" wx:key="index" bindtap='typeActive'>
+        <view>
+          <text class="type {{item.color}}" >{{item.typeName}}</text>
+          <text>{{item.name}}</text>
+        </view>
+        <image src="{{item.active?imgList[0]:imgList[1]}}"></image>
+      </view>
+      <view class="box">
+        <text>在首页显示：</text>
+        <switch class="wx-switch-input" checked="{{checked}}" bindchange="switch1Change"/>
+      </view>
+    </view>
     <view class='btn1'>
-      <view bindtap='modal_click_Hidden' class='cancel'>取消</view>
+      <view bindtap='cancel' class='cancel'>取消</view>
       <view bindtap='Sure' class='Sure'>确定</view>
     </view>
   </view>

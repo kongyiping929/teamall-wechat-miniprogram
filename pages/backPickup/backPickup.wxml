@@ -5,28 +5,28 @@
 </view>
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 预约列表 -->
-    <view class="subscribe">
+    <view class="subscribe" wx:for="{{list}}" wx:key="{{index}}">
         <view class="subscribeTimeMes">
-            <text>订单编号:2019010110101021321</text>
-            <text>2019-09-08 18:00</text>
+            <text>订单编号:{{item.orderNo}}</text>
+            <text>{{item.createdTime}}</text>
         </view>
         <view class="subscribeTitle one-txt-cut">
-          <text>茶叶名称</text>
-          <text class="num">x 1</text>
+          <text>{{item.productName}}</text>
+          <text class="num">x {{item.buyNum}}</text>
         </view>
         <view class="subscribeAttr">
-            <text>一饼 , 590g , 包装1</text>
+            <text>{{item.specName}} , {{item.lineSpecName}} , {{item.packageSpecName}}</text>
             <image src="/assets/image/user/downArrows.png"></image>
         </view>
         <view class="subscribeTitle one-txt-cut">
-          <text>取货店铺:店铺名称</text>
+          <text>取货店铺:{{item.shopName}}</text>
         </view>
         <view class="subscribeNumber">
             <view>
                 <text>订单合计:</text>
-                <text>¥2,300</text>
+                <text>¥{{item.payAmount}}</text>
             </view>
-            <view class="confirm">确认预约</view>
+            <view class="confirm" bindtap="confirmOrder" data-orderNo="{{item.orderNo}}">取消订单</view>
         </view>
     </view>
 </scroll-view>

@@ -8,6 +8,8 @@ Page({
    */
   data: {
     switch1Checked: false, // 预约接单
+    shopModal:false,
+    shopList:""
   },
 
   // 更改预约接单
@@ -15,13 +17,39 @@ Page({
     this.setData({ switch1Checked: e.detail.value })
   },
 
+  showModal() {
+    this.setData({ shopModal: true })
+  },
+  hideModal() {
+    this.setData({ shopModal: false })
+  },
+
   // 初始化
   init() {
     let that = this;
-    ajax.post('/app/user/manage/getdata',{shopId:1 })
+    ajax.post('/app/user/manage/getdata', { shopId: app.globalData.shopId })
       .then(res => {
         console.log(res)
-        this.setData({ list:res.data});
+        this.setData({ list: res.data, shopActiveId: res.data.shopId});
+      })
+    this.shopList()
+  },
+
+  shopList() {
+    let that = this;
+    ajax.post('/app/user/manage/manageshop', { })
+      .then(res => {
+        this.setData({ shopList:res.data});
+      })
+  },
+
+  changesShop(e){
+    this.setData({ shopActiveId: e.currentTarget.dataset.id });
+    ajax.post('/app/index/updCurrentShop', { id: e.currentTarget.dataset.id })
+      .then(res => {
+        this.hideModal();
+        app.globalData.shopId = e.currentTarget.dataset.id;
+        this.init();
       })
   },
 

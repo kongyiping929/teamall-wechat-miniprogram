@@ -1,4 +1,6 @@
 // pages/productPlaza/productPlaza.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 Page({
 
   /**
@@ -8,11 +10,22 @@ Page({
 
   },
 
+  // 初始化
+  init() {
+    let that = this;
+    const { id } = this.data
+    ajax.post('/app/microSquare/findMicroSquareDetail', { id})
+      .then(res => {
+        this.setData({ list: res.data.list });
+      })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.setData({ id: options.id }, () => this.init())
+    
   },
 
   /**

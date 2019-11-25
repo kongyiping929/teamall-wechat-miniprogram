@@ -4,8 +4,6 @@
     <view class="topBar">
         <view class="topBarL">
             <view class="topBarLTitle">{{orderStatusList[status - 0]}}</view>
-            <view class="topBarLTip" wx:if="{{status - 0 === 1}}">剩23小时59分自动关闭</view>
-            <view class="topBarLTip" wx:if="{{status - 0 === 3}}">还有9天12时自动确认</view>
         </view>
         <view class="topBarR">
             <image src="/assets/image/orderDetails/status1.png"></image>
@@ -13,19 +11,19 @@
     </view>
     <!-- 地址信息 -->
     <view class="address">
-        <view class="addressContacts">
+        <view class="addressContacts" wx:if="{{list.userAddressInfo}}">
             <image src="/assets/image/confirmMake/location.png"></image>
-            <text>广州中环店</text>
-            <text>130xxxxxxxxxx</text>
+            <text>{{list.userAddressInfo.consignee}}</text>
+            <text>{{list.userAddressInfo.mobile}}</text>
         </view>
-        <view class="addressMes">
+        <view class="addressMes" wx:if="{{list.userAddressInfo}}">
             <text>地址</text>
-            <text>广东省 深圳市 南山区 某某街道   某某小区10栋110号 广东省 深圳市 南山区 某某街道   某某小区10栋110号</text>
+            <text>{{list.userAddressInfo.userAddress}}</text>
         </view>
         <view class="addressStore">
             <view class="addressStoreItem">
                 <text>发货店铺</text>
-                <text>中环店</text>
+                <text>{{list.shopName}}</text>
             </view>
             <view class="addressStoreItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
                 <text>快递公司</text>
@@ -41,10 +39,10 @@
     <view class="product">
         <image class="productPhoto" src="/assets/image/index/productPhoto.png"></image>
         <view class="productWapper">
-            <view class="productTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
-            <view class="productPrice">¥2,300</view>
+            <view class="productTitle one-txt-cut">{{list.productName}}</view>
+            <view class="productPrice">¥{{list.basePrice}}</view>
             <view class="productSelect">
-                <text>一饼 , 590g , 包装1</text>
+                <text>{{list.specName}} , {{list.lineSpecName}} , {{list.packageSpecName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
             </view>
         </view>
@@ -53,37 +51,37 @@
     <view class="attrWapper">
         <view class="attr">
             <text>购买数量</text>
-            <text>9999999</text>
+            <text>{{list.buyNum}}</text>
         </view>
-        <view class="attr">
+        <view class="attr" wx:if="{{list.subtractQuota}}">
             <text>优惠</text>
-            <text>-¥20</text>
+            <text>-¥{{list.subtractQuota}}</text>
         </view>
         <view class="attr">
             <text>实际付款</text>
-            <text>¥9999999</text>
+            <text>¥{{list.payAmount}}</text>
         </view>
         <view class="attr">
             <text>支付方式</text>
-            <text>微信支付</text>
+            <text>{{list.payChannel == 1?"预存支付":"微信支付"}}</text>
         </view>
     </view>
     <!-- 备注 -->
     <view class="remark">
         <text>备注:</text>
-        <text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor.</text>
+        <text>{{list.remark}}</text>
     </view>
     <!-- 订单信息 -->
     <view class="orderMes">
         <view class="orderTile">订单信息</view>
         <view class="orderItem">
-            订单编号:  3345625457569
+            订单编号:  {{list.orderNo}}
         </view>
         <view class="orderItem">
-            创建时间:  2019-02-24 23:32:05
+            创建时间:  {{list.createdTime}}
         </view>
         <view class="orderItem" wx:if="{{status - 0 !== 1}}">
-            支付时间:  2019-02-24 23:32:05
+            支付时间:  {{list.payTime}}
         </view>
         <view class="orderItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
             发货时间:  2019-02-24 23:32:05
@@ -101,17 +99,17 @@
     <!-- 底部 -->
     <view class="footer status{{status}}" wx:if="{{status - 0 === 1}}">
         <view>
-            <text>共计9人,合计:</text>
-            <text>￥2,300</text>
+            <text>共计{{list.buyNum}}件,合计:</text>
+            <text>￥{{list.payAmount}}</text>
         </view>
-        <view>支付</view>
+        <view bindtap="submitOrder">支付</view>
     </view>
     <view class="footer status{{status}}" wx:elif="{{status - 0 === 2 || status - 0 === 3}}">
         <view class="footerIcon" bind:tap="changeServiceModal" data-status="{{true}}">
             <image src="/assets/image/productDetails/service.png"></image>
             <view>客服</view>
         </view>
-        <view class="{{status - 0 === 2 ? 'footerBtn2' : 'footerBtn3'}}">
+        <view class="{{status - 0 === 2 ? 'footerBtn2' : 'footerBtn3'}}" data-status="{{status}}"  bindtap="confirmOrder">
             {{status - 0 === 2 ? '申请退款' : '确认收货'}}
         </view>
     </view>

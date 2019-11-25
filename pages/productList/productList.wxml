@@ -3,26 +3,32 @@
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 顶部状态栏 -->
     <view class="select {{typeArr[typeId].class}}">
-        <text>按销量</text>
-        <text class="active">按价格</text>
+        <text class="{{searchType == 1?'active':''}}" bindtap="changSearchType">按销量</text>
+        <text class="{{searchType == 2?'active':''}}" bindtap="changSearchType">按价格</text>
     </view>
 
     <!-- 产品列表 -->
     <view class="productWapper">
-        <navigator class="productItem" url="/pages/productDetails/productDetails?id={{index}}" open-type="navigate" hover-class="none" wx:for="{{6}}" wx:key="{{index}}">
-            <image class="productBg" src="/assets/image/index/productPhoto.png"></image>
+        <navigator class="productItem" url="/pages/productDetails/productDetails?id={{item.productId}}" open-type="navigate" hover-class="none" wx:for="{{list}}" wx:key="{{index}}">
+            <image class="productBg" src="{{item.url}}"></image>
             <image class="productIcon" src="{{typeArr[typeId].icon}}"></image>
             <view class="productName">
-                茶叶名称
+                {{item.productName}}
             </view>
             <view class="productPrice">
-                <text>¥700.00</text>
-                <text>¥900.00</text>
+                <text>¥{{item.basePrice}}</text>
+                <text>¥{{item.marketPrice}}</text>
             </view>
             <view class="productSales">
-                <text>炒青绿茶</text>
-                <text>出售 989</text>
+                <text>{{item.typeName}}</text>
+                <text>出售 {{item.saleNum}}</text>
             </view>
         </navigator>
+        <view class="couponNone" wx:if="{{!list.length > 0}}">
+            <view class="couponNoneBg">
+                <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+            </view>
+            <view class="couponNoneTip">暂无产品</view>
+        </view>
     </view>
 </scroll-view>

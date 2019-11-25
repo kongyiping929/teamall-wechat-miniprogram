@@ -1,34 +1,40 @@
 <!-- 预约确认 -->
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 店铺地址 -->
-    <view class="storeAddress">
+    <view class="storeAddress" wx:if="{{list}}"  bind:tap="changeAddPersonStatus" data-status="{{true}}">
         <view class="storeMode">
             <image src="/assets/image/confirmMake/location.png"></image>
-            <text>广州中环店</text>
-            <text>130xxxxxxxxxx</text>
+            <text>{{list.shopName}}</text>
+            <text>{{list.servicePhone}}</text>
         </view>
         <view class="storeMes">
             <text>地址</text>
-            <text>广东省 深圳市 南山区 某某街道   某某小区10栋110号深圳市 南山区 某某街道   某某小区10栋110号</text>
+            <text>{{list.detailAddress}}</text>
         </view>
+    </view>
+    <view class="storeAddress" wx:else>
+      <view class="storeMode">
+          <image src="/assets/image/confirmMake/location.png"></image>
+          <text>请填写收货地址</text>
+      </view>
     </view>
     <!-- 产品介绍 -->
     <view class="product">
-        <image class="productPhoto" src="/assets/image/index/productPhoto.png"></image>
+        <image class="productPhoto" src="http://{{list.url}}"></image>
         <view class="productWapper">
-            <view class="productTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
-            <view class="productPrice">¥2,300</view>
+            <view class="productTitle one-txt-cut">{{list.specName}}</view>
+            <view class="productPrice">¥{{price}}</view>
             <view class="productSelect">
-                <text>一饼 , 590g , 包装1</text>
+                <text>{{list.specName}}{{list.specPackageName}}{{list.specLineName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
             </view>
-        </view>
+        </view> 
     </view>
     <!-- 属性 -->
     <view class="attr">
         <view class="attrItem">
             <text>出行人数</text>
-            <text>99</text>
+            <text>{{item.specPayNum}}</text>
         </view>
         <picker mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime1" bindcolumnchange="changeDateTimeColumn1" range="{{dateTimeArray}}">
             <view class="attrItem nth2">
@@ -39,11 +45,11 @@
                 </view>
             </view>
         </picker>
-        <picker bindchange="bindPickerChange" value="{{masterWorker}}" range="{{masterWorkerArr}}">
+        <picker bindchange="bindPickerChange" range-key="userName" value="{{masterWorker}}" range="{{masterWorkerArr}}">
             <view class="attrItem">
                 <text>预约茶艺师</text>
                 <view>
-                    <text>{{masterWorkerArr[masterWorker]}}</text>
+                    <text>{{masterWorkerArr[masterWorker].userName}}</text>
                     <image src="/assets/image/productDetails/more.png"></image>
                 </view>
             </view>
@@ -55,10 +61,10 @@
         <input placeholder="请与客服联系后再填写,填写限100个字符" placeholder-style="font-size: 28rpx;font-weight:400;line-height:40rpx;color:rgba(172,187,188,0.5);" maxlength="{{100}}" value="{{remark}}" type="text" bindinput="changeRemark" />
     </view>
     <!-- 优惠券 -->
-    <view class="discountCoupon" bind:tap="changeCouponModal" data-status="{{true}}">
+     <view class="discountCoupon" bind:tap="changeCouponModal" data-status="{{true}}">
         <text>优惠券</text>
         <view>
-            <text>-¥20/当前可用1张</text>
+            <text wx:if="{{couponActive}}">-{{price - price*(couponActive.discount || 1)-(couponActive.subtractQuota||0)}}</text>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
@@ -66,15 +72,15 @@
     <view class="pay">
         <view class="payTitle">支付选择</view>
         <view class="payMode">
-            <view>
-                <image src="/assets/image/confirmMake/selectActive.png"></image>
+            <view bindtap="changPayChannel">
+                <image src="{{payChannel == 0?imgList[0]:imgList[1]}}"></image>
                 <text>预存支付</text>
             </view>
-            <text>余额: ¥99,999,999.99</text>
+            <text>余额: ¥{{list.prechargeBalance}}</text>
         </view>
         <view class="payMode">
-            <view>
-                <image src="/assets/image/confirmMake/select.png"></image>
+            <view bindtap="changPayChannel">
+                <image src="{{payChannel == 1?imgList[0]:imgList[1]}}"></image>
                 <text>微信支付</text>
             </view>
         </view>
@@ -82,8 +88,8 @@
     <!-- 底部 -->
     <view class="footer">
         <view>
-            <text>共计9人,合计:</text>
-            <text>￥2,300</text>
+            <text>共计{{item.specPayNum}}人,合计:</text>
+            <text>￥{{price*(couponActive.discount || 1)-(couponActive.subtractQuota||0)}}</text>
         </view>
         <view bind:tap="confirmMake">提交预约</view>
     </view>
@@ -95,25 +101,32 @@
             <text>优惠券</text>
             <image src="/assets/image/productDetails/close.png" bind:tap="changeCouponModal" data-status="{{false}}"></image>
         </view>
-        <view class="couponList" wx:if="{{true}}">
-            <view class="couponItem" wx:for="{{10}}">
+        <view class="couponList"  wx:if="{{coupon.length > 0}}">
+            <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
+                <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
                 <view class="couponItemTop">
                     <view>
                         <view>
                             <text>优惠券</text>
-                            <text>x 2</text>
+                            <!-- <text>x {{item.discount}}</text> -->
                         </view>
-                        <view>有效期至 2019-09-09</view>
+                        <view>有效期至 {{item.expTime}}</view>
                     </view>
                     <view>
-                        <text>2.8</text>
-                        <text>折</text>
+                      <view wx:if="{{item.discount>0}}">
+                          <text>{{item.discount*10}}</text>
+                          <text>折</text>
+                      </view>
+                      <view wx:if="{{item.subtractQuota>0}}">
+                          <text>{{item.useQuota>0?",再":""}}减</text>
+                          <text>{{item.subtractQuota }}元</text>
+                      </view>
                     </view>
                 </view>
                 <view class="couponItemBottom">
-                    <text>产品类型</text>
-                    <text>满减额度 100元使用</text>
-                    <text>立即使用</text>
+                    <text>{{item.productTypeId == "0"?"通用":productTypeId}}</text>
+                    <text>满减额度 {{item.useQuota}}元使用</text>
+                    <text data-item="{{item}}" bindtap="{{(item.productTypeId==items.productTypeId || item.productTypeId==0)?'couponChange':'tip'}}">立即使用</text>
                 </view>
             </view>
         </view>

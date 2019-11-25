@@ -8,9 +8,9 @@
         </view>
     </view>
     <!-- 用户账号 -->
-    <view class="account" bind:tap="selectProduct" wx:for="{{list}}" wx:key="{{index}}">
+    <view class="account" bind:tap="selectProduct" wx:if="{{list}}">
         <image src="/assets/image/user/photo.png"></image>
-        <text>J***C</text>
+        <text>{{list.nickName}}</text>
         <image src="/assets/image/productDetails/more.png"></image>
     </view>
 </scroll-view>

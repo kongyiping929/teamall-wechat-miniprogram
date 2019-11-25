@@ -1,40 +1,38 @@
 <!-- 订单查询 -->
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 预约列表 -->
-    <view class="subscribe">
-        <view class="subscribeTimeMes">
-            <text>订单编号:2019010110101021321</text>
-            <text>2019-09-08 18:00</text>
+    <view class="subscribe" wx:for="{{list}}" wx:key="{{index}}">
+         <view class="subscribeTimeMes">
+            <text>订单编号:{{item.orderNo}}</text>
+            <text>{{item.createdTime}}</text>
         </view>
-        <view class="subscribeTitle one-txt-cut">
-          <text>茶叶名称</text>
-        </view>
-        <view class="subscribePrice2">
-            <text>¥700.00</text>
-            <text>x 1</text>
+        <view class="subscribeTitle subscribePrice2 one-txt-cut">
+          <text>{{item.productName}}</text>
+          <text class="num">x {{item.buyNum}}</text>
         </view>
         <view class="subscribeAttr">
-            <text>一饼 , 590g , 包装1</text>
+            <text>{{item.specName}} , {{item.lineSpecName}} , {{item.packageSpecName}}</text>
             <image src="/assets/image/user/downArrows.png"></image>
         </view>
         <view class="subscribeTitle one-txt-cut">
-          <text>取货店铺:店铺名称</text>
+          <text>取货店铺:{{item.shopName}}</text>
         </view>
-         <view class="subscribeProson">
+         <view class="subscribeProson" wx:if="{{item.userAddressInfo}}">
             <image src="/assets/image/confirmMake/location.png"></image>
-            <text>冬瓜的</text>
-            <text>130xxxxxxxxxx</text>
+            <text>{{item.userAddressInfo.consignee}}</text>
+            <text>{{item.userAddressInfo.mobile}}</text>
         </view>
-        <view class="subscribeConsignee">
+        <view class="subscribeConsignee" wx:if="{{item.userAddressInfo}}">
             <text>地址</text>
-            <text>广东省 深圳市 南山区 某某街道广东省 深圳市 南山区 某某街道广东省 深圳市 南山区 某某街道</text>
+            <text>{{item.userAddressInfo.userAddress}}</text>
         </view>
         <view class="subscribeNumber">
             <view>
                 <text>订单合计:</text>
-                <text>¥2,300</text>
+                <text>¥{{item.payAmount}}</text>
             </view>
-            <view>确认退款</view>
+            <view bindtap="refundEdit" data-orderNo="{{item.orderNo}}">确认退款</view>
         </view>
     </view>
 </scroll-view>
+<showModel showModalRefund="{{showModalRefund}}" bind:refundEdit="refundEdit" bind:hideModel="hideModel" ></showModel>

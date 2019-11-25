@@ -59,6 +59,20 @@ Page({
     wx.navigateTo({ url: '/pages/myCollect/myCollect' });
   },
 
+  // 跳转我的优惠券
+  goMyCoupon() {
+    wx.navigateTo({ url: '/pages/myCoupon/myCoupon' });
+  },
+
+  // 跳转我的地址
+  goAddress() {
+    wx.navigateTo({ url: '/pages/addressList/addressList' });
+  },
+  // 跳转订单详情
+  goOrderDetails(e) {
+    wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=1&id=${e.currentTarget.dataset.id}` })
+  },
+
   // 初始化
   init() {
     let that = this;
@@ -74,7 +88,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init()
+    
   },
 
   goPay(){
@@ -100,7 +114,11 @@ Page({
     var reg = /^(\d{2})\d{7}(\d{2})$/;
     return tel.replace(reg, "$1*******$2");
   },
-
+  clipboard(){
+    wx.setClipboardData({
+      data: this.data.user.inviteCode
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -112,7 +130,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init()
   },
 
   /**

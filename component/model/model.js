@@ -6,6 +6,7 @@ Component({
     showModal: Boolean,
     showStock: Boolean,
     showSwitch: Boolean,
+    type: Boolean,
     data:Object
   },
 
@@ -14,7 +15,18 @@ Component({
    */
   data: {
     isHiddenMask: false,
-    value:""
+    value:"",
+    checked:true,
+    showType :1,
+    typeList: [
+      { name: "最新上架", typeName: "新", active: true, color:"color" },
+      { name: "佳节礼品", typeName: "佳", active: false, color: "jia" },
+      { name: "优惠不断", typeName: "惠", active: false, color: "hui" },
+    ],
+    imgList: [
+      "/assets/image/confirmMake/selectActive.png",
+      "/assets/image/confirmMake/select.png",
+    ]
   },
 
   /**
@@ -24,25 +36,40 @@ Component({
     inputChange(e){
       this.setData({ value: e.detail.value})
     },
-    /// 显示 actionsheet
-    show: function () {
-      this.createAnimation(!this.data.isHiddenMask);
+    typeActive(e){
+      const { typeList} = this.data;
+      let list = typeList;
+      list.forEach((v,i)=>{
+        v.active = false
+      })
+      list[e.target.dataset.index].active = true;
+      this.setData({ typeList: list, showType: e.target.dataset.index+1 })
     },
-
-    /// 隐藏 actionsheet
-    hidden: function () {
-      this.createAnimation(!this.data.isHiddenMask);
-    },
-
-    /// 单击了 actionsheet 事件
+    // 单击了 actionsheet 事件
     Sure: function (e) {
-      // triggerEvent函数接受三个值：事件名称、数据、选项值 
-      this.triggerEvent('inputChange', this.data.value);
+      // triggerEvent函数接受三个值：事件名称、数据、选项值
+      const { type, checked, showType} = this.data;
+      if (type){
+        this.triggerEvent('productEdit', { checked, showType })
+      }else{
+        if (!this.data.value) return wx.showToast({
+          title: "请输入值",
+          icon: 'none',
+          duration: 2000
+        });
+        this.data.showStock ? this.triggerEvent('inputChange', this.data.value) :
+          this.triggerEvent('appointment', { value: this.data.value, checked })
+        this.setData({value:""})
+      }
     },
 
-    /// 取消 actionsheet 事件
+    // 取消 actionsheet 事件
     cancel: function () {
-      this.hidden();
+      this.triggerEvent('hideModel', {})
+    },
+    // 开关
+    switchChange: function () {
+      this.setData({ checked: !this.data.checked })
     },
 
     /// 创建 actionsheet 动画
@@ -54,7 +81,7 @@ Component({
         delay: 1, // 延时执行时长
       });
 
-      // 2 这个动画实例赋给当前的动画实例 
+      // 2 这个动画实例赋给当前的动画实例
       this.animation = animation;
 
       // 3 计算高度，并赋值

@@ -1,61 +1,64 @@
-<view class="account" bind:tap="selectProduct">
-  <view >
-    <text class="title">{{product.productName}}</text>
-    <view class="subscribeAttr">
-        <text>{{product.typeName}}</text>
+<view class="shelfDetails">
+  <view class="account" bind:tap="selectProduct">
+    <view >
+      <text class="title">{{product.productName}}</text>
+      <view class="subscribeAttr">
+          <text>{{product.typeName}}</text>
+      </view>
     </view>
   </view>
-</view>
-<view class="specifications" wx:for="{{product.specInfoVoList}}" wx:key="{{index}}">
-  <view class="info">
-    <view>
-      <text class="title">规格</text>
-      <text class="title">{{item.specName}}</text>
+  <view class="specifications" wx:for="{{product.specInfoVoList}}" wx:key="{{index}}"  wx:for-index="productIndex">
+    <view class="info">
+      <view>
+        <text class="title">规格</text>
+        <text class="title">{{item.specName}}</text>
+      </view>
+      <view>
+        <text class="title black">价格:</text>
+        <text class="red">¥{{item.basePrice }}</text>
+      </view>
     </view>
-    <view>
-      <text class="title black">价格:</text>
-      <text class="red">¥{{item.basePrice }}</text>
+    <view class="infoTip">
+          <text>细分规格</text>
+          <text>价格</text>
     </view>
-  </view>
-  <view class="infoTip">
-        <text>细分规格</text>
-        <text>价格</text>
-  </view>
-  <view class="infoTip details" wx:for="{{item.lineList}}" wx:key="{{index}}">
-        <text>{{item.name }}</text>
-        <text>+ ¥{{item.addPrice }}</text>
-  </view>
-  <view class="line"></view>
-  <view class="info">
-    <view>
-      <text class="title">包装</text>
+    <view class="infoTip details" wx:for="{{item.lineList}}" wx:key="{{index}}" >
+          <text>{{item.name }}</text>
+          <text>+ ¥{{item.addPrice }}</text>
     </view>
-  </view>
-  <view class="infoTip">
-        <text>细分规格</text>
-        <text>库存</text>
-        <text>包装价格</text>
-        <text>操作</text>
-  </view>
-  <view class="infoTip details edit" wx:for="{{item.packageList}}" wx:key="{{index}}">
-        <text>{{item.name}}</text>
-        <text>{{item.stockNum || 0}}</text>
-        <text>+ ¥{{item.addPrice}}</text>
-        <text bindtap="editStock" data-index="{{index}}">库存编辑</text>
-  </view>
+    <view class="line"></view>
+    <view class="info">
+      <view>
+        <text class="title">包装</text>
+      </view>
+    </view>
+    <view class="infoTip">
+          <text>细分规格</text>
+          <text>库存</text>
+          <text>包装价格</text>
+          <text wx:if="{{productType==1}}">操作</text>
+    </view>
+    <view class="infoTip details edit" wx:for="{{item.packageList}}" wx:key="{{index}}">
+          <text>{{item.name}}</text>
+          <text>{{item.stockNum || 0}}</text>
+          <text>+ ¥{{item.addPrice}}</text>
+          <text class="btn" bindtap="editStock" wx:if="{{productType==1}}" data-index="{{index}}" data-productIndex="{{productIndex}}" >库存编辑</text>
+    </view>
 
-  <view class="line"></view>
-  <view class="info state">
-    <view>
-      <text class="title">可预约</text>
-      <text class="title black"> 预约单价:¥{{item.appointmentPrice }}/人</text>
-    </view>
-    <view>
-      <text class="title red"> 预约编辑</text>
+    <view class="line"></view>
+    <view class="info state">
+      <view>
+        <text class="title">{{item.appointmentStatus==1?"可预约":"不可预约"}}</text>
+        <text class="title black" wx:if="{{item.appointmentStatus==1}}"> 预约单价:¥{{item.appointmentPrice }}/人</text>
+      </view>
+      <view>
+        <text class="title red" wx:if="{{productType==1}}" bindtap="appointmentEdit"  data-productIndex="{{productIndex}}"> 预约编辑</text>
+      </view>
     </view>
   </view>
 </view>
+
 <!-- 底部 -->
-    <view class="footer">下架</view>
-    <showModel showModal="{{showModal}}" switch="{{false}}" showStock="{{true}}"  data="{{modalData}}"
-    bind:inputChange="inputChange"></showModel>
+<view class="footer" bindtap="{{productType==0?'downProduct':'confirm'}}">{{productType==0?"下架":"上架"}}</view>
+<showModel showModal="{{showModal}}" switch="{{false}}" showStock="{{showStock}}" type="{{type}}"  data="{{modalData}}"
+ bind:inputChange="inputChange" bind:appointment="appointment" bind:productEdit="productEdit" bind:hideModel="hideModel" ></showModel>

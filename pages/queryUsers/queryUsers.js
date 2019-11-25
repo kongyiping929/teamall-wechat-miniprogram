@@ -19,7 +19,8 @@ Page({
 
   // 选择产品
   selectProduct(e) {
-    wx.navigateTo({ url: `/pages/userSelectProduct/userSelectProduct?type=${this.data.type}` });
+    const { type, list } = this.data
+    wx.navigateTo({ url: `/pages/userSelectProduct/userSelectProduct?type=${type}&userId=${list.userId}` });
   },
 
   /**

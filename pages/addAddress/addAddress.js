@@ -3,7 +3,6 @@ const app = getApp()
 const ajax = require('../../assets/js/ajax.js');
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -14,6 +13,7 @@ Page({
     recipients: '', // 收件人
     phone: '', // 手机号
     address: '', // 详细地址
+    regionId:""
   },
 
   // 更改字段
@@ -102,7 +102,7 @@ Page({
     let {
       item
     } = options;
-    console.log(item)
+    console.log(item, item == "")
     if (!item) {
       wx.setNavigationBarTitle({
         title: '添加收货地址'

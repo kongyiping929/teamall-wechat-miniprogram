@@ -7,18 +7,22 @@ Page({
    * 页面的初始数据
    */
   data: {
+    type:1,//1:产品分类 2:微广场
     list:''
   },
 
-  // 跳转产品微广场
+  // 跳转
   goProductPlaza(e) {
-    wx.navigateTo({ url: '/pages/productPlaza/productPlaza?id=' + e.currentTarget.dataset.id })
+    this.data.type == 2?wx.navigateTo({ url: '/pages/productPlaza/productPlaza?id=' + e.currentTarget.dataset.id }):
+    wx.navigateTo({ url: '/pages/productList/productList?productTypeId=' + e.currentTarget.dataset.id })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options)
+    this.setData({ type: options.type });
     this.init()
   },
   // 初始化

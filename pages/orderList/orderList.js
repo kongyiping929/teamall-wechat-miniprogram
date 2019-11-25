@@ -1,6 +1,9 @@
 // pages/orderList/orderList.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 
 const orderStatusList = ['', '待支付', '待发货', '待收货', '已完成', '售后/退款'];
+const orderStatusBtn = ['', '待支付', '申请退款', '确认收货', '已完成', ""];
 const orderStatusArr = ['', '待支付', '待发货', '待收货', '已完成', '退款申请中', '退款成功', '退款失败'];
 
 Page({
@@ -11,11 +14,29 @@ Page({
   data: {
     orderStatusList, // 订单状态栏
     orderStatusArr, // 订单状态
+    orderStatusBtn,//订单按钮
     id: '', // 状态id
+    list:[],
+  },
+
+  init() {
+    const { id } = this.data;
+    ajax.post('/app/user/productorder/myorder', { orderStatus: id })
+      .then(res => {
+        let list = res.data.list;
+        for(let k in list){
+          if (list[k].userAddressInfo){
+            console.log(list[k].userAddressInfo,JSON.parse(list[k].userAddressInfo))
+            list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
+          }
+        }
+        this.setData({ list })
+        console.log(res.data.list)
+      })
   },
 
   changeId (e) {
-    this.setData({ id: e.currentTarget.dataset.id });
+    this.setData({ id: e.currentTarget.dataset.id },()=>this.init());
   },
 
   // 下拉刷新
@@ -54,7 +75,8 @@ Page({
 
   // 跳转订单详情
   goOrderDetails(e) {
-    wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=${e.currentTarget.dataset.id}&orderid=${e.currentTarget.dataset.orderid}` })
+    console.log(e.currentTarget.dataset.status, e.currentTarget.dataset.id)
+    wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=${e.currentTarget.dataset.status}&id=${e.currentTarget.dataset.id}` })
   },
 
   /**
@@ -62,6 +84,7 @@ Page({
    */
   onLoad: function (options) {
     this.setData({ id: options.id })
+    this.init();
   },
 
   /**

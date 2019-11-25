@@ -1,4 +1,6 @@
 // pages/myPrestore/myPrestore.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 
 const selectArr = [];
 
@@ -17,6 +19,18 @@ Page({
    */
   data: {
     selectArr, // 选择器
+    code:""
+  },
+
+  init() {
+    let { typeId, searchType, productTypeId } = this.data;
+  
+    let that = this;
+    ajax.post('/app/user/recharge/getdata', {})
+      .then(res => {
+        this.setData({ selectArr: res.data.dictQuotaListVo, list: res.data.page, prechargeBalance: res.data.prechargeBalance })
+        console.log(res)
+      })
   },
 
   // 选择数据
@@ -26,7 +40,47 @@ Page({
       item.status = false;
     });
     selectArr[e.currentTarget.dataset.index].status = true;
-    this.setData({ selectArr });
+    console.log(selectArr[e.currentTarget.dataset.index].dictTypeCode)
+    this.setData({ selectArr, code: selectArr[e.currentTarget.dataset.index].dictTypeCode});
+  },
+
+  recharge(){
+    let { code } = this.data;
+    let that = this;
+    if (!code) return wx.showToast({
+      title: "请选择充值金额！",
+      icon: 'none',
+      duration: 2000
+    });
+    ajax.post('/app/user/recharge/recharge', { dictTypeCode: code})
+      .then(res => {
+        wx.requestPayment({
+          timeStamp: res.data.timeStamp,
+          nonceStr: res.data.nonceStr,
+          package: res.data.package,
+          signType: res.data.signType,
+          paySign: res.data.paySign,
+          success: function (res) {
+            console.log(res, res.data)
+            wx.showToast({
+              title: '订单支付成功',
+              icon: 'none',
+              duration: 2000
+            });
+            setTimeout(() => {
+              that.init();
+            }, 800);
+          },
+          fail: function (res) {
+            wx.showToast({
+              title: '订单支付失败',
+              icon: 'none',
+              duration: 2000
+            });
+          }
+        })
+        console.log(res)
+      })
   },
 
   // 下拉刷新
@@ -67,7 +121,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.init()
   },
 
   /**

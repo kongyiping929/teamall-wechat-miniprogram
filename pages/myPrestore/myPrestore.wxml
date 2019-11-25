@@ -6,7 +6,7 @@
             <image class="topMesImage" src="/assets/image/user/moneyIcon_1.png"></image>
             <view class="topMesCon">
                 <view class="topMesTitle">我的预存</view>
-                <view class="topMesPrice">¥232,343.00</view>
+                <view class="topMesPrice">¥{{prechargeBalance}}</view>
             </view>
         </view>
         <view class="select">
@@ -14,10 +14,10 @@
             <view class="selectWap">
                 <view class="selectItem" wx:for="{{selectArr}}" wx:key="{{index}}" bind:tap="changeSelectArr" data-index="{{index}}">
                     <image src="{{item.status ? '/assets/image/confirmMake/selectActive.png' : '/assets/image/confirmMake/select.png'}}"></image>
-                    <view class="selectItemPrcie">{{item.price}}</view>
+                    <view class="selectItemPrcie">{{item.quota }}</view>
                 </view>
             </view>
-            <view class="selectBtn">充值</view>
+            <view class="selectBtn" bindtap="recharge">充值</view>
         </view>
     </view>
     <!-- 列表 -->

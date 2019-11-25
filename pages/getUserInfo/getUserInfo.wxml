@@ -1,8 +1,6 @@
 <!--pages/getUserInfo/getUserInfo.wxml-->
 <view class="logo">
-    <image src="/assets/img/auth_logo.png"></image>
-    <view class="logoTitle">中秋月饼</view>
-    <view class="logoTip">Mid-Autumn moon cake</view>
+    <image src="/assets/image/index/logo@2x.png"></image>
 </view>
 
 <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo">授权获取用户信息</button>

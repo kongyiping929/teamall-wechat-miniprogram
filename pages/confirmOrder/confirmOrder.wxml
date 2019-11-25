@@ -6,41 +6,47 @@
         <view class="getModeSelect">
             <view bindtap="changReceiveType">
                 <image src="{{receiveType == 0?imgList[0]:imgList[1]}}"></image>
-                <text>快递</text>
+                <text>到店自取</text>
             </view>
             <view bindtap="changReceiveType">
                 <image src="{{receiveType == 1?imgList[0]:imgList[1]}}"></image>
-                <text>到店自取</text>
+                <text>快递</text>
             </view>
         </view>
-        <view class="getModeAddress" wx:if="{{consignee}}"  bind:tap="changeAddPersonStatus" data-status="{{true}}">
-            <image src="/assets/image/confirmMake/location.png"></image>
-            <view class="getModeAddressBox">
-                <view class="getModeAddressBoxTop">
-                    <text>{{consignee.consignee}}</text>
-                    <text>{{consignee.mobile}}</text>
-                </view>
-                <view class="getModeAddressBoxBottom">
-                    <text>地址</text>
-                    <text>{{consignee.userAddress}}</text>
-                </view>
-            </view>
-            <image class="arrowRight" src="/assets/image/productDetails/more.png"></image>
+        <view wx:if="{{receiveType == 1}}">
+          <view class="getModeAddress" wx:if="{{consignee}}"  bind:tap="changeAddPersonStatus" data-status="{{true}}">
+              <image src="/assets/image/confirmMake/location.png"></image>
+              <view class="getModeAddressBox">
+                  <view class="getModeAddressBoxTop">
+                      <text>{{consignee.consignee}}</text>
+                      <text>{{consignee.mobile}}</text>
+                  </view>
+                  <view class="getModeAddressBoxBottom">
+                      <text>地址</text>
+                      <text>{{consignee.userAddress}}</text>
+                  </view>
+              </view>
+              <image class="arrowRight" src="/assets/image/productDetails/more.png"></image>
+          </view>
+          <view class="getModeMap" wx:else bind:tap="changeAddPersonStatus" data-status="{{true}}">
+              <image src="/assets/image/confirmMake/location.png"></image>
+              <text>请填写收货地址</text>
+              <image class="arrowRight" src="/assets/image/productDetails/more.png"></image>
+          </view>
         </view>
         <view class="getModeMap" wx:else>
-            <image src="/assets/image/confirmMake/location.png"></image>
-            <text>请填写收货地址</text>
-            <image class="arrowRight" src="/assets/image/productDetails/more.png"></image>
-        </view>
+              <image src="/assets/image/confirmMake/location.png"></image>
+              <text>{{items.shopName}}</text>
+          </view>
     </view>
     <!-- 产品介绍 -->
     <view class="product">
-        <image class="productPhoto" src="{{list.url}}"></image>
+        <image class="productPhoto" src="http://{{list.url}}"></image>
         <view class="productWapper">
             <view class="productTitle one-txt-cut">{{list.specName}}</view>
-            <view class="productPrice">¥{{list.unitPrice}}</view>
+            <view class="productPrice">¥{{price}}</view>
             <view class="productSelect">
-                <text>{{list.specPackageName}}{{list.specLineName}}</text>
+                <text>{{list.specName}},{{list.specPackageName}},{{list.specLineName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
             </view>
         </view>
@@ -48,7 +54,7 @@
     <!-- 购买数量 -->
     <view class="number">
         <text>购买数量</text>
-        <text>{{list.specPayNum}}</text>
+        <text>{{items.specPayNum}}</text>
     </view>
     <!-- 备注 -->
     <view class="remark">
@@ -58,8 +64,8 @@
     <!-- 优惠券 -->
     <view class="discountCoupon" bind:tap="changeCouponModal" data-status="{{true}}">
         <text>优惠券</text>
-        <view wx:if="{{coupon.length > 0}}">
-            <text>-¥20/当前可用1张</text>
+        <view>
+            <text wx:if="{{couponActive}}">-{{price - price*(couponActive.discount || 1)-(couponActive.subtractQuota||0)}}</text>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
@@ -83,8 +89,8 @@
     <!-- 底部 -->
     <view class="footer">
         <view>
-            <text>共计9人,合计:</text>
-            <text>￥2,300</text>
+            <text>共计{{items.specPayNum}}件,合计:</text>
+            <text>￥{{price*(couponActive.discount || 1)-(couponActive.subtractQuota||0)}}</text>
         </view>
         <view bindtap="submitOrder">提交订单</view>
     </view>
@@ -93,28 +99,35 @@
 <view class="couponWapper" wx:if="{{couponModal}}" bind:tap="changeCouponModal" data-status="{{false}}">
     <view class="couponBox" catch:tap="stopEvent">
         <view class="couponBar">
-            <text>优惠券{{coupon.lenght}}</text>
+            <text>优惠券</text>
             <image src="/assets/image/productDetails/close.png" bind:tap="changeCouponModal" data-status="{{false}}"></image>
         </view>
         <view class="couponList"  wx:if="{{coupon.length > 0}}">
-            <view class="couponItem" wx:for="{{coupon}}" >
+            <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
+                <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
                 <view class="couponItemTop">
                     <view>
                         <view>
                             <text>优惠券</text>
-                            <text>x 2</text>
+                            <!-- <text>x {{item.discount}}</text> -->
                         </view>
-                        <view>有效期至 2019-09-09</view>
+                        <view>有效期至 {{item.expTime}}</view>
                     </view>
                     <view>
-                        <text>2.8</text>
-                        <text>折</text>
+                      <view wx:if="{{item.discount>0}}">
+                          <text>{{item.discount*10}}</text>
+                          <text>折</text>
+                      </view>
+                      <view wx:if="{{item.subtractQuota>0}}">
+                          <text>{{item.useQuota>0?",再":""}}减</text>
+                          <text>{{item.subtractQuota }}元</text>
+                      </view>
                     </view>
                 </view>
                 <view class="couponItemBottom">
-                    <text>产品类型</text>
-                    <text>满减额度 100元使用</text>
-                    <text>立即使用</text>
+                    <text>{{item.productTypeId == "0"?"通用":productTypeId}}</text>
+                    <text>满减额度 {{item.useQuota}}元使用</text>
+                    <text data-item="{{item}}" bindtap="{{(item.productTypeId==items.productTypeId || item.productTypeId==0)?'couponChange':'tip'}}">立即使用</text>
                 </view>
             </view>
         </view>
@@ -123,7 +136,7 @@
                 <image src="/assets/image/confirmOrder/modalBg1.png"></image>
             </view>
             <view class="couponNoneTip">暂无可用优惠卷</view>
-            <view class="couponNoneBtn">不使用优惠券</view>
+            <view class="couponNoneBtn" bind:tap="changeCouponModal">不使用优惠券</view>
         </view>
     </view>
 </view>
@@ -145,7 +158,7 @@
               <image class="addressImg" src="/assets/image/address/address.png" bindtap="goAddAddress"  data-item="{{item }}" ></image>
             </view>
         </view>
-        <view class="personNone" wx:if="{{!list.userAddressList}}">
+        <view class="personNone" wx:if="{{!consignee}}">
             <view class="personNoneBg">
                 <image src="/assets/image/confirmOrder/modalBg2.png"></image>
             </view>

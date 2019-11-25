@@ -1,0 +1,48 @@
+<view wx:if='{{showModalDelive}}'>
+  <view class='mask_layer' bindtap='cancel' />
+  <view class='modal_box'>
+    <view class="title">{{!type?"温馨提示":"确认上架后,该商品将显示于商城中."}}</view>
+    <view class='content'>
+      <view>
+        <text class="data">发货时请确认快递公司及单号</text>
+        <input class='input_show1' placeholder-class="place-holder" bindinput='companyInput' value='{{company}}'  placeholder='输入快递公司'></input>
+        <input class='input_show1' type="number" placeholder-class="place-holder" bindinput='orderNoInput' value='{{orderNo}}'  placeholder='输入快递单号'></input>
+      </view>
+    </view>
+    <view class='btn1'>
+      <view bindtap='cancel' class='cancel'>取消</view>
+      <view bindtap='Sure' class='Sure'>确定</view>
+    </view>
+  </view>
+</view>
+<view wx:if='{{showModalRefund}}'>
+  <view class='mask_layer' bindtap='cancel' />
+  <view class='modal_box'>
+  <view class="title">温馨提示</view>
+    <view class='content'>
+      <view>
+        <text class="data">请确认订单,若确认退款申请订单则会发起退款</text>
+      </view>
+    </view>
+    <view class='btn1'>
+      <view bindtap='cancel' class='cancel'>取消</view>
+      <view bindtap='Sure' class='Sure'>确认退款</view>
+    </view>
+  </view>
+</view>
+<view wx:if='{{showModalPay}}'>
+  <view class='mask_layer' bindtap='cancel' />
+  <view class='modal_box'>
+  <view class="title">温馨提示</view>
+    <view class='content'>
+      <view>
+        <text class="data">更改订单总价将会干扰产品的增值部分,请确认最终订单合计额后再进行操作,更改成功后,订单总额将为填写额</text>
+        <input class='input_show1' placeholder-class="place-holder" bindinput='payInput' value='{{refundValue}}'  placeholder='输入价格' maxlength="100"></input>
+      </view>
+    </view>
+    <view class='btn1'>
+      <view bindtap='cancel' class='cancel'>取消</view>
+      <view bindtap='Sure' class='Sure'>确定</view>
+    </view>
+  </view>
+</view>

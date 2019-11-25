@@ -6,15 +6,6 @@
  *
  * @数据源 https://docs.alipay.com/isv/10327
  *
- * @使用范例：
-    <region-picker bind:change="regionChange" province="浙江省" city="台州市" county="天台县"></region-picker>
-
- * @获取到的数据示例:
-    e.detail={
-        province:'浙江省',
-        city:'台州市',
-        county:'天台县'
-    };
 ---=*--*=*-=*-=-*-=* ^.^ *---=*--*=*-=*-=-*-=* */
 const ajax = require('../../assets/js/ajax.js');
 const orz = require('./orz');
@@ -28,8 +19,13 @@ let counties=[];//县区数据，根据市的选择而变
 
 /** 用于获取某数组中元素的索引号 */
 const getIndex=orz.curry(function (arr,name) {
-    let idx=Array.prototype.indexOf.call(arr,name);
-    return (idx< 1) ? 0 : idx;
+  let idx = Array.prototype.indexOf.call(arr, name);
+  return (idx < 1) ? 0 : idx;
+});
+const getChildren=orz.curry(function (arr,name) {
+  for(let k in arr){
+    if (arr[k].value == name) return k
+  }
 });
 
 /** 用于获取省份数据，并传递给全局provinces，此函数只在ready中执行一次就可以了 */
@@ -49,6 +45,7 @@ const getProvinces=function () {
  */
 const getCities=function (provinceIndex) {
   let col = [];
+  console.log(areaArr[provinceIndex], provinceIndex)
   let data = areaArr[provinceIndex].children
   provinces = data;
   data.forEach(function (item, index) {
@@ -105,6 +102,7 @@ Component({
                     value:value
                 });
             }
+          console.log(this.data.value)
             this.setData({
                 pickArr:pickArr,
             });
@@ -123,9 +121,11 @@ Component({
     },
     ready: function () {
       const { province, city, county, regionId} = this.data;
+      console.log( regionId)
       ajax.post('/common/address/province/city/district', {})
         .then(res => {
           areaArr = res.data
+          console.log(areaArr)
           let col1 = getProvinces();
           let provinceIndex = getIndex(col1, province);
           let col2 = getCities(provinceIndex);
@@ -133,15 +133,20 @@ Component({
           let col3 = getCounties(cityIndex);
           let countyIndex = getIndex(col3, county);
           let value = [provinceIndex, cityIndex, countyIndex];
+          
           let pickArr = [col1, col2, col3];
-          if (regionId) {
-            this.valChange({
+          if (regionId != "") {
+            let a = getChildren(areaArr, regionId[0]);
+            let b = getChildren(areaArr[a].children, regionId[1]);
+            let c = getChildren(areaArr[a].children[b].children, regionId[2]);
+            console.log(a,b,c)
+            this.valChange({  
               detail: {
-                value: [getIndex(areaArr, regionId[0]), getIndex(areaArr, regionId[1]),
-                getIndex(areaArr, regionId[3])]
+                value: [a, b, c]
               }
             })
           }
+          console.log(pickArr)
           this.setData({
             pickArr: pickArr,
             value: value

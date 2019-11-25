@@ -21,6 +21,20 @@ Page({
       })
   },
 
+  selectProduct(e){
+    console.log(e)
+    const { productId, productName, typeName } = e.target.dataset.item
+    let item = {
+      productId,
+      productName,
+      typeName,
+      type: this.data.type
+    }
+    wx.navigateTo({
+      url: '/pages/editorShelfDetails/editorShelfDetails?item=' + JSON.stringify(item) ,
+    })
+  },
+
   changeQueryType(e){
     this.setData({ type: e.target.dataset.value },()=>this.init())
   },
@@ -29,7 +43,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init()
+    
   },
 
   /**
@@ -43,7 +57,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init()
   },
 
   /**

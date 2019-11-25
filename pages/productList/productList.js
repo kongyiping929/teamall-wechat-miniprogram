@@ -1,6 +1,6 @@
 // pages/productList/productList.js
 const ajax = require('../../assets/js/ajax.js');
-
+const app = getApp()
 const typeArr = [
   {
     title: '最新上架',
@@ -26,26 +26,35 @@ Page({
    */
   data: {
     typeArr,
-    typeId: 0, // 类型
+    typeId: "", // 类型
+    searchType:1,//销量-价格
+    productTypeId:""
   },
   // 初始化
   init() {
-    
-    let { typeId } = this.data;
+    let { typeId, searchType, productTypeId } = this.data;
     let data = {
-      "pageNum": 1,
-      "productTypeId": 0,
-      "searchType": 0,
-      "shopId": 0,
-      "showType": typeId+1,
-      "sort": 0
+      "searchType": searchType,
+      "shopId": app.globalData.shopId,
+    }
+    if (typeId){
+      data.showType = typeId + 1;
+    }else{
+      data.productTypeId = productTypeId
     }
     let that = this;
-    ajax.post('/app/index/findProductInfo',{...data})
+    let url = typeId ? '/app/index/findProductTypeList': '/app/index/findProductList'
+    ajax.post(url,data)
       .then(res => {
+        this.setData({list: res.data.list})
         console.log(res)
       })
   },
+
+  changSearchType() {
+    this.setData({ searchType: this.data.searchType == 1 ? 2 : 1 }, () => this.init() )
+  },
+
   // 下拉刷新
   onRefresh(index = 'false') {
     // let { pageId, size, id } = this.data;
@@ -84,9 +93,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let typeId = Number(options.type);
-    wx.setNavigationBarTitle({ title: typeArr[typeId].title });
-    this.setData({ typeId });
+    let typeId = options.type?Number(options.type):"";
+    let productTypeId = options.productTypeId ? options.productTypeId:"";
+    console.log(options)
+    wx.setNavigationBarTitle({ title: typeId!=""?typeArr[typeId].title:"产品分类" });
+    this.setData({ typeId, productTypeId });
     this.init();
   },
 

@@ -108,6 +108,7 @@ page {
     background: rgba(243, 248, 241, 1);
     border-radius: 8rpx;
     padding: 0 14rpx;
+    overflow: hidden
 }
 
 .orderMesTipAttr text {
@@ -229,7 +230,7 @@ page {
 .productIconItem image {
     width: 120rpx;
     height: 120rpx;
-    border-radius: 60rpx;
+    border-radius: 10rpx;
     vertical-align: middle;
     margin-bottom: 24rpx;
 }
@@ -281,6 +282,7 @@ page {
     width: 78rpx;
     height: 78rpx;
     margin-right: 41rpx;
+    border-radius: 50%
 }
 
 .clockTitleBarLeft text {
@@ -303,7 +305,7 @@ page {
 
 .clockContent {
     position: relative;
-    height: 180rpx;
+    /* height: 180rpx; */
     line-height: 36rpx;
     font-size: 24rpx;
     font-weight: 400;
@@ -403,6 +405,7 @@ page {
     background: rgba(243, 248, 241, 1);
     border-radius: 8rpx;
     padding: 0 14rpx;
+    overflow: hidden
 }
 
 .TorderMesTipAttr text {

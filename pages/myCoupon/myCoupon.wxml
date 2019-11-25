@@ -1,0 +1,36 @@
+<!-- 我的收藏 -->
+  <!-- 列表 -->
+  <view wx:if="{{coupon.length > 0}}">
+    <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
+      <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
+      <view class="couponItemTop">
+        <view>
+          <view>
+            <text>优惠券</text>
+          </view>
+          <view>有效期至 {{item.expTime}}</view>
+        </view>
+        <view>
+          <view wx:if="{{item.discount>0}}">
+            <text>{{item.discount*10}}</text>
+            <text>折</text>
+          </view>
+          <view wx:if="{{item.subtractQuota>0}}">
+            <text>{{item.discount>0?",再":""}}减</text>
+            <text>{{item.subtractQuota }}元</text>
+          </view>
+        </view>
+
+      </view>
+      <view class="couponItemBottom">
+        <text>{{item.productTypeId == "0"?"通用":item.productTypeId}}</text>
+        <text>满减额度 {{item.useQuota}}元使用</text>
+      </view>
+    </view>
+  </view>
+  <view class="couponNone" wx:else>
+    <view class="couponNoneBg">
+      <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+    </view>
+    <view class="couponNoneTip">暂无可用优惠卷</view>
+  </view>

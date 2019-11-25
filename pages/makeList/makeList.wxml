@@ -1,35 +1,35 @@
 <!-- 我的预约 -->
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 预约订单 -->
-    <view class="order" wx:for="{{10}}" wx:key="{{index}}">
+    <view class="order" wx:for="{{list}}" wx:key="{{index}}">
         <view class="orderTime">
             <image src="/assets/image/find/clock.png"></image>
             <text>2019-03-06  晚间 7:00-9:00</text>
         </view>
         <view class="orderMes">
-            <image class="orderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+            <image class="orderMesPhoto" src="http://{{item.url}}"></image>
             <view class="orderMesTip">
-                <view class="orderMesTipTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="orderMesTipTitle one-txt-cut">{{item.productName}}</view>
                 <view class="orderMesTipAttr">
-                    <text>一饼 , 590g , 包装1</text>
+                    <text>一饼 , 590g , {{item.specName}}</text>
                     <image src="/assets/image/user/downArrows.png"></image>
                 </view>
             </view>
         </view>
         <view class="orderAddress">
             <image src="/assets/image/index/map.png"></image>
-            <text class="one-txt-cut">广州中山北路78号中环店</text>
+            <text class="one-txt-cut">{{item.shopName}}</text>
             <text></text>
             <view class="one-txt-cut">
                 <text>预约人数</text>
-                <text>99人</text>
+                <text>{{item.peopleNum}}人</text>
             </view>
             <text></text>
-            <text class="one-txt-cut">茶艺师名字</text>
+            <text class="one-txt-cut">{{item.nickName}}</text>
         </view>
         <view class="orderPay">
-            <view>预约创建时间: 2019-09-18</view>
-            <view class="{{index % 2 === 0 ? 'none' : ''}}">去支付</view>
+            <view>预约创建时间: {{item.createdTime}}</view>
+            <view class="{{item.orderStatus % 2 === 0 ? 'none' : ''}}">去支付</view>
         </view>
     </view>
 </scroll-view>

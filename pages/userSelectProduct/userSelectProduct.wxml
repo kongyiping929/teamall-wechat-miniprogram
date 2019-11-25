@@ -1,11 +1,10 @@
 <!-- 产品选择 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
-    <!-- 产品列表 -->
-    <view class="item" wx:for="{{6}}">
-        <text>茶叶名称</text>
-        <text>炒青绿茶</text>
+    <navigator url="/pages/backConfirmOrder/backConfirmOrder?productId={{item.productId}}&userId=1197089166505148418" hover-class="none" open-type="navigate" wx:for="{{list}}" wx:key="{{index}}">
+    <view class="item">
+        <text>{{item.productName }}</text>
+        <text>{{item.typeName}}</text>
         <view>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
-</scroll-view>
+    </navigator>

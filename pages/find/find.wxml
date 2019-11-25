@@ -40,37 +40,36 @@
     <!-- 微广场tip -->
     <view class="titleTip square">
         <text>微广场</text>
-        <navigator url="/pages/productType/productType" open-type="navigate" hover-class="none">查看更多</navigator>
+        <navigator url="/pages/productType/productType?type=2" open-type="navigate" hover-class="none">查看更多</navigator>
     </view>
     <!-- 产品类型 -->
     <view class="productIcon">
-        <view class="productIconItem" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{index}}">
-            <image src="{{item.url}}"></image>
+        <view class="productIconItem" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{item.squareId}}">
+            <image src="http://{{item.url}}"></image>
             <view class="one-txt-cut">{{item.squareName}}</view>
         </view>
     </view>
     <!-- 分割线 -->
     <view class="halving"></view>
     <!-- 我的打卡tip -->
-    <view class="titleTip clock">
+    <view class="titleTip clock" wx:if="{{myPunchList}}">
         <text>我的打卡</text>
         <navigator url="/pages/cardRecord/cardRecord" open-type="navigate" hover-class="none">查看更多</navigator>
     </view>
     <!-- 打卡信息 -->
-    <view class="clockWapper {{2 === index + 1 ? 'length' : ''}}" wx:for="{{2}}" wx:key="{{index}}">
+    <view class="clockWapper {{2 === index + 1 ? 'length' : ''}}" wx:if="{{myPunchList}}" wx:for="{{myPunchList}}" wx:key="{{index}}">
         <view class="clockTitleBar">
             <view class="clockTitleBarLeft">
-                <image src="/assets/image/find/userPhoto.png"></image>
-                <text>J***C</text>
+                <image src="{{item.headimgUrl}}"></image>
+                <text>{{item.userName}}</text>
             </view>
             <view class="clockTitleBarRight">
                 <image src="/assets/image/find/goodIcon.png"></image>
-                <text>+324</text>
+                <text>+{{item.likeNum}}</text>
             </view>
         </view>
         <view class="clockContent {{contentState ? 'none' : 'text-cut' }}">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
+            {{item.content}}
             <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text>
         </view>
         <view class="clockImg {{2 === index + 1 ? 'length' : ''}}">

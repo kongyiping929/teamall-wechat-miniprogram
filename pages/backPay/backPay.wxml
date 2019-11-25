@@ -1,0 +1,38 @@
+<!-- 订单查询 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 预约列表 -->
+    <view class="subscribe"  wx:for="{{list}}" wx:key="{{index}}">
+        <view class="subscribeTimeMes">
+            <text>订单编号:{{item.orderNo}}</text>
+            <text>{{item.createdTime}}</text>
+        </view>
+        <view class="subscribeTitle subscribePrice2 one-txt-cut">
+          <text>{{item.productName}}</text>
+          <text class="num">x {{item.buyNum}}</text>
+        </view>
+        <view class="subscribeAttr">
+            <text>{{item.specName}} , {{item.lineSpecName}} , {{item.packageSpecName}}</text>
+            <image src="/assets/image/user/downArrows.png"></image>
+        </view>
+        <view class="subscribeTitle one-txt-cut">
+          <text>取货店铺:{{item.shopName}}</text>
+        </view>
+         <view class="subscribeProson" wx:if="{{item.userAddressInfo}}">
+            <image src="/assets/image/confirmMake/location.png"></image>
+            <text>{{item.userAddressInfo.consignee}}</text>
+            <text>{{item.userAddressInfo.mobile}}</text>
+        </view>
+        <view class="subscribeConsignee" wx:if="{{item.userAddressInfo}}">
+            <text>地址</text>
+            <text>{{item.userAddressInfo.userAddress}}</text>
+        </view>
+        <view class="subscribeNumber">
+            <view>
+                <text>订单合计:</text>
+                <text>¥{{item.payAmount}}</text>
+            </view>
+            <view bindtap="confirmRefund" data-orderNo="{{item.orderNo}}">更改总额</view>
+        </view>
+    </view>
+</scroll-view>
+<showModel showModalPay="{{showModalPay}}" bind:payEdit="payEdit" bind:hideModel="hideModel" ></showModel>

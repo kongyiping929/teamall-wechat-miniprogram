@@ -13,7 +13,7 @@
     </view>
     <view class="lfrg">
         <span>输入邀请码</span>
-        <input type="text" placeholder="请填写邀请码" value="{{invitation}}" bindinput="changeField" data-field="invitation" maxlength="{{6}}" />
+        <input type="text" placeholder="请填写邀请码" value="{{invitation}}" bindinput="changeInvitation" data-field="invitation" maxlength="{{6}}" />
     </view>
 </view>
 <view class="btn" bind:tap="submit">完成</view>

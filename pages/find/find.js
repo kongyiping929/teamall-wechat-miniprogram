@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    contentState: false // 文字溢出显示状态 true 显示 false 隐藏
+    contentState: true // 文字溢出显示状态 true 显示 false 隐藏
   },
 
   // 更改文字溢出显示状态
@@ -34,11 +34,27 @@ Page({
         this.setData({ list: res.data.list });
       })
   },
+  myPunchList() {
+    let that = this;
+    const { myPunchList } = this.data
+    ajax.post('/app/microSquare/findMyPunchList', { pageSize:1})
+      .then(res => {
+        this.setData({ myPunchList: res.data.list });
+        return res.data.list
+      }).then((res)=>{
+        console.log(res)
+        ajax.post('/common/attachment/list', { category: 5, resourceId: res[0].userPunchId })
+          .then(res => {
+            this.setData({ img: res.data });
+          })
+      })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     this.microSquareList()
+    this.myPunchList()
   },
 
   /**

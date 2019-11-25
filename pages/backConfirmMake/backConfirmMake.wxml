@@ -1,0 +1,161 @@
+<!-- 确认订单 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+    <!-- 取货方式 -->
+    <view class="getMode">
+        <view class="getModeMap" bind:tap="changeAddPersonStatus" data-status="{{true}}">
+            <image src="/assets/image/user/photo.png"></image>
+            <text>千与千寻</text>
+        </view>
+    </view>
+    <view class="getModeAddress getMode"  bind:tap="changeAddPersonStatus" data-status="{{true}}">
+              <image src="/assets/image/confirmMake/location.png"></image>
+              <view class="getModeAddressBox">
+                  <view class="getModeAddressBoxTop">
+                      <text>广州</text>
+                      <text>13823214321</text>
+                  </view>
+                  <view class="getModeAddressBoxBottom">
+                      <text>地址</text>
+                      <text>广东省 深圳市 南山区 某某街道   某某小区10栋110号 </text>
+                  </view>
+              </view>
+          </view>
+    <!-- 产品介绍 -->
+    <view class="product">
+        <view class="productWapper">
+            <view class="productTitle one-txt-cut">茶叶名称</view>
+            <view class="productSelect">
+                <text>炒青茶</text>
+            </view>
+        </view>
+    </view>
+     <!-- 规格 -->
+    <view class="discountCoupon" bind:tap="changeCouponModal" data-status="{{true}}">
+        <text>规格</text>
+        <view>
+            <text wx:if="{{couponActive}}">-{{couponActive.subtractQuota}}</text>
+            <image src="/assets/image/productDetails/more.png"></image>
+        </view>
+    </view>
+    <view class="attr">
+    <picker mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime1" bindcolumnchange="changeDateTimeColumn1" range="{{dateTimeArray}}">
+            <view class="attrItem nth2">
+                <text>预约时段</text>
+                <view>
+                    <view>{{dateTimeYTD}}  {{dateTimeArray[1][dateTime[1]]}}</view>
+                    <image src="/assets/image/productDetails/more.png"></image>
+                </view>
+            </view>
+        </picker>
+    </view>
+    <!-- 购买数量 -->
+    <view class="number">
+        <text>出售</text>
+        <text>999999件 订单合计：<text>¥999</text></text>
+    </view>
+   
+    <!-- 备注 -->
+    <view class="remark">
+        <text>备注:</text>
+        <input class="remarkInput" value="{{remark}}" type="text" placeholder-style="color: #ACBBBC;" maxlength="{{100}}" placeholder="请与客服联系后再填写,填写限100个字符" bindinput="changeRemark" />
+    </view>
+    <!-- 支付 -->
+    <view class="pay">
+        <view class="payTitle">支付选择</view>
+        <view class="payMode">
+            <view bindtap="changPayChannel">
+                <image src="{{payChannel == 0?imgList[0]:imgList[1]}}"></image>
+                <text>预存支付</text>
+            </view>
+        </view>
+        <view class="payMode">
+            <view  bindtap="changPayChannel">
+                <image src="{{payChannel == 1?imgList[0]:imgList[1]}}"></image>
+                <text>微信支付</text>
+            </view>
+        </view>
+        <view class="payMode">
+            <view  bindtap="changPayChannel">
+                <image src="{{payChannel == 2?imgList[0]:imgList[1]}}"></image>
+                <text>免单</text>
+            </view>
+        </view>
+    </view>
+    <!-- 底部 -->
+    <view class="footer">
+        <view bindtap="submitOrder">确认发送预定</view>
+    </view>
+</scroll-view>
+<!-- 优惠券模态框 -->
+<view class="couponWapper" wx:if="{{couponModal}}" bind:tap="changeCouponModal" data-status="{{false}}">
+    <view class="couponBox" catch:tap="stopEvent">
+        <view class="couponBar">
+            <text>优惠券{{coupon.lenght}}</text>
+            <image src="/assets/image/productDetails/close.png" bind:tap="changeCouponModal" data-status="{{false}}"></image>
+        </view>
+        <view class="couponList"  wx:if="{{coupon.length > 0}}">
+            <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
+                <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
+                <view class="couponItemTop">
+                    <view>
+                        <view>
+                            <text>优惠券</text>
+                            <text>x {{item.discount}}</text>
+                        </view>
+                        <view>有效期至 {{item.expTime}}</view>
+                    </view>
+                    <view>
+                      <view wx:if="{{item.useQuota>0}}">
+                          <text>{{item.useQuota}}</text>
+                          <text>折</text>
+                      </view>
+                      <view wx:if="{{item.subtractQuota>0}}">
+                          <text>{{item.useQuota>0?",再":""}}减</text>
+                          <text>{{item.subtractQuota }}元</text>
+                      </view>
+                    </view>
+                    
+                </view>
+                <view class="couponItemBottom">
+                    <text>{{item.productTypeId == "0"?"通用":productTypeId}}</text>
+                    <text>满减额度 {{item.useQuota}}元使用</text>
+                    <text data-item="{{item}}" bindtap="couponChange">立即使用</text>
+                </view>
+            </view>
+        </view>
+        <view class="couponNone" wx:else>
+            <view class="couponNoneBg">
+                <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+            </view>
+            <view class="couponNoneTip">暂无可用优惠卷</view>
+            <view class="couponNoneBtn" bind:tap="changeCouponModal">不使用优惠券</view>
+        </view>
+    </view>
+</view>
+<!-- 地址模态框 -->
+<view class="personModal" data-status="{{false}}" wx:if="{{addPersonStatus}}">
+    <view class="personWap" catch:tap="stop">
+        <view class="personTitle">
+            <span>收货地址</span>
+            <image src="/assets/image/productDetails/close.png" class="fr" bind:tap="changeAddPersonStatus" data-status="{{false}}"></image>
+        </view>
+        <view class="item" wx:for="{{list.userAddressList}}" wx:key="{{index}}"bind:tap="changeRecipients" data-item="{{item}}">
+          <view>
+            <text class="name">{{item.consignee}}</text>
+            <text class="phone">{{item.mobile }}</text>
+          </view>
+            <view class="info">
+              <image wx:if="{{item.defaultStatus==1}}" class="active" src="/assets/image/address/moren.png"></image>
+              <text class="address">{{item.userAddress }}</text>
+              <image class="addressImg" src="/assets/image/address/address.png" bindtap="goAddAddress"  data-item="{{item }}" ></image>
+            </view>
+        </view>
+        <view class="personNone" wx:if="{{!list.userAddressList}}">
+            <view class="personNoneBg">
+                <image src="/assets/image/confirmOrder/modalBg2.png"></image>
+            </view>
+            <view class="personNoneTip">无收货地址，请添加!</view>
+        </view>
+        <view class="personBtn" bind:tap="goAddAddress">新增地址</view>
+    </view>
+</view>

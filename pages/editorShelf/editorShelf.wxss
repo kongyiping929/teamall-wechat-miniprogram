@@ -60,7 +60,7 @@
   padding: 12rpx 18rpx;
   background-color: #9DAF84;
   border-radius: 50%;
-   margin-right: 8rpx
+  margin-right: 8rpx
 }
 .subscribeAttr {
     display: inline-block;

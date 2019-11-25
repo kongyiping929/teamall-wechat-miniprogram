@@ -3,7 +3,6 @@ const app = getApp()
 const ajax = require('../../assets/js/ajax.js');
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -11,18 +10,20 @@ Page({
     list:"",
     remark: "", // 备注
     coupon: null,//优惠券
+    couponActive:null,
     couponModal: false, // 优惠券模态框 true 显示 false 隐藏
     addPersonStatus: false, // 添加地址模态框
     passenger: [], // 旅客信息
     travellerPerson: [], // 收件人列表
     consignee: null, // 收件人地址对象
-    item:"",//规格参数
-    receiveType :0,//取货方式
+    items:"",//规格参数
+    receiveType :1,//取货方式
     payChannel :1,//支付默认微信
     imgList: [
       "/assets/image/confirmMake/selectActive.png",
       "/assets/image/confirmMake/select.png",
-    ]
+    ],
+    price:0
   },
 
   // 更改备注
@@ -33,6 +34,16 @@ Page({
   // 显示隐藏优惠券模态框
   changeCouponModal(e) {
     this.setData({ couponModal: e.currentTarget.dataset.status });
+  },
+
+  couponChange(e){
+    let item = e.currentTarget.dataset.item
+    if (this.data.price < item.useQuota) return wx.showToast({
+      title: '不满足优惠金额！',
+      icon: 'none',
+      duration: 2000
+    });
+    this.setData({ couponActive: item, couponModal: false });
   },
 
   // 跳转添加地址
@@ -72,16 +83,14 @@ Page({
   stopEvent(e) {}, // 防止冒泡
 
   init(){
-    const { item: { productId , shopId, specId, specLineId, specPackageId }} = this.data;
+    const { items: { productId, shopId, specId, specLineId, specPackageId, specPayNum}} = this.data;
     ajax.post('/app/product/getOrderConfirmInfo', { productId, shopId, specId, specLineId, specPackageId })
       .then(res => {
-        let consignee = [];
+        let consignee = "";
         res.data.userAddressList.filter((v,i)=>{
-          v.defaultStatus == 1 ? consignee=v:"";
+          v.defaultStatus == 1 ? consignee=v : "";
         })
-       let a = []
-        this.setData({ list: res.data, consignee, coupon:res.data.userCouponList})
-        console.log(Object.keys(res.data.userCouponList).length )
+        this.setData({ list: res.data, consignee, coupon: res.data.userCouponList, price: res.data.unitPrice*specPayNum})
       })
   },
 
@@ -89,9 +98,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({ item: JSON.parse(options.item) })
+    this.setData({ items: JSON.parse(options.item) })
     console.log(JSON.parse(options.item))
-    this.init();
+    
   },
 
   changPayChannel(){
@@ -103,7 +112,7 @@ Page({
   },
 
   submitOrder(){
-    const { consignee, payChannel, item: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId } } = this.data;
+    const { consignee, couponActive, payChannel, receiveType, items: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId, remark } } = this.data;
     let data = {
       buyNum: specPayNum,
       initiationChannel :2,
@@ -111,15 +120,19 @@ Page({
       productId,
       productTypeId,
       punchStatus: 1,
-      receiveType: 2,
+      receiveType: receiveType+1,
       shopId ,
       specId ,
       specLineId ,
       specPackageId ,
-      userAddressInfo: consignee
+      userAddressInfo: receiveType == 1 ? consignee : {},
+      couponId: couponActive && (couponActive.id || '') || "",
+      remark
     }
     ajax.post('/app/user/productorder/saveorder', data)
       .then(res => {
+        console.log(payChannel, payChannel == 0)
+        if (!payChannel == 0){
         wx.requestPayment({
           timeStamp: res.data.timeStamp,
           nonceStr: res.data.nonceStr,
@@ -127,22 +140,16 @@ Page({
           signType: res.data.signType,
           paySign: res.data.paySign,
           success: function (res) {
-            if (res.data) {
-              wx.showToast({
-                title: '订单支付成功',
-                icon: 'none',
-                duration: 2000
-              });
-              // setTimeout(() => {
-              //   wx.navigateTo({ url: express === 1 ? '/pages/myReserve/myReserve?id=1' : '/pages/voucher/voucher?id=0' })
-              // }, 800);
-            } else {
-              wx.showToast({
-                title: '订单支付失败',
-                icon: 'none',
-                duration: 2000
-              });
-            }
+            console.log(res,res.data)
+            wx.showToast({
+              title: '订单支付成功',
+              icon: 'none',
+              duration: 2000
+            });
+            setTimeout(() => {
+              //wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=2&id=${productId}` })
+              wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
+            }, 800);
           },
           fail: function (res) {
             wx.showToast({
@@ -151,11 +158,28 @@ Page({
               duration: 2000
             });
           }
-        })
-        console.log(Object.keys(res.data))
+        })}else{
+          console.log(res)
+          wx.showToast({
+            title: '订单支付成功',
+            icon: 'none',
+            duration: 2000
+          });
+          setTimeout(() => {
+            //wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=2&id=${productId}` })
+            wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
+          }, 800);
+        }
+        
       })
   },
-
+  tip(){
+    wx.showToast({
+      title: '此优惠券不适用于该产品！',
+      icon: 'none',
+      duration: 2000
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -167,7 +191,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init();
   },
 
   /**
@@ -184,24 +208,4 @@ Page({
 
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

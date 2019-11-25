@@ -14,7 +14,7 @@
     <!-- 列表 -->
     <view class="list">
         <view class="listTitle">红包领取记录</view>
-        <view class="item" wx:for="{{10}}" wx:key="{{index}}">
+        <view class="item" wx:for="{{list}}" wx:key="{{index}}">
             <view class="itemTime">
                 <text>订单编号: 3345625457569</text>
                 <text>2019-02-24 23:32:05</text>

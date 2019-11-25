@@ -13,16 +13,17 @@ Page({
     if (e.detail.errMsg === 'getUserInfo:ok' && e.detail.userInfo) {
       wx.getUserInfo({
         success: response => {
-          console.log(response)
+          console.log(app.globalData.code,response)
           const { iv, encryptedData } = response
           wx.request({
             url: 'http://119.23.79.12:7001/cy'+'/app/common/wxlogin' ,
             data: { code: app.globalData.code, userInfo: encryptedData, iv },
             method: 'POST',
             success(res) {
-              console.log(res)
-              app.globalData.TOKEN = res.data.responseBody.data.loginToken;
-              wx.reLaunch({ url: '/pages/index/index' });
+              console.log("zzzz", res.data.responseBody.data)
+              wx.setStorageSync('TOKEN', res.data.responseBody.data.loginToken)
+              wx.setStorageSync('OPENID', res.data.responseBody.data.openid)
+              wx.reLaunch({ url: '/pages/editPhone/editPhone' });
             }
           })
         }})
@@ -54,7 +55,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    wx.hideLoading()
   },
 
   /**

@@ -1,4 +1,6 @@
 // pages/queryOrder/queryOrder.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 Page({
 
   /**
@@ -8,7 +10,23 @@ Page({
     queryType: 0, // 查询类型 0 查预约 1 查订单
     keyword: '', // 搜索值
   },
-
+  search() {
+    const { keyword, queryType } = this.data;
+    let url = queryType == 0 ? "/app/user/manage/getappiontments" : '/app/user/manage/getorders'
+    ajax.post(url, { shopId: app.globalData.shopId ,keyword })
+      .then(res => {
+        let list = res.data.list;
+        for (let k in list) {
+          if (list[k].userAddressInfo) {
+            list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
+          }
+        }
+        this.setData({ list })
+      })
+  },
+  orderInput(e) {
+    this.setData({ keyword: e.detail.value })
+  },
   // 更改查询类型
   changeQueryType(e) {
     this.setData({ queryType: e.currentTarget.dataset.value })
@@ -18,7 +36,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
   },
 
   /**

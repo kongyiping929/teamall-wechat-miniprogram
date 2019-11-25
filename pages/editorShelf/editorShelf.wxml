@@ -11,16 +11,16 @@
             </view>
         </view>
          <!-- 列表 -->
-        <navigator wx:for="{{product.list}}" wx:key="{{index}}" url="/pages/editorShelfDetails/editorShelfDetails?productId={{item.productId}}" hover-class="none" open-type="navigate">
-          <view class="account" bind:tap="selectProduct">
-            <view >
+         <navigator wx:for="{{product.list}}" wx:key="{{index}}" url="/pages/editorShelfDetails/editorShelfDetails?productId={{item.productId}}&&type={{type}}&&productName={{item.productName}}&&typeName={{item.typeName}}" data-item="{{item}}"  hover-class="none" open-type="navigate">
+          <view class="account">
+            <view data-item="{{item}}">
               <text class="title">{{item.productName}}</text>
               <view class="subscribeAttr">
                   <text>{{item.typeName}}</text>
               </view>
             </view>
             <view>
-                <text class="type">{{showType[item.showType-1]}}</text>
+                <text class="type" wx:if='{{type==0}}'>{{showType[item.showType-1]}}</text>
                 <text class="type color" wx:if='{{item.showStatus == 1}}'>首</text>
                 <image src="/assets/image/productDetails/more.png"></image>
             </view>

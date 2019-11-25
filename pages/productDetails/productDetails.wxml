@@ -28,7 +28,7 @@
         <view class="productAttrPush">
             <text>规格:</text>
             <text>{{list.specInfo}}</text>
-            <image src="/assets/image/productDetails/more.png"></image>
+            <image src="http://{{list.url}}"></image>
         </view>
         <view class="productAttrSelect">
             <text>已选规格名称</text>
@@ -103,11 +103,11 @@
       <image src="/assets/image/index/productPhoto.png" class="specImg"></image>
     </view>
     <view class="specAttr">
-      <view class="specAttrPrice">¥ {{productSpecsItem.basePrice}}</view>
+      <view class="specAttrPrice">¥ {{price}}</view>
       <view class="specAttrRepertory">库存 {{productPackSpecsItem.stockNum}}</view>
       <view class="specAttrClass one-txt-cut">
         <text wx:if="{{(productSpecsItem && productSpecsItem !== null) || (productSubdivisionSpecsItem && productSubdivisionSpecsItem !== null) || (productPackSpecsItem && productPackSpecsItem !== null)}}">已选</text>
-        <text>{{productSpecsItem.name}}</text>
+        <text>{{productSpecsItem.specName}}</text>
         <text>{{productSubdivisionSpecsItem.name}}</text>
         <text>{{productPackSpecsItem.name}}</text>
       </view>
@@ -121,17 +121,17 @@
     <view class="specSelect" wx:if="{{productSubdivisionSpecs && productSubdivisionSpecs !== '' && productSubdivisionSpecs !== null}}">
       <view class="specSelectTitle">产品细分规格</view>
       <view class="specSelectItem">
-        <text class="one-txt-cut {{productSubdivisionSpecsItem.specId === item.specId ? 'active' : ''}}" wx:for="{{productSubdivisionSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productSubdivisionSpecs">{{item.name}}</text>
+        <text class="one-txt-cut {{productSubdivisionSpecsItem.id === item.id ? 'active' : ''}}" wx:for="{{productSubdivisionSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productSubdivisionSpecs">{{item.name}}</text>
       </view>
     </view>
     <view class="specSelect">
-      <view class="specSelectTitle">包装类型</view>
+      <view class="specSelectTitle">包装类型{{item.name}}</view>
       <view class="specSelectItem">
-        <text class="one-txt-cut {{productPackSpecsItem.specId === item.specId ? 'active' : ''}}" wx:for="{{productPackSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productPackSpecs">{{item.name}}</text>
+        <text class="one-txt-cut {{productPackSpecsItem.id == item.id ? 'active' : ''}}" wx:for="{{productPackSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productPackSpecs">{{item.name}}</text>
       </view>
     </view>
     <view class="specNumber">
-      <view>购买数量</view>
+      <view>{{urltype == 1?"预约到店人数":"购买数量"}}</view>
       <view>
         <text bind:tap="changeSpecPayNum" data-type="{{0}}">-</text>
         <text>{{specPayNum}}</text>
@@ -159,14 +159,14 @@
             <span>生产公司 :</span>
             <span>{{list.productionCompany}}</span>
         </view>
-        <view>
+        <!-- <view>
           <span>口感 :</span>
           <span>{{qualityGuaranteePeriod}}</span>
-        </view>
+        </view> -->
       </view>
       <view class="detailsConDes">说明 :</view>
       <view class="detailsConintroduce txt-cut">
-        <view wx:if="{{productDesc.length}}" wx:for="{{productDesc}}" wx:key="{{index}}">
+        <view >
           <span>{{list.description}}</span>
           <br />
         </view>

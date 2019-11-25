@@ -1,4 +1,6 @@
 // pages/makeList/makeList.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 Page({
 
   /**
@@ -8,11 +10,20 @@ Page({
 
   },
 
+  // 初始化
+  init() {
+    let that = this;
+    const { keyword } = this.data
+    ajax.post('/app/user/appointment/myappointment', { })
+      .then(res => {
+        this.setData({ list: res.data.list });
+      })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.init()
   },
 
   /**

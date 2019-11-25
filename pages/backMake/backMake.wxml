@@ -1,7 +1,7 @@
 <!-- 订单查询 -->
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 预约列表 -->
-    <view class="subscribe">
+    <view class="subscribe"  wx:for="{{list}}" wx:key="{{index}}">
         <view class="subscribeTimeMes">
             <image src="/assets/image/find/clock.png"></image>
             <text>2019-03-06  晚间 7:00-9:00</text>
@@ -23,7 +23,7 @@
         <view class="subscribeNumber">
             <text>预约创建时间: 2019-09-18</text>
             <view class="confirm">确认预约</view>
-            <view>去支付</view>
+            <view>退款</view>
         </view>
     </view>
 </scroll-view>

@@ -3,7 +3,7 @@
   height: 100%;
   position: fixed;
   z-index: 999;
-left:0;top:0;
+  left:0;top:0;
   background: #000;
   opacity: 0.5;
   overflow: hidden;
@@ -21,6 +21,9 @@ left:0;top:0;
 }
  
 .title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #424C50;
   padding: 40rpx 30rpx;
   text-align: center;
   background-color: gazure;
@@ -79,9 +82,43 @@ left:0;top:0;
 }
 .box{
   display: flex;
-  font-size: 28rpx;
+  font-size: 30rpx;
   justify-content: space-between;
   align-items: center;
   padding: 0 10rpx;
 }
 
+.type{
+  font-size: 24rpx;
+  color: #fff;  
+  padding: 12rpx 18rpx;
+  background-color: #9DAF84;
+  border-radius: 50%;
+  margin-right: 12rpx
+}
+.selected{
+  font-size: 30rpx;
+  color: #424C50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10rpx 20rpx; 
+  line-height: 80rpx;
+  border: 1px #D7E0E0 solid;
+  box-shadow: 0 0 8rpx #D7E0E0;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+.selected image{
+  width: 24rpx;
+  height: 24rpx;
+}
+.active{
+  border-color: #799262;
+}
+.jia{
+  background-color: #C69C6D
+}
+.hui{
+  background-color: #ED5735
+}

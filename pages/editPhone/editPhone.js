@@ -1,6 +1,6 @@
 // pages/editPhone/editPhone.js
-// const ajax = require('../../assets/js/request.js');
-const app = getApp();
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 
 Page({
 
@@ -27,36 +27,38 @@ Page({
     let timer = null;
     let num = 60;
     this.setData({ codeTip: '已发送' })
-    // ajax.post('/app/member/sendcode', { phone: phone }, 'redBag')
-    //   .then(({ returnCode, returnData, returnMsg }) => {
-    //     if (returnCode !== '000000') {
-    //       this.setData({ codeTip: '获取验证码' })
-    //       return wx.showToast({
-    //         title: returnMsg,
-    //         icon: 'none',
-    //         duration: 2000
-    //       });
-    //     }
-    //     timer = setInterval(() => {
-    //       if (num === 0) {
-    //         clearInterval(timer)
-    //         this.setData({ codeTip: '获取验证码' })
-    //       } else {
-    //         num--;
-    //         this.setData({ codeTip: `${num}秒后重发` })
-    //       }
-    //     }, 1000)
-    //   })
+    ajax.post('/app/user/center/sendcode', { phone: phone }, 'redBag')
+      .then(({ returnCode, returnData, returnMsg }) => {
+        // if (returnCode !== '000000') {
+        //   this.setData({ codeTip: '获取验证码' })
+        //   return wx.showToast({
+        //     title: returnMsg,
+        //     icon: 'none',
+        //     duration: 2000
+        //   });
+        // }
+        timer = setInterval(() => {
+          if (num === 0) {
+            clearInterval(timer)
+            this.setData({ codeTip: '获取验证码' })
+          } else {
+            num--;
+            this.setData({ codeTip: `${num}秒后重发` })
+          }
+        }, 1000)
+      })
   },
 
   // 更改字段
   changeField(e) {
     this.setData({ [e.currentTarget.dataset.field]: e.detail.value })
   },
-
+  changeInvitation(e) {
+    this.setData({ [e.currentTarget.dataset.field]: e.detail.value })
+  },
   // 注册
   submit() {
-    let { phone, code } = this.data;
+    let { phone, code, invitation } = this.data;
     if (!/^\d{5,}$/.test(phone)) return wx.showToast({
       title: '手机号码输入有误',
       icon: 'none',
@@ -67,22 +69,22 @@ Page({
       icon: 'none',
       duration: 2000
     });
-    // ajax.post('/app/member/updphone', { code, phone: phone })
-    //   .then(({ returnData }) => {
-    //     wx.showToast({
-    //       title: '更绑手机成功',
-    //       icon: 'none',
-    //       duration: 2000
-    //     });
-    //     if (app.changePhone) {
-    //       app.changePhone();
-    //     }
-    //     setTimeout(() => {
-    //       wx.switchTab({
-    //         url: '/pages/user/user'
-    //       })
-    //     }, 800)
-    //   })
+    ajax.post('/app/user/center/updphone', { code, phone: phone, invitation })
+      .then(({ returnData }) => {
+        wx.showToast({
+          title: '更绑手机成功',
+          icon: 'none',
+          duration: 2000
+        });
+        if (app.changePhone) {
+          app.changePhone();
+        }
+        setTimeout(() => {
+          wx.switchTab({
+            url: '/pages/index/index'
+          })
+        }, 800)
+      })
   },
 
   /**

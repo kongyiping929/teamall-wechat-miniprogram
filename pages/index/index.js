@@ -22,7 +22,7 @@ const navList = [
   {
     src: '/assets/image/index/productClassification.png',
     text: '产品分类',
-    path: '/pages/productType/productType'
+    path: '/pages/productType/productType?type=1'
   }
 ]
 
@@ -39,7 +39,7 @@ Page({
       'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
       'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
     ],
-    newList:''
+    allList:''
   },
 
   // 初始化
@@ -50,24 +50,25 @@ Page({
       .then(res => {
         console.log(res)
         this.setData({ shopName: res.data.shopName, cityName: res.data.cityName });
-        app.globalData.shopId = res.shopId
-      }).then(()=>{
-        that.productTypeList()
+        app.globalData.shopId = res.data.shopId
       })
+    this.userPunchInfo()
+   
   },
 
   // 首页所有产品
   productTypeList() {
-    let data = {
-      "pageSize": 4,
-      "shopId": 1,
-      "showType": 1,
-    }
     let { latitude, longitude } = this.data;
-    ajax.post('/app/index/findProductInfo',{...data})
+    ajax.post('/app/index/findProductInfo',{})
       .then(res => {
-        console.log(res)
-        this.setData({ newList: res.data.list});
+        console.log(res.data.giftList)
+        this.setData({ allList: res.data});
+      })
+  },
+  userPunchInfo() {
+    ajax.post('/app/index/findUserPunchInfo',{})
+      .then(res => {
+        this.setData({ userPunchInfo: res.data});
       })
   },
   // 跳转店铺地址
@@ -76,20 +77,12 @@ Page({
   },
 
   onLoad: function () {
-    let that = this;
-    wx.getLocation({
-      success(res) {
-        console.log(res)
-        that.setData({ latitude: res.latitude, longitude: res.longitude }, () => that.init())
-        app.globalData.latitude = res.latitude
-        app.globalData.longitude = res.longitude
-      }
-    })
+    
   },
   
   // 跳转每日打卡
   goDayCard(e) {
-    wx.navigateTo({ url: '/pages/dayCard/dayCard' })
+    wx.navigateTo({ url: '/pages/dayCard/dayCard?count=' + this.data.userPunchInfo.userPunchCount })
   },
   getUserInfo(e) {
     console.log(e)
@@ -123,5 +116,15 @@ Page({
         }
       })
     }
+  },
+  onShow: function () {
+    let that = this;
+    wx.getLocation({
+      success(res) {
+        that.setData({ latitude: res.latitude, longitude: res.longitude }, () => { that.init(); that.productTypeList() })
+        app.globalData.latitude = res.latitude
+        app.globalData.longitude = res.longitude
+      }
+    })
   },
 })

@@ -164,7 +164,7 @@
 					"id": 15,
 					"name": "订单列表",
 					"pathName": "pages/orderList/orderList",
-					"query": "id=6",
+					"query": "id=1",
 					"scene": null
 				},
 				{
@@ -234,6 +234,48 @@
 					"id": 25,
 					"name": "地址",
 					"pathName": "pages/addressList/addressList",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "发货",
+					"pathName": "pages/backDeliver/backDeliver",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "退款",
+					"pathName": "pages/backRefund/backRefund",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "未付款",
+					"pathName": "pages/backPay/backPay",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "定向开单-订单确认",
+					"pathName": "pages/backConfirmOrder/backConfirmOrder",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 30,
+					"name": "定向开单-确定预约",
+					"pathName": "pages/backConfirmMake/backConfirmMake",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "产品选择",
+					"pathName": "pages/userSelectProduct/userSelectProduct",
 					"query": "",
 					"scene": null
 				}

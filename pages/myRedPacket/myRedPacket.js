@@ -1,4 +1,6 @@
 // pages/myRedPacket/myRedPacket.js
+const app = getApp()
+const ajax = require('../../assets/js/ajax.js');
 const orderStatusArr = [
   {
     class: '',
@@ -21,6 +23,17 @@ Page({
    */
   data: {
     orderStatusArr, // 订单状态
+    list:""
+  },
+
+  // 初始化
+  init() {
+    let { } = this.data;
+    let that = this;
+    ajax.post('/app/redPackage/findList', {})
+      .then(res => {
+        this.setData({ list:res.data.list})
+      })
   },
 
   // 下拉刷新
@@ -61,7 +74,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.init()
   },
 
   /**

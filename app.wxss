@@ -26,3 +26,30 @@ page {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
 }
+
+.couponNone {
+  padding-top: 108rpx;
+  margin: 0 auto 30rpx;
+}
+
+.couponNone .couponNoneBg {
+  width: 200rpx;
+  height: 144rpx;
+  margin: 0 auto 60rpx;
+}
+
+.couponNone .couponNoneBg image {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.couponNoneTip {
+  height: 40rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  line-height: 40rpx;
+  color: rgba(153, 153, 153, 1);
+  margin-bottom: 60rpx;
+  text-align: center;
+}

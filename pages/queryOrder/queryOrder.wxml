@@ -11,8 +11,8 @@
             </view>
         </view>
         <view class="querySecrch">
-            <input value="{{keyword}}" type="text" placeholder="输入订单编号" placeholder-style="color: rgba(172, 187, 188, 0.5)" />
-            <text>搜索</text>
+            <input value="{{keyword}}" type="text" placeholder="输入订单编号" placeholder-style="color: rgba(172, 187, 188, 0.5)" bindinput="orderInput"/>
+            <text bindtap="search">搜索</text>
         </view>
     </view>
     <!-- 预约列表 -->

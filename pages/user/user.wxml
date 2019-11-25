@@ -9,9 +9,9 @@
                 <view class="userInfo_attribute_level">Lv.1</view>
             </view>
             <view class="userInfo_code">
-                <text>邀请码: {{user.inviteCode}}</text>
-                <text></text>
-                <image src="/assets/image/user/user_code.png"></image>
+                <text>邀请码: </text>
+                <text>{{user.inviteCode}}</text>
+                <image src="/assets/image/user/user_code.png" bindtap="clipboard"></image>
             </view>
         </view>
         <view class="userParams">
@@ -31,18 +31,18 @@
     <view class="price">
         <view class="price_item">
             <view class="price_item_bar">
-                <text>我的红包</text>
-                <text bind:tap="goMyRedPacket">提取</text>
+                <text>我的预存</text>
+                <text bind:tap="goMyPrestore">充值</text>
             </view>
-            <view class="price_balance">¥{{user.withdrawBalance}}</view>
+            <view class="price_balance">¥{{user.prechargeBalance}}</view>
         </view>
         <view class="price_halving"></view>
         <view class="price_item" style="margin-left: 30rpx;">
             <view class="price_item_bar">
-                <text>我的预存</text>
-                <text bind:tap="goMyPrestore">提取</text>
+                <text>我的红包</text>
+                <text bind:tap="goMyRedPacket">提取</text>
             </view>
-            <view class="price_balance">¥{{user.prechargeBalance}}</view>
+            <view class="price_balance">¥{{user.withdrawBalance}}</view>
         </view>
     </view>
     <!-- 订单状态 -->
@@ -71,7 +71,7 @@
                     <view class="orderMesTip">
                         <view class="orderMesTipTitle one-txt-cut">{{user.productOrderListVo.productName}}</view>
                         <view class="orderMesTipAttr">
-                            <text> {{user.productOrderListVo.specName}}</text>
+                            <text> {{user.productOrderListVo.specName}},{{user.productOrderListVo.lineSpecName}},{{user.productOrderListVo.packageSpecName}}</text>
                             <image src="/assets/image/user/downArrows.png"></image>
                         </view>
                     </view>
@@ -81,14 +81,14 @@
                         <text>订单合计:</text>
                         <text>¥{{user.productOrderListVo.payAmount}}</text>
                     </view>
-                    <view>去支付</view>
+                    <view bindtap="goOrderDetails" data-id="{{user.productOrderListVo.id}}">去支付</view>
                 </view>
             </view>
         </view>
     </view>
     <!-- 选择器 -->
     <view class="select">
-        <view class="selectItem">
+        <view class="selectItem" bindtap="goAddress">
             <view class="selectItemLeft">我的收件地址</view>
             <view class="selectItemRight">
                 <image src="/assets/image/tabBar/rightArrows.png"></image>
@@ -101,7 +101,7 @@
                 <image src="/assets/image/tabBar/rightArrows.png"></image>
             </view>
         </view>
-        <view class="selectItem">
+        <view class="selectItem" bind:tap="goMyCoupon">
             <view class="selectItemLeft">我的优惠券</view>
             <view class="selectItemRight">
                 <text>可用数量{{user.couponCount}}张</text>

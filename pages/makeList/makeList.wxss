@@ -43,6 +43,7 @@ page {
     width: 160rpx;
     height: 160rpx;
     margin-right: 28rpx;
+    border-radius: 10rpx;
 }
 
 .orderMesTip {

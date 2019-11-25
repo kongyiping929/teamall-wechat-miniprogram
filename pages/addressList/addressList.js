@@ -19,10 +19,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init()
+    
   },
+
   goAddress: function (e) {
-    wx.navigateTo({ url: '/pages/addAddress/addAddress?id=' + e.currentTarget.dataset.id })
+    let data = e.currentTarget.dataset.item ? JSON.stringify(e.currentTarget.dataset.item) : "";
+    wx.navigateTo({ url: '/pages/addAddress/addAddress?item=' + data })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -35,7 +37,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init()
   },
 
   /**

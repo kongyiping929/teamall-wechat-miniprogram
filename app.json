@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/getUserInfo/getUserInfo",
     "pages/find/find",
     "pages/user/user",
     "pages/editPhone/editPhone",
@@ -21,6 +22,7 @@
     "pages/myRedPacket/myRedPacket",
     "pages/orderList/orderList",
     "pages/myCollect/myCollect",
+    "pages/myCoupon/myCoupon",
     "pages/administer/administer",
     "pages/queryOrder/queryOrder",
     "pages/queryUsers/queryUsers",
@@ -29,9 +31,11 @@
     "pages/backMake/backMake",
     "pages/backPickup/backPickup",
     "pages/backDeliver/backDeliver",
-    "pages/getUserInfo/getUserInfo",
     "pages/backRefund/backRefund",
-    "pages/userSelectProduct/userSelectProduct"
+    "pages/backPay/backPay",
+    "pages/userSelectProduct/userSelectProduct",
+    "pages/backConfirmOrder/backConfirmOrder",
+    "pages/backConfirmMake/backConfirmMake"
   ],
   "permission": {
     "scope.userLocation": {

@@ -7,7 +7,7 @@
             <view class="cardMesTopTip">
                 <view class="cardMesTopTipNum">
                     <text>本月打卡次数:</text>
-                    <text>31</text>
+                    <text>{{count}}</text>
                 </view>
                 <view class="cardMesTopTipTicket">本次打卡可获得奖品:优惠券</view>
             </view>
@@ -26,11 +26,11 @@
     <!-- 打卡输入 -->
     <view class="inputBox">
         <view class="inputWapper">
-            <textarea placeholder="每天打卡是一种态度" placeholder-class="placeholderStyle" maxlength="{{200}}" auto-focus="{{true}}" bindinput="changeRemark" focus="{{true}}" value="{{remark}}" auto-height="{{true}}" />
-        </view>
+            <textarea placeholder="每天打卡是一种态度" placeholder-class="placeholderStyle" maxlength="{{200}}" auto-focus="{{true}}" bindinput="changeRemark" focus="{{true}}" value="{{remark}}" />
+        </view> 
         <view class="addImageBox">
             <view class="addImageItem" wx:for="{{userImage}}" wx:key="{{index}}">
-                <image src="{{item}}"></image>
+                <image src="{{item.fileBase64Content }}"></image>
             </view>
             <view class="addImage" bind:tap="selectImage" wx:if="{{userImage.length < 3}}"></view>
         </view>
@@ -54,13 +54,13 @@
         </view>
     </view>
     <!-- 打卡按钮 -->
-    <view class="btn" bind:tap="changeModal" data-status="{{true}}">打卡</view>
+    <view class="btn" bind:tap="save" data-status="{{true}}">打卡</view>
 </scroll-view>
 <!-- 打卡成功模态框 -->
 <view class="modal" wx:if="{{modal}}">
     <view class="modalWapper">
         <view class="modalTitle">打卡成功!</view>
-        <view class="modalMes" wx:if="{{true}}">
+        <view class="modalMes" wx:if="{{!couponModal}}">
             <view class="modalMesBg">
                 <image src="/assets/image/dayCard/modalBg.png"></image>
             </view>
@@ -72,22 +72,24 @@
                 <view class="modalRollTop">
                     <view class="modalRollTopL">
                         <view>优惠券</view>
-                        <view>有效期至 2019-09-09</view>
+                        <view>有效期至{{couponModal.expTime}}</view>
                     </view>
-                    <view class="modalRollTopR">
-                        <text>2.8</text>
+                    <view class="modalRollTopR discount">
+                        <text>{{couponModal.discount*10}}</text>
                         <text>折</text>
+                    </view>
+                    <view class="modalRollTopR" wx:if="{{couponModal.subtractQuota>0}}">
+                        <text>{{couponModal.discount>0?",再":""}}减</text>
+                        <text>{{couponModal.subtractQuota }}元</text>
                     </view>
                 </view>
                 <view class="modalRollBottom">
-                    <text>产品类型</text>
-                    <text>满减额度 100元使用</text>
+                    <text>{{couponModal.productTypeId == "0"?"通用":couponModal.productTypeId}}</text>
+                    <text>满减额度 {{couponModal.useQuota}}元使用</text>
                 </view>
             </view>
         </view>
         <view class="modalFooter">
-            <text bind:tap="changeModal" data-status="{{false}}">取消</text>
-            <text></text>
             <text bind:tap="changeModal" data-status="{{false}}" data-confirm="{{true}}">确定</text>
         </view>
     </view>
