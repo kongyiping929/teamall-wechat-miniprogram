@@ -77,7 +77,6 @@
     color: rgba(247, 55, 2, 1);
 }
 
-
 .subscribePrice2 text:last-child {
     font-size: 24rpx;
     font-weight: 400;

@@ -3,7 +3,7 @@
     <!-- 用户信息 -->
     <view class="userMes">
         <view class="userInfo">
-            <image class="userInfo_photo" src="/assets/image/user/photo.png"></image>
+            <image class="userInfo_photo" src="{{user.headimgUrl}}"></image>
             <view class="userInfo_attribute">
                 <view class="userInfo_attribute_name">{{user.nickName}}</view>
                 <view class="userInfo_attribute_level">Lv.1</view>
@@ -15,9 +15,9 @@
             </view>
         </view>
         <view class="userParams">
-            <view class="userParamsAccount one-txt-cut" style="width: 160rpx;">
+            <view class="userParamsAccount one-txt-cut" style="width: 224rpx;">
                 <text>用户ID</text>
-                <text>tea01</text>
+                <text>{{user.userId}}</text>
             </view>
             <view class="userParamsBorder"></view>
             <view class="userParamsAccount">
@@ -32,7 +32,7 @@
         <view class="price_item">
             <view class="price_item_bar">
                 <text>我的预存</text>
-                <text bind:tap="goMyPrestore">充值</text>
+                <text class="redPacket" bind:tap="goMyPrestore">充值</text>
             </view>
             <view class="price_balance">¥{{user.prechargeBalance}}</view>
         </view>
@@ -40,7 +40,7 @@
         <view class="price_item" style="margin-left: 30rpx;">
             <view class="price_item_bar">
                 <text>我的红包</text>
-                <text bind:tap="goMyRedPacket">提取</text>
+                <text class="redPacket" wx:if="{{canDraw}}" bind:tap="goMyRedPacket">提取</text>
             </view>
             <view class="price_balance">¥{{user.withdrawBalance}}</view>
         </view>
@@ -67,7 +67,7 @@
                     <text>{{user.productOrderListVo.createdTime }}</text>
                 </view>
                 <view class="orderMes">
-                    <image class="orderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+                    <image class="orderMesPhoto" src="http://{{user.productOrderListVo.url}}"></image>
                     <view class="orderMesTip">
                         <view class="orderMesTipTitle one-txt-cut">{{user.productOrderListVo.productName}}</view>
                         <view class="orderMesTipAttr">

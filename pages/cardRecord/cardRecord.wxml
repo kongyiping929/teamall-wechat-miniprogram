@@ -1,28 +1,37 @@
 <!-- 打卡记录 -->
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 打卡信息 -->
-    <view class="clockWapper" wx:for="{{4}}" wx:key="{{index}}">
+    <view class="clockWapper" wx:for="{{myPunchList}}" wx:key="{{index}}">
         <view class="clockTitleBar">
             <view class="clockTitleBarLeft">
-                <image src="/assets/image/find/userPhoto.png"></image>
-                <text>J***C</text>
+                <image src="{{item.headimgUrl}}"></image>
+                <text>{{item.userName}}</text>
             </view>
             <view class="clockTitleBarRight">
                 <image src="/assets/image/find/goodIcon.png"></image>
-                <text>+324</text>
+                <text>+{{item.likeNum}}</text>
             </view>
         </view>
         <view class="clockContent {{contentState ? 'none' : 'text-cut' }}">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
-            <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">
-                正文
-            </text>
+            {{item.content}}
+            <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text>
         </view>
-        <view class="clockImg {{2 === index + 1 ? 'length' : ''}}">
-            <image src="/assets/image/find/productBg.png"></image>
-            <image src="/assets/image/find/productBg.png"></image>
-            <image src="/assets/image/find/productBg.png"></image>
+        <view class="clockImg">
+            <image  wx:for="{{item.imgList}}" wx:key="{{index}}" wx:if="{{item}}" src="http://{{item}}"></image>
+        </view>
+        <view class="TorderMes" wx:if="{{item.orderInfo}}">
+            <image class="TorderMesPhoto" src="http://{{item.orderInfo.attachmentInfo}}"></image>
+            <view class="TorderMesTip">
+                <view class="TorderMesTipTitle one-txt-cut">{{item.orderInfo.productName}}</view>
+                <view class="TorderMesPrice">
+                  <text>¥{{item.orderInfo.basePrice}}</text>
+                  <text>¥{{item.orderInfo.marketPrice }}</text>
+                </view>
+                <view class="TorderMesTipAttr">
+                    <text>{{item.orderInfo.typeName}}</text>
+                    <!-- <image src="/assets/image/user/downArrows.png"></image> -->
+                </view>
+            </view>
         </view>
     </view>
 </scroll-view>

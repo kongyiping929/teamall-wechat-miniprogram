@@ -44,15 +44,12 @@ Page({
 
   // 初始化
   init() {
-    let { latitude, longitude } = this.data;
     let that = this;
-    ajax.post('/app/index/findCurrentShop', { latitude, longitude })
+    ajax.post('/admin/banner/list', { })
       .then(res => {
         console.log(res)
-        this.setData({ shopName: res.data.shopName, cityName: res.data.cityName });
-        app.globalData.shopId = res.data.shopId
       })
-    this.userPunchInfo()
+    
    
   },
 
@@ -63,17 +60,22 @@ Page({
       .then(res => {
         console.log(res.data.giftList)
         this.setData({ allList: res.data});
+      }).then(res=>{
+        this.userPunchInfo();
+        this.init()
       })
   },
   userPunchInfo() {
+    app.globalData.shopId= wx.getStorageSync("SHOP").shopId,
+    app.globalData.shop = wx.getStorageSync("SHOP"),
     ajax.post('/app/index/findUserPunchInfo',{})
       .then(res => {
-        this.setData({ userPunchInfo: res.data});
+        this.setData({ userPunchInfo: res.data, shopName: app.globalData.shop.shopName, cityName: app.globalData.shop.cityName});
       })
   },
   // 跳转店铺地址
   goShopList(e) {
-    wx.navigateTo({ url: '/pages/shopList/shopList?cityName=' + this.data.cityName });
+    wx.navigateTo({ url: '/pages/shopList/shopList?cityName=' + app.globalData.shop.cityName });
   },
 
   onLoad: function () {
@@ -119,12 +121,7 @@ Page({
   },
   onShow: function () {
     let that = this;
-    wx.getLocation({
-      success(res) {
-        that.setData({ latitude: res.latitude, longitude: res.longitude }, () => { that.init(); that.productTypeList() })
-        app.globalData.latitude = res.latitude
-        app.globalData.longitude = res.longitude
-      }
-    })
+    that.productTypeList()
+    
   },
 })

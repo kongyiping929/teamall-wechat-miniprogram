@@ -28,7 +28,7 @@ Page({
     let that = this;
     ajax.post('/app/user/recharge/getdata', {})
       .then(res => {
-        this.setData({ selectArr: res.data.dictQuotaListVo, list: res.data.page, prechargeBalance: res.data.prechargeBalance })
+        this.setData({ selectArr: res.data.dictQuotaListVo, list: res.data.page.list, prechargeBalance: res.data.prechargeBalance })
         console.log(res)
       })
   },

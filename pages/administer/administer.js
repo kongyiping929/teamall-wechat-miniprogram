@@ -44,20 +44,23 @@ Page({
   },
 
   changesShop(e){
-    this.setData({ shopActiveId: e.currentTarget.dataset.id });
-    ajax.post('/app/index/updCurrentShop', { id: e.currentTarget.dataset.id })
+    this.setData({ shopActiveId: e.currentTarget.dataset.shopId });
+    ajax.post('/app/index/updCurrentShop', { id: e.currentTarget.dataset.item.shopId })
       .then(res => {
         this.hideModal();
-        app.globalData.shopId = e.currentTarget.dataset.id;
+        wx.setStorageSync('SHOP', e.currentTarget.dataset.item)
+        app.globalData.shopId = e.currentTarget.dataset.item.shopId;
+        app.globalData.shop = e.currentTarget.dataset.item;
         this.init();
       })
+    
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init()
+    
   },
 
   /**
@@ -71,7 +74,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init()
   },
 
   /**

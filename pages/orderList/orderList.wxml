@@ -1,17 +1,16 @@
 <!-- 订单列表 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
-    <!-- 标题栏 -->
     <view class="bar">
         <text wx:for="{{orderStatusList}}" wx:key="{{index}}" wx:if="{{item && item !== ''}}" class="{{id == index ? 'active' : ''}}" bind:tap="changeId" data-id="{{index}}">{{item}}</text>
     </view>
+<scroll-view scroll-y>
     <!-- 列表 -->
-    <view class="item" wx:for="{{list}}" wx:key="{{index}}">
+    <view class="item" wx:for="{{list}}" wx:key="{{index}}" >
         <view class="itemTop">
             <text>订单编号:{{item.orderNo }}</text>
             <text class="{{id - 0 == 4 ? 'id4' : id - 0 == 5 ? 'id5' : id - 0 == 6 ? 'id6' : id - 0 == 7 ? 'id7' : ''}}">{{orderStatusArr[id-0]}}</text>
         </view>
         <view class="itemMes">
-            <image class="itemMesBg" src="{{item.url}}"></image>
+            <image class="itemMesBg" src="http://{{item.url}}"></image>
             <view class="itemMesDes">
                 <view class="itemMesDesTitle one-txt-cut">{{item.productName  }}</view>
                 <view class="itemMesDesPrice">
@@ -19,7 +18,7 @@
                     <text>x {{item.buyNum}}</text>
                 </view>
                 <view class="itemMesDesAttr">
-                    <text>{{item.specName}} , {{item.lineSpecName}} , {{item.packageSpecName}}</text>
+                    <text>{{item.specName}}{{item.lineSpecName&&","+item.lineSpecName}}{{item.packageSpecName&&","+item.packageSpecName}}</text>
                     <image src="/assets/image/user/downArrows.png"></image>
                 </view>
             </view>
@@ -56,3 +55,9 @@
         </view>
     </view>
 </scroll-view>
+<view class="couponNone" wx:if="{{list.length == 0}}">
+    <view class="couponNoneBg">
+      <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+    </view>
+    <view class="couponNoneTip">暂无订单</view>
+  </view>

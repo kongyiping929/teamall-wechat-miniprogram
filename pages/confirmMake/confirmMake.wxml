@@ -1,5 +1,5 @@
 <!-- 预约确认 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+<scroll-view scroll-y="{{true}}">
     <!-- 店铺地址 -->
     <view class="storeAddress" wx:if="{{list}}"  bind:tap="changeAddPersonStatus" data-status="{{true}}">
         <view class="storeMode">
@@ -25,7 +25,7 @@
             <view class="productTitle one-txt-cut">{{list.specName}}</view>
             <view class="productPrice">¥{{price}}</view>
             <view class="productSelect">
-                <text>{{list.specName}}{{list.specPackageName}}{{list.specLineName}}</text>
+                <text>{{list.specName}},{{list.specLineName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
             </view>
         </view> 
@@ -34,7 +34,7 @@
     <view class="attr">
         <view class="attrItem">
             <text>出行人数</text>
-            <text>{{item.specPayNum}}</text>
+            <text>{{items.specPayNum}}</text>
         </view>
         <picker mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime1" bindcolumnchange="changeDateTimeColumn1" range="{{dateTimeArray}}">
             <view class="attrItem nth2">

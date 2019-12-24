@@ -4,26 +4,29 @@
     <view class="subscribe"  wx:for="{{list}}" wx:key="{{index}}">
         <view class="subscribeTimeMes">
             <image src="/assets/image/find/clock.png"></image>
-            <text>2019-03-06  晚间 7:00-9:00</text>
-            <text>待确认</text>
+            <text>{{item.appointmentTime}}   {{item.timeRangeDesc}}</text>
+            <text>{{orderStatusArr[item.orderStatus]}}</text>
         </view>
-        <view class="subscribeTitle one-txt-cut">茶叶名称</view>
+        <view class="subscribeTitle one-txt-cut">{{item.productName}}</view>
         <view class="subscribeAttr">
-            <text>一饼 , 590g , 包装1</text>
+            <text>{{item.specName}}</text>
             <image src="/assets/image/user/downArrows.png"></image>
         </view>
-        <view class="subscribePrice">¥700.00</view>
+        <view class="subscribePrice">¥{{item.payAmount}}</view>
         <view class="subscribeAddress">
             <image src="/assets/image/confirmMake/location.png"></image>
-            <text class="one-txt-cut">广州中山北路78号中环店</text>
+            <text class="one-txt-cut">{{item.shopName}}</text>
             <text></text>
             <text>预约人数</text>
-            <text>99人</text>
+            <text>{{item.peopleNum}}人</text>
         </view>
         <view class="subscribeNumber">
-            <text>预约创建时间: 2019-09-18</text>
-            <view class="confirm">确认预约</view>
-            <view>退款</view>
+          <view class="tiem">
+            <text>预约创建时间: </text>
+            <text>{{item.createdTime}}</text>
+          </view>
+            <view class="confirm" bindtap="payConfirm" data-orderStatus="{{item.orderStatus}}" data-orderNo="{{item.orderNo}}">{{item.orderStatus == 2?'确认预约':'完成服务'}}</view>
+            <!-- <view bindtap="payCancel"  data-orderNo="{{item.orderNo}}">退款</view> -->
         </view>
     </view>
 </scroll-view>

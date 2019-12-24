@@ -1,12 +1,14 @@
 // pages/queryOrder/queryOrder.js
 const app = getApp()
 const ajax = require('../../assets/js/ajax.js');
+const orderStatusArr = ['','待支付', '待确认', '待服务', '已完成', '退款成功', '退款失败', '已取消'];
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    orderStatusArr,
     queryType: 0, // 查询类型 0 查预约 1 查订单
     keyword: '', // 搜索值
   },
@@ -15,7 +17,7 @@ Page({
     let url = queryType == 0 ? "/app/user/manage/getappiontments" : '/app/user/manage/getorders'
     ajax.post(url, { shopId: app.globalData.shopId ,keyword })
       .then(res => {
-        let list = res.data.list;
+        let list = res.data;
         for (let k in list) {
           if (list[k].userAddressInfo) {
             list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
@@ -29,7 +31,7 @@ Page({
   },
   // 更改查询类型
   changeQueryType(e) {
-    this.setData({ queryType: e.currentTarget.dataset.value })
+    this.setData({ queryType: e.currentTarget.dataset.value,list:"" })
   },
 
   /**

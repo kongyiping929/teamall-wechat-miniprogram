@@ -10,7 +10,7 @@
     <!-- 产品列表 -->
     <view class="productWapper">
         <navigator class="productItem" url="/pages/productDetails/productDetails?id={{item.productId}}" open-type="navigate" hover-class="none" wx:for="{{list}}" wx:key="{{index}}">
-            <image class="productBg" src="{{item.url}}"></image>
+            <image class="productBg" src="http://{{item.productIconUrl}}"></image>
             <image class="productIcon" src="{{typeArr[typeId].icon}}"></image>
             <view class="productName">
                 {{item.productName}}

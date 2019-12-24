@@ -1,5 +1,5 @@
 <!-- 产品选择 -->
-    <navigator url="/pages/backConfirmOrder/backConfirmOrder?productId={{item.productId}}&userId=1197089166505148418" hover-class="none" open-type="navigate" wx:for="{{list}}" wx:key="{{index}}">
+    <navigator url="{{type == 1?'/pages/backConfirmOrder/backConfirmOrder?productId='+item.productId+'&userId='+userId:'/pages/backConfirmMake/backConfirmMake?productId='+item.productId+'&userId='+userId}}" hover-class="none" open-type="navigate" wx:for="{{list}}" wx:key="{{index}}">
     <view class="item">
         <text>{{item.productName }}</text>
         <text>{{item.typeName}}</text>

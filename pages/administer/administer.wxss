@@ -48,8 +48,8 @@ page {
 
 .operateTopItem {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     width: 25%;
 }
 
@@ -113,6 +113,8 @@ page {
   min-height: 600rpx;
   background-color: #fff;
   border-radius: 20rpx 20rpx 0 0;
+  max-height: 80vh;
+  overflow: scroll;
 }
 
 .personModal .personWap .personTitle {
@@ -147,8 +149,8 @@ page {
   justify-content: space-between;
   background: rgba(255, 255, 255, 1);
   border-bottom: 2rpx solid #f2f2f3;
-  padding: 0rpx 40rpx 10rpx;
-  margin: 20rpx 0;
+  padding: 20rpx 40rpx;
+  margin: 10rpx 0;
 }
 
 .item .name {
@@ -161,7 +163,10 @@ page {
 .item .phone {
   color: #799262;
 }
-
+.item .phone image{
+  width: 28rpx;
+  height: 20rpx;
+}
 
 .personModal .personWap .personBtn {
   position: absolute;

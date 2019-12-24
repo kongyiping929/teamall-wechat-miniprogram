@@ -95,7 +95,6 @@ page {
 
 .clockContent {
     position: relative;
-    height: 180rpx;
     line-height: 36rpx;
     font-size: 24rpx;
     font-weight: 400;
@@ -185,6 +184,7 @@ page {
     font-size: 24rpx;
     font-weight: 400;
     color: rgba(172, 187, 188, 1);
+    text-decoration: line-through;
 }
 
 .TorderMesTipAttr {

@@ -43,8 +43,8 @@
     <view class="product">
         <image class="productPhoto" src="http://{{list.url}}"></image>
         <view class="productWapper">
-            <view class="productTitle one-txt-cut">{{list.specName}}</view>
-            <view class="productPrice">¥{{price}}</view>
+            <view class="productTitle one-txt-cut">{{list.productName}}</view>
+            <view class="productPrice">¥{{list.unitPrice}}</view>
             <view class="productSelect">
                 <text>{{list.specName}},{{list.specPackageName}},{{list.specLineName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
@@ -153,7 +153,7 @@
             <text class="phone">{{item.mobile }}</text>
           </view>
             <view class="info">
-              <image wx:if="{{item.defaultStatus==1}}" class="active" src="/assets/image/address/moren.png"></image>
+              <image wx:if="{{item.defaultStatus==1}}" class="active" src="/assets/image/address/moren@2x.png"></image>
               <text class="address">{{item.userAddress }}</text>
               <image class="addressImg" src="/assets/image/address/address.png" bindtap="goAddAddress"  data-item="{{item }}" ></image>
             </view>

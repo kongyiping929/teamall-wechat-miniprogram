@@ -89,9 +89,9 @@
             <span>店铺列表</span>
             <image src="/assets/image/productDetails/close.png" class="fr" bind:tap="hideModal" data-status="{{false}}"></image>
         </view>
-        <view class="item" wx:for="{{shopList}}" wx:key="{{index}}" bindtap="changesShop" data-id="{{item.shopId}}">
+        <view class="item" wx:for="{{shopList}}" wx:key="{{index}}" bindtap="changesShop" data-item="{{item}}">
             <text class="name">{{item.shopName}}</text>
-            <text class="phone" wx:if="{{item.shopId == shopActiveId}}">√</text>
+            <view class="phone" wx:if="{{item.shopId == shopActiveId}}"><image src="/assets/image/user/checked.png"></image></view>
         </view>
         <!-- <view class="personNone" wx:if="{{!consignee}}">
             <view class="personNoneBg">

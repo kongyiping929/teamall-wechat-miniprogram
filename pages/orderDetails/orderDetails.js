@@ -104,7 +104,7 @@ Page({
       })
   },
 
-  confirmOrder(e){
+  confirmOrder(e){ 
     let status = e.currentTarget.dataset.status;
     const { id } = this.data.list;
     let pages = getCurrentPages();
@@ -119,6 +119,28 @@ Page({
         setTimeout(() => {
           prevPage.setData({
             id: status == 3 ?4:5
+          })
+          wx.navigateBack({
+            delta: 1,
+          })
+        }, 1000);
+      })
+  },
+  //取消申请退款
+  cancelOrder(e) {
+    const { id } = this.data.list;
+    let pages = getCurrentPages();
+    let prevPage = pages[pages.length - 2];  //上一个页面
+    ajax.post('/app/user/manage/updOrderStatus', { orderId: id, optType: 2 })
+      .then(res => {
+        wx.showToast({
+          title: '取消成功！',
+          icon: 'none',
+          duration: 2000
+        });
+        setTimeout(() => {
+          prevPage.setData({
+            id: 2
           })
           wx.navigateBack({
             delta: 1,
@@ -151,7 +173,12 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    //wx.navigateTo({ url: '/pages/orderList/orderList?id=1' });
+    let pages = getCurrentPages();
+    let prevPage = pages[pages.length - 2];  //上一个页面
+    console.log(prevPage, prevPage.route =='pages/orderList/orderList')
+    if (prevPage.route != 'pages/orderList/orderList'){
+      wx.navigateTo({ url: '/pages/orderList/orderList?id=' + this.data.status });
+    }
   },
 
   /**

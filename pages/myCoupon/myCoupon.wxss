@@ -32,14 +32,6 @@ page {
   background-size: 100%;
 }
 
-.active {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40rpx;
-  height: 40rpx;
-}
-
 .couponItem:last-child {
   margin: 0;
 }

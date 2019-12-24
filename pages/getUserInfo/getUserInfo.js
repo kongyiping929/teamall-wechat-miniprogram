@@ -14,37 +14,39 @@ Page({
       wx.getUserInfo({
         success: response => {
           console.log(app.globalData.code,response)
-          const { iv, encryptedData } = response
+          const { iv, encryptedData } = response;
+          let parame = { 
+            code: app.globalData.code, 
+            userInfo: encryptedData, 
+            iv ,
+            shopId: app.globalData.shopId ? app.globalData.shopId:"",
+            inviteCode: app.globalData.inviteCode,
+            latitude: app.globalData.latitude,
+            longitude: app.globalData.longitude,
+          }
           wx.request({
             url: 'http://119.23.79.12:7001/cy'+'/app/common/wxlogin' ,
-            data: { code: app.globalData.code, userInfo: encryptedData, iv },
+            data: parame,
             method: 'POST',
             success(res) {
-              console.log("zzzz", res.data.responseBody.data)
               wx.setStorageSync('TOKEN', res.data.responseBody.data.loginToken)
               wx.setStorageSync('OPENID', res.data.responseBody.data.openid)
-              wx.reLaunch({ url: '/pages/editPhone/editPhone' });
+              wx.setStorageSync('SHOP', res.data.responseBody.data.shop)
+              app.globalData.shopId = res.data.responseBody.data.shop.shopId;
+              app.globalData.shop = res.data.responseBody.data.shop;
+              if (app.globalData.inviteCode) {
+                wx.navigateBack({
+                  delta:1
+                })
+              } else {
+                wx.switchTab({ url: '/pages/index/index' });
+              }
             }
           })
         }})
-      // app.globalData.userInfo = e.detail.userInfo;
-      // if (app.globalData.phoneFlag) {
-      //   if (app.globalData.shareUrl) {
-      //     wx.switchTab({ url: app.globalData.shareUrl });
-      //   } else {
-      //     wx.switchTab({ url: '/pages/index/index' });
-      //   }
-      // }
-      
-      // if (app.globalData.shareUrl.indexOf('index') > 0) {
-      //   wx.switchTab({ url: app.globalData.shareUrl });
-      // }
-      // if (app.globalData.shareUrl.indexOf('obtainVoucher') > 0 || app.globalData.shareUrl.indexOf('productDetails') > 0) {
-      //   wx.reLaunch({ url: app.globalData.shareUrl });
-      // }
     } else {
       wx.showToast({
-        title: '获取信息失败，请允许获取完成注册',
+        title: '获取信息失败，请允许获取用户信息',
         icon: 'none',
         duration: 2000
       })
@@ -55,7 +57,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.hideLoading()
+    wx.hideLoading();
+    wx.getLocation({
+      success(res) {
+        app.globalData.latitude = res.latitude
+        app.globalData.longitude = res.longitude
+        wx.setStorageSync('latitude', res.latitude)
+        wx.setStorageSync('longitude', res.longitude)
+      }
+    })
   },
 
   /**

@@ -21,15 +21,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
     this.setData({ type: options.type });
     this.init()
   },
   // 初始化
   init() {
-    let { cityName } = this.data;
+    let { type } = this.data;
     let that = this;
-    ajax.post('/app/index/findProductTypeList')
+    ajax.post('/app/index/findProductTypeList',{})
       .then(res => {
         this.setData({ list: res.data });
       })

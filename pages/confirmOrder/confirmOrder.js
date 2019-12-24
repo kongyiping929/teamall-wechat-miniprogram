@@ -131,24 +131,24 @@ Page({
     }
     ajax.post('/app/user/productorder/saveorder', data)
       .then(res => {
-        console.log(payChannel, payChannel == 0)
-        if (!payChannel == 0){
+        console.log(payChannel, payChannel == 1)
+        if (payChannel == 1){
         wx.requestPayment({
           timeStamp: res.data.timeStamp,
           nonceStr: res.data.nonceStr,
           package: res.data.package,
           signType: res.data.signType,
           paySign: res.data.paySign,
-          success: function (res) {
-            console.log(res,res.data)
+          success: function (result) {
+            console.log(result)
             wx.showToast({
               title: '订单支付成功',
               icon: 'none',
               duration: 2000
             });
             setTimeout(() => {
-              //wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=2&id=${productId}` })
-              wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
+              wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=${receiveType == 0 ? 3 : 2}&id=${res.data.id}` })
+              //wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
             }, 800);
           },
           fail: function (res) {
@@ -157,6 +157,9 @@ Page({
               icon: 'none',
               duration: 2000
             });
+            setTimeout(() => {
+              wx.navigateTo({ url: '/pages/orderList/orderList?id=1' });
+            }, 800);
           }
         })}else{
           console.log(res)
@@ -166,8 +169,8 @@ Page({
             duration: 2000
           });
           setTimeout(() => {
-            //wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=2&id=${productId}` })
-            wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
+            //wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
+            wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=${receiveType==0?3:2}&id=${res.data.id}` })
           }, 800);
         }
         

@@ -28,22 +28,25 @@ Page({
     typeArr,
     typeId: "", // 类型
     searchType:1,//销量-价格
-    productTypeId:""
+    productTypeId:"",
+    pageNum :1
   },
   // 初始化
   init() {
-    let { typeId, searchType, productTypeId } = this.data;
+    let { typeId, searchType, productTypeId, pageNum } = this.data;
     let data = {
       "searchType": searchType,
       "shopId": app.globalData.shopId,
+      pageNum
     }
-    if (typeId){
-      data.showType = typeId + 1;
+    console.log(typeId, typeId != "")
+    if (typeId!=""){
+      data.showType = Number(typeId) + 1;
     }else{
       data.productTypeId = productTypeId
     }
     let that = this;
-    let url = typeId ? '/app/index/findProductTypeList': '/app/index/findProductList'
+    let url = typeId == "" ? '/app/index/findProductList': '/app/index/findProductList'
     ajax.post(url,data)
       .then(res => {
         this.setData({list: res.data.list})
@@ -56,17 +59,9 @@ Page({
   },
 
   // 下拉刷新
-  onRefresh(index = 'false') {
-    // let { pageId, size, id } = this.data;
-    // pageId = 1;
-    // ajax.downPost(URLARR[Number(id)], { pageId, size })
-    //   .then(({ returnData }) => {
-    //     this.setData({
-    //       data: returnData.result,
-    //       pageId: pageId + 1,
-    //       status: returnData.result.length < size ? true : false,
-    //     })
-    //   })
+  onRefresh() {
+    console.log("zzzzz")
+    
   },
 
   // 上滑刷新
@@ -93,7 +88,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let typeId = options.type?Number(options.type):"";
+    let typeId = options.type?options.type:"";
     let productTypeId = options.productTypeId ? options.productTypeId:"";
     console.log(options)
     wx.setNavigationBarTitle({ title: typeId!=""?typeArr[typeId].title:"产品分类" });
@@ -133,7 +128,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.setData({ pageNum: 1 })
+    this.init()
   },
 
   /**

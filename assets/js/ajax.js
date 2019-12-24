@@ -4,21 +4,30 @@ const URL = 'http://119.23.79.12:7001/cy';
 
 let token = wx.getStorageSync('TOKEN')
 const openid = wx.getStorageSync('OPENID')
-
+let isLoading = true;
+let tiem = "";
 let post = (url, data, toast) => new Promise(reslove => {
-  let token = wx.getStorageSync('TOKEN')
-  const openid = wx.getStorageSync('OPENID')
-  console.log(token, openid)
+  let token = wx.getStorageSync('TOKEN');
+  const openid = wx.getStorageSync('OPENID');
+  clearTimeout(tiem)
+  console.log(isLoading)
+  
   const app = getApp();
-  wx.showLoading({
-    title: '加载中...',
-    mask: true
-  });
+  if (isLoading){
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    });
+    isLoading = false;
+  }
+   tiem = setTimeout(()=>{
+     isLoading = true;
+   },1500)
   
   wx.getSetting({
     success: (res) => {
       if (res.authSetting['scope.userInfo'] === undefined) {
-         wx.redirectTo({
+        wx.navigateTo({
           url: '/pages/getUserInfo/getUserInfo'
         })
       }else{
@@ -37,14 +46,21 @@ let post = (url, data, toast) => new Promise(reslove => {
 
             // 登录超时
             if (res.data.responseBody.code === '-110113') {
-              console.log(url, data, token)
-              wxRelogin("/app/common/wxRelogin", { openid }).then(res => {
-                const pages = getCurrentPages()
-                const perpage = pages[pages.length - 1]
-                perpage.onLoad()
-                perpage.onShow()
-                console.log(perpage)
+              wx.getLocation({
+                success(res) {
+                  app.globalData.latitude = res.latitude
+                  app.globalData.longitude = res.longitude
+                  wx.setStorageSync('latitude', res.latitude)
+                  wx.setStorageSync('longitude', res.longitude)
+                  wxRelogin("/app/common/wxRelogin", { openid, latitude: res.latitude, longitude: res.longitude}).then(res => {
+                    const pages = getCurrentPages()
+                    const perpage = pages[pages.length - 1]
+                    perpage.onLoad()
+                    perpage.onShow()
+                  })
+                }
               })
+              
             }
 
             // 请求异常的提示语
@@ -85,7 +101,11 @@ let wxRelogin = (url, data) => new Promise(reslove => {
       'login_token': token
     },
     success(res) {
-      console.log(res.data.responseBody.data.loginToken)
+      if (res.data.responseBody.code === '-100002') {
+        wx.navigateTo({
+          url: '/pages/getUserInfo/getUserInfo'
+        })
+      }
       token = res.data.responseBody.data.loginToken;
       wx.setStorageSync('TOKEN', res.data.responseBody.data.loginToken)
       reslove(res.data.responseBody);

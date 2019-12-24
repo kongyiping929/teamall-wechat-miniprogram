@@ -9,7 +9,7 @@
     </view>
     <!-- 用户账号 -->
     <view class="account" bind:tap="selectProduct" wx:if="{{list}}">
-        <image src="/assets/image/user/photo.png"></image>
+        <image src="{{list.headimgUrl}}"></image>
         <text>{{list.nickName}}</text>
         <image src="/assets/image/productDetails/more.png"></image>
     </view>

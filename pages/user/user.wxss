@@ -22,6 +22,7 @@ page {
   width: 120rpx;
   height: 120rpx;
   margin-right: 32rpx;
+  border-radius: 50%;
 }
 
 .userInfo_attribute {
@@ -109,6 +110,8 @@ page {
 
 .userParamsAccount text:last-child {
   color: #fff;
+  width: 200rpx;
+  display: inline-block;
 }
 
 .userParamsBorder {
@@ -167,7 +170,7 @@ page {
   color: rgba(85, 98, 102, 1);
 }
 
-.price_item_bar text:last-child {
+.price_item_bar .redPacket {
   width: 90rpx;
   height: 40rpx;
   background: rgba(121, 146, 98, 0.2);
@@ -293,6 +296,7 @@ page {
   width: 160rpx;
   height: 160rpx;
   margin-right: 28rpx;
+  border-radius: 10rpx;
 }
 
 .orderMesTip {

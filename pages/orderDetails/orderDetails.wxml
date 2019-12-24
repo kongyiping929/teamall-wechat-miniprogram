@@ -1,5 +1,5 @@
 <!-- 订单详情 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+<scroll-view scroll-y="{{true}}">
     <!-- 顶部bar -->
     <view class="topBar">
         <view class="topBarL">
@@ -25,22 +25,22 @@
                 <text>发货店铺</text>
                 <text>{{list.shopName}}</text>
             </view>
-            <view class="addressStoreItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
+            <!-- <view class="addressStoreItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
                 <text>快递公司</text>
                 <text>中通</text>
             </view>
             <view class="addressStoreItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
                 <text>快递单号</text>
                 <text>325456</text>
-            </view>
+            </view> -->
         </view>
     </view>
     <!-- 产品介绍 -->
     <view class="product">
-        <image class="productPhoto" src="/assets/image/index/productPhoto.png"></image>
+        <image class="productPhoto" src="http://{{list.url}}"></image>
         <view class="productWapper">
             <view class="productTitle one-txt-cut">{{list.productName}}</view>
-            <view class="productPrice">¥{{list.basePrice}}</view>
+            <view class="productPrice">¥{{list.payAmount}}</view>
             <view class="productSelect">
                 <text>{{list.specName}} , {{list.lineSpecName}} , {{list.packageSpecName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
@@ -87,10 +87,10 @@
             发货时间:  2019-02-24 23:32:05
         </view>
         <view class="orderItem" wx:if="{{status - 0 === 4}}">
-            收货时间:  2019-02-24 23:32:05
+            收货时间:  {{list.receiveTime}}
         </view>
         <view class="orderItem" wx:if="{{status - 0 === 5 || status - 0 === 6 || status - 0 === 7}}">
-            退款申请时间:  2019-02-24 23:32:05
+            退款申请时间:  {{list.refundApplyTime}}
         </view>
         <view class="orderItem" wx:if="{{status - 0 === 6 || status - 0 === 7}}">
             退款处理时间:  2019-02-24 23:32:05
@@ -126,7 +126,7 @@
             <view>客服</view>
         </view>
         <button open-type='contact'>111</button>
-        <view class="footerBtn2" wx:if="{{status - 0 === 5}}">
+        <view class="footerBtn2" wx:if="{{status - 0 === 5}}" bindtap="cancelOrder">
             取消申请
         </view>
     </view>

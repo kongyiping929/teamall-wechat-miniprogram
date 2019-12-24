@@ -1,12 +1,14 @@
 // pages/backMake/backMake.js
 const app = getApp()
 const ajax = require('../../assets/js/ajax.js');
+
+const orderStatusArr = ['', '待支付', '待确认', '待服务', '已完成', '退款成功', '退款失败', '已取消'];
 Page({
- 
   /**
    * 页面的初始数据
    */
   data: {
+    orderStatusArr,
     orderNo: ""
   },
 
@@ -15,32 +17,60 @@ Page({
     ajax.post('/app/user/manage/getappointment', { shopId: app.globalData.shopId })
       .then(res => {
         let list = res.data.list;
-        for (let k in list) {
-          if (list[k].userAddressInfo) {
-            list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
-          }
-        }
         this.setData({ list })
       })
   },
-
-  payEdit(e) {
-    const { orderNo } = this.data;
-    console.log(e, orderNo)
-    ajax.post('/app/user/manage/updamount', {
-      orderNo, amount: e.detail.payValue
+//确认预约/完成服务
+  payConfirm(e) {
+    console.log(e, e.currentTarget.dataset.orderstatus)
+    let that = this;
+    let orderStatus = e.currentTarget.dataset.orderstatus;
+    let url = orderStatus == 2 ? "/app/user/manage/confirmappoint" : "/app/user/manage/completeappoint"
+    wx.showModal({
+      title: '提示',
+      content: orderStatus == 2 ? '请确认预约体验产品及服务人数!' :'请确认到店客户已完成体验!',
+      confirmText: orderStatus == 2 ? "确认预约":"完成服务",
+      success(res) {
+        if (res.confirm) {
+          ajax.post(url, { orderNo: e.currentTarget.dataset.orderno })
+            .then(res => {
+              wx.showToast({
+                title: '确认成功！',
+                icon: 'none',
+                duration: 2000
+              });
+              setTimeout(() => {
+                that.init()
+              }, 800);
+            })
+        }
+      }
     })
-      .then(res => {
-        wx.showToast({
-          title: '修改成功！',
-          icon: 'none',
-          duration: 2000
-        });
-        this.hideModel()
-        setTimeout(() => {
-          this.init()
-        }, 800);
-      })
+    
+    
+  },
+  //退款
+  payCancel(e) {
+    wx.showModal({
+      title: '提示',
+      content: '请确认预约订单内容,点击确认后将发起退款!',
+      confirmText: "确认退款",
+      success(res) {
+        ajax.post('/app/user/manage/refundappoint', {
+          orderNo: e.currentTarget.dataset.orderno 
+        })
+          .then(res => {
+            wx.showToast({
+              title: '退款成功！',
+              icon: 'none',
+              duration: 2000
+            });
+            setTimeout(() => {
+              this.init()
+            }, 800);
+          })
+      }
+    })
   },
 
   /**

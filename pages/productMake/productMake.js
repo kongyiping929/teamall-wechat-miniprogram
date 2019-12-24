@@ -1,55 +1,40 @@
-// pages/myCollect/myCollect.js
-const app = getApp()
-const ajax = require('../../assets/js/ajax.js'); 
-const typeArr = [
-  {
-    title: '最新上架',
-    class: '',
-    icon: '/assets/image/index/new_icon.png'
-  },
-  {
-    title: '佳节礼品',
-    class: 'gift',
-    icon: '/assets/image/index/benefit_icon.png'
-  },
-  {
-    title: '优惠不断',
-    class: 'discounts',
-    icon: '/assets/image/index/benefit_icon.png'
-  }
-]
-Page({ 
+// pages/productType/productType.js
+const ajax = require('../../assets/js/ajax.js');
+
+Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    typeArr,
-    list:""
+    type:1,//1:产品分类 2:微广场
+    list:''
   },
 
-  // 跳转产品详情
-  goProductDetails(e) {
-    wx.navigateTo({ url: `/pages/productDetails/productDetails?id=${e.currentTarget.dataset.orderid}` });
-  },
-
-  // 初始化
-  init() {
-    let that = this;
-    const { keyword } = this.data
-    ajax.post('/app/user/collection/list', {})
-      .then(res => {
-        this.setData({ list: res.data.list });
-      })
+  // 跳转
+  goProductPlaza(e) {
+    wx.navigateTo({ url: '/pages/productPlaza/productPlaza?id=' + e.currentTarget.dataset.id })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options)
+    this.setData({ type: options.type });
     this.init()
+    console.log(this.data.list)
   },
-
+  // 初始化
+  init() {
+    let { type } = this.data;
+    let that = this;
+    let url = "/app/microSquare/findMicroSquareList"
+    ajax.post(url,{})
+      .then(res => {
+        this.setData({ list: res.data.list });
+      })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

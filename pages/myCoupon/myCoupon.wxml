@@ -2,7 +2,6 @@
   <!-- 列表 -->
   <view wx:if="{{coupon.length > 0}}">
     <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
-      <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
       <view class="couponItemTop">
         <view>
           <view>

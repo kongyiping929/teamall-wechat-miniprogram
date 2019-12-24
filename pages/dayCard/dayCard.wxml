@@ -13,12 +13,12 @@
             </view>
         </view>
         <picker bindchange="bindPickerChange" value="{{productTypeIndex}}" range="{{productTypeArr}}" range-key="squareName"
-        data-id='{{productTypeArr[productTypeIndex].squareId}}'>
+        data-id='{{productTypeArr[productTypeIndex].squareId}}' disabled="{{shopInfo}}">
             <view class="cardMesBottom">
                 <view class="cardMesBottomL">打卡微广场选择</view>
                 <view class="cardMesBottomR">
                     <text>{{productTypeArr[productTypeIndex].squareName}}</text>
-                    <image src="/assets/image/productDetails/more.png"></image>
+                    <image src="/assets/image/productDetails/more.png" wx:if="{{!shopInfo}}"></image>
                 </view>
             </view>
         </picker>
@@ -36,18 +36,18 @@
         </view>
     </view>
     <!-- 产品信息 -->
-    <view class="product">
+    <view class="product" wx:if="{{shopInfo}}">
         <view class="productName">打卡产品</view>
         <view class="productMes">
             <image class="productPhoto" src="/assets/image/index/productPhoto.png"></image>
             <view class="productWapper">
-                <view class="productTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="productTitle one-txt-cut">{{shopInfo.productName}}</view>
                 <view class="productPrice">
-                    <text>¥2,300</text>
-                    <text>¥900.00</text>
+                    <text>¥{{shopInfo.basePrice}}</text>
+                    <text>¥{{shopInfo.marketPrice}}</text>
                 </view>
-                <view class="productSelect">
-                    <text>一饼 , 590g , 包装1</text>
+                <view class="productSelect one-txt-cut">
+                    <text>{{shopInfo.specInfo}}</text>
                     <image src="/assets/image/user/downArrows.png"></image>
                 </view>
             </view>
@@ -78,13 +78,13 @@
                         <text>{{couponModal.discount*10}}</text>
                         <text>折</text>
                     </view>
-                    <view class="modalRollTopR" wx:if="{{couponModal.subtractQuota>0}}">
+                    <view class="modalRollTopR subtractQuota" wx:if="{{couponModal.subtractQuota>0}}">
                         <text>{{couponModal.discount>0?",再":""}}减</text>
                         <text>{{couponModal.subtractQuota }}元</text>
                     </view>
                 </view>
                 <view class="modalRollBottom">
-                    <text>{{couponModal.productTypeId == "0"?"通用":couponModal.productTypeId}}</text>
+                    <text class="one-txt-cut">{{couponModal.productTypeId == "0"?"通用":couponModal.productTypeId}}</text>
                     <text>满减额度 {{couponModal.useQuota}}元使用</text>
                 </view>
             </view>

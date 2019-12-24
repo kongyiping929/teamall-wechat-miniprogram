@@ -90,6 +90,7 @@ Page({
     this.setData({ showModal: true,type:true, showStock: false})
   },
   productEdit(e){
+    console.log(e.detail.checked)
     const { productId} = this.data;
     let data = {
       showType: e.detail.showType,

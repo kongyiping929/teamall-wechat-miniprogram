@@ -5,14 +5,9 @@ Page({
 
   /**
    * 页面的初始数据
-   */
+   */ 
   data: {
     list:"",//产品详情
-    imgUrls: [
-      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
-      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
-      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-    ],
     current: 0, // 当前滑块的位置
     id: '', // 产品id
     specModal: false, // 产品规格
@@ -31,7 +26,9 @@ Page({
     imgList: [
       "/assets/image/productDetails/starSelect.png",
       "/assets/image/productDetails/star.png",
-    ]
+    ],
+    userPunchLis:"",
+    animationData: {}
   },
 
   // 初始化
@@ -45,11 +42,20 @@ Page({
     const {id} = this.data;
     ajax.post('/app/product/findInfo', { id })
       .then(res => {
-        this.setData({ list: res.data, collection: res.data.isCollection });
-        console.log(this.data.collection)
+        let imgUrls = res.data.url.split(",");
+        this.setData({ list: res.data, collection: res.data.isCollection, otherParam: JSON.parse(res.data.otherParam), imgUrls });
+      }).then(res=>{
+        this.findUserPunchList()
       })
     this.setData({ productPackSpecs, productSpecs, productSubdivisionSpecs })
 
+  },
+  findUserPunchList() {
+    const { list} = this.data;
+    ajax.post('/app/product/findUserPunchList', { productId: list.productId, pageSize :1 })
+      .then(res => {
+        this.setData({ userPunchLis: res.data.list });
+      })
   },
 
   // 选择器
@@ -62,30 +68,40 @@ Page({
       productSubdivisionSpecs,
       productPackSpecsItem,
       productSpecsItem,
-      productSubdivisionSpecsItem
+      productSubdivisionSpecsItem,
+      urltype
     } = this.data;
+    this.setData({ specPayNum:1})
     if (field === 'productSpecs') {
-      unitPrice = parseFloat(productSpecs[index].unitPrice) + (productPackSpecsItem && productPackSpecsItem !== null ? parseFloat(productPackSpecsItem.unitPrice) : 0) + (productSubdivisionSpecsItem && productSubdivisionSpecsItem !== null ? parseFloat(productSubdivisionSpecsItem.unitPrice) : 0);
+      let list = productSpecs[index];
+      let productSubdivisionSpecsItem = list.lineList.length > 0 ? list.lineList[0] : null;
+      let productPackSpecsItem = urltype == 2 ? list.packageList.length > 0 ? list.packageList[0].stockNum > 0 ? list.packageList[0] : null : null : null;
+      unitPrice = parseFloat(productSpecs[index].basePrice) + (productPackSpecsItem? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      console.log(productSpecs[index].basePrice, productPackSpecsItem, productSubdivisionSpecsItem )
+      
       this.setData({
-        productSpecsItem: productSpecs[index],
-        unitPrice
+        productSpecsItem: list,
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+        productSubdivisionSpecs: list.lineList,
+        productSubdivisionSpecsItem,
+        productPackSpecsItem,
+        productPackSpecs: list.packageList,
       });
     }
     if (field === 'productSubdivisionSpecs') {
-      unitPrice = parseFloat(productSubdivisionSpecs[index].unitPrice) + (productPackSpecsItem && productPackSpecsItem !== null ? parseFloat(productPackSpecsItem.unitPrice) : 0) + (productSpecsItem && productSpecsItem !== null ? parseFloat(productSpecsItem.unitPrice) : 0);
+      unitPrice = parseFloat(productSubdivisionSpecs[index].addPrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0);
       this.setData({
-        productSubdivisionSpecsItem: productSubdivisionSpecs[index],
-        unitPrice
+        productSubdivisionSpecsItem: productSubdivisionSpecs.length > 0 ?productSubdivisionSpecs[index]:[],
+        unitPrice: parseFloat(unitPrice).toFixed(2),
       });
     }
     if (field === 'productPackSpecs') {
-      unitPrice = parseFloat(productPackSpecs[index].unitPrice) + (productSpecsItem && productSpecsItem !== null ? parseFloat(productSpecsItem.unitPrice) : 0) + (productSubdivisionSpecsItem && productSubdivisionSpecsItem !== null ? parseFloat(productSubdivisionSpecsItem.unitPrice) : 0);
+      unitPrice = parseFloat(productPackSpecs[index].addPrice) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
       this.setData({
         productPackSpecsItem: productPackSpecs[index],
-        unitPrice
+        unitPrice: parseFloat(unitPrice).toFixed(2),
       });
     }
-
   },
 
   // 获取滑块当前索引
@@ -96,29 +112,93 @@ Page({
   // 显示/隐藏产品规格模态框
   changeSpecModal(e) {
     let { status, urltype } = e.currentTarget.dataset;
-    this.setData({ specModal: status, urltype });
+    let that = this;
+    this.setData({ specModal: status, urltype, specPayNum: 1 });
     this.specList();
-    
+    var animation = wx.createAnimation({
+      duration: 600,//动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
+      timingFunction: 'ease',//动画的效果 默认值是linear
+    })
+    this.animation = animation
+    setTimeout(function () {
+      if (status){
+        that.fadeIn();//调用显示动画
+      }else{
+        that.fadeDown();//调用显示动画
+      }
+    }, 200) 
+  },
+  fadeIn: function () {
+    this.animation.translateY(0).step()
+    this.setData({
+      animationData: this.animation.export()//动画实例的export方法导出动画数据传递给组件的animation属性
+    })
+  },
+  fadeDown: function () {
+    this.animation.translateY(600).step()
+    this.setData({
+      animationData: this.animation.export(),
+    })
+  },
+  changeAppointment(e) {
+    let { urltype } = e.currentTarget.dataset;
+    let that = this;
+    this.setData({  urltype, specPayNum: 1 });
+    this.specList();
+    var animation = wx.createAnimation({
+      duration: 600,//动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
+      timingFunction: 'ease',//动画的效果 默认值是linear
+    })
+    this.animation = animation
+    setTimeout(function () {
+        that.fadeIn();//调用显示动画
+    }, 500) 
   },
 
   //产品规格列表
   specList (){
-    const { id } = this.data;
+    const { id, urltype} = this.data;
     ajax.post('/app/product/findSpecInfo', { id })
       .then(res => {
-        console.log(res.data.list[0].packageList[0])
         let data = res.data.list[0];
-        let price = parseFloat(data.basePrice) + parseFloat(data.packageList[0].addPrice) +
-          parseFloat(data.lineList[0].addPrice) 
+        let list = res.data.list;
+        let status = false;
+        let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
+        let productPackSpecsItem = null;
+        let unitPrice = parseFloat(data.basePrice) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice):0) +(productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) :0)
+        let disableList = new Set();
+        for (let i = 0; i < list.length;i++){
+          if (urltype == 1){
+            if (list[i].appointmentStatus == 1) { status = true}
+          }
+          for (let y = 0; y < list[i].packageList.length; y++) {
+            if (list[i].packageList[y].stockNum>0){
+              disableList.add(list[i].specId)
+              if (!productPackSpecsItem){
+                urltype == 2 ?productPackSpecsItem = list[i].packageList[y]:"";
+              }
+            }
+          }
+        }
+        if (status && urltype == 1){
+          this.setData({ specModal: true });
+        } else if (urltype == 1){
+          wx.showToast({
+            title: '该产品暂不提供预约体验服务',
+            icon: 'none',
+            duration: 2000
+          });
+        }
         this.setData({ 
           specList: res.data.list, 
           productSpecs: res.data.list,
-          productSubdivisionSpecs: res.data.list[0].lineList,
-          productPackSpecs: res.data.list[0].packageList ,
-          productSpecsItem: res.data.list[0],
-          productPackSpecsItem: res.data.list[0].packageList[0],
-          productSubdivisionSpecsItem: res.data.list[0].lineList[0],
-          price
+          productSubdivisionSpecs: data.lineList,
+          productPackSpecs: data.packageList ,
+          productSpecsItem: data,
+          productPackSpecsItem,
+          productSubdivisionSpecsItem,
+          unitPrice: parseFloat(unitPrice).toFixed(2),
+          disableList: Array.from(disableList)
         });
       })
   },
@@ -149,6 +229,7 @@ Page({
     this.setData({
       detailsModal: status
     });
+
   },
 
   // 阻止冒泡
@@ -173,12 +254,7 @@ Page({
       icon: 'none',
       duration: 2000
     });
-    if (productSubdivisionSpecsItem === null) return wx.showToast({
-      title: '请选择产品细分规格',
-      icon: 'none',
-      duration: 2000
-    });
-    if (productPackSpecsItem === null) return wx.showToast({
+    if (productPackSpecsItem === null && urltype == 2) return wx.showToast({
       title: '请选择产品包装规格',
       icon: 'none',
       duration: 2000
@@ -188,8 +264,8 @@ Page({
       productTypeId: list.productTypeId,
       shopId: productSpecsItem.shopId,
       specId: productSpecsItem.specId,
-      specLineId: productSubdivisionSpecsItem.id,
-      specPackageId: productPackSpecsItem.id,
+      specLineId: productSubdivisionSpecsItem?productSubdivisionSpecsItem.id:"",
+      specPackageId: productPackSpecsItem?productPackSpecsItem.id:"",
       specPayNum,
       shopName: list.shopName,
     }
@@ -197,6 +273,7 @@ Page({
     wx.navigateTo({
       url: urltype === 1 ? '/pages/confirmMake/confirmMake?item=' + JSON.stringify(product)  :
       '/pages/confirmOrder/confirmOrder?item=' + JSON.stringify(product)  });
+    this.setData({ specModal: false });
   },
 
   changeCollection(){
@@ -225,12 +302,26 @@ Page({
     this.setData({ service: status });
   },
 
+  checkedPunch(e) {
+    let id = e.currentTarget.dataset.id
+    ajax.post('/app/product/likeUserPunch', { id })
+      .then(res => {
+        wx.showToast({
+          title: '点赞成功！',
+          icon: 'none',
+          duration: 2000
+        });
+      })
+  },
+  
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({ id: options.id})
-    this.init()
+    this.setData({ id: options.id});
+    options.inviteCode ? app.globalData.inviteCode = options.inviteCode:"";
+    options.shopId ? app.globalData.shopId = options.shopId:"";
+    
   },
 
   /**
@@ -244,7 +335,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init()
   },
 
   /**
@@ -262,23 +353,27 @@ Page({
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(`/pages/productDetails/productDetails?id=${this.data.id}&&shopId=${app.globalData.shopId}&&inviteCode=${this.data.list.inviteCode}`)
+    }
+    return {
+      title: this.data.list.productName,
+      path: `/pages/productDetails/productDetails?id=${this.data.id}&&shopId=${app.globalData.shopId}&&inviteCode=${this.data.list.inviteCode}`,
+      //imageUrl: this.data.topVideo.image_url,
+      success: function (res) {
+        wx.showToast({
+          title: '分享成功！',
+          icon: 'none',
+          duration: 2000,
+        });
+      },
+      fail: function (res) {
+        // 转发失败
+      }
+    }
   }
 })

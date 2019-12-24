@@ -7,7 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    list:"",
+    myPunchList:"",
+    contentState:true
   },
 
   // 初始化
@@ -16,15 +18,39 @@ Page({
     const { id } = this.data
     ajax.post('/app/microSquare/findMicroSquareDetail', { id})
       .then(res => {
-        this.setData({ list: res.data.list });
+        this.setData({ list: res.data });
       })
   },
-
+  microSquareList() {
+    let that = this;
+    const { id } = this.data
+    ajax.post('/app/microSquare/findMyPunchList', { squareId :id})
+      .then(res => {
+        let myPunchList = res.data.list
+        myPunchList.filter((v, i) => {
+          v.imgList = v.attachmentInfo ? v.attachmentInfo.split(",").reverse() : [];
+          v.orderInfo = v.orderInfo ? v.orderInfo : "";
+        })
+        this.setData({ myPunchList});
+      })
+  },
+  //点赞
+  checkedPunch(e) {
+    let id = e.currentTarget.dataset.id
+    ajax.post('/app/product/likeUserPunch', { id })
+      .then(res => {
+        wx.showToast({
+          title: '点赞成功！',
+          icon: 'none',
+          duration: 2000
+        });
+      })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({ id: options.id }, () => this.init())
+    this.setData({ id: options.id }, () => { this.init(); this.microSquareList()})
     
   },
 

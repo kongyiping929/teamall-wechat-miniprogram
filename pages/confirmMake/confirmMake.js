@@ -56,6 +56,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(JSON.parse(options.item))
     this.setData({ items: JSON.parse(options.item) })
     this.initTime();
   },
@@ -163,6 +164,9 @@ Page({
               icon: 'none',
               duration: 2000
             });
+            setTimeout(() => {
+              wx.navigateTo({ url: '/pages/makeList/makeList' });
+            }, 800);
           }
         })
         } else {

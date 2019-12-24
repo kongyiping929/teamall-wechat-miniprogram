@@ -17,7 +17,8 @@ Page({
     userImage: [], // 用户选择的图片
     imgList:[],//服务器返回的图片集合
     modal: false, // 打卡模态框
-    couponModal:""//优惠券
+    couponModal:"",//优惠券
+    shopInfo:"",//打卡商品
   },
 
   // 筛选器
@@ -45,17 +46,15 @@ Page({
           filePath: tempFilePaths, //选择图片返回的相对路径
           encoding: 'base64', //编码格式
           success: res => { //成功的回调
-            userImage.push({ fileBase64Content : 'data:image/png;base64,' + res.data, fileName: timestamp})
+            userImage.push({ fileBase64Content: 'data:image/png;base64,' +res.data, fileName: timestamp})
             that.setData({ userImage });
-            ajax.post('/common/file/upload', { fileBase64Content: 'data:image/png;base64,' + res.data, fileName: timestamp })
+            ajax.post('/common/file/upload', { fileBase64Content: res.data, fileName: timestamp })
               .then(res => {
                 console.log(res.data)
-                imgList.push({ url : 'data:image/png;base64,' + res.data, name : timestamp })
+                imgList.push({ url: res.data, name : timestamp })
               })
           }
         })
-        
-       
       },
       fail(err) {
         console.log(err)
@@ -74,31 +73,37 @@ Page({
   },
 
   // 初始化
-  init() {
+  init() { 
     let that = this;
     ajax.post('/app/user/punch/preInfo',{})
       .then(res => {
-        console.log(res.data.list)
+        console.log(Object.keys(res.data).length)
         that.setData({
-          shop: res.data.list,
-        })
+          shopInfo: Object.keys(res.data).length > 0 ? res.data:"" ,
+        }, () => { console.log(""?true:false)})
+        return res.data;
+      }).then(shopInfo=>{
+        ajax.post('/app/microSquare/findMicroSquareList', { pageSize: 9999 })
+          .then(res => {
+            let productTypeArr= res.data.list
+            if (Object.keys(shopInfo).length > 0){
+              console.log(shopInfo)
+              for (let i = 0; i < productTypeArr.length; i++) {
+                if(productTypeArr[i].squareId == shopInfo.squareId){
+                  that.setData({
+                    productTypeIndex: i
+                  })
+                }
+              }
+            }
+            
+            that.setData({
+              productTypeArr,
+              squareId: res.data.list[0].squareId
+            })
+          })
       })
-    ajax.post('/app/microSquare/findMicroSquareList', { "pageSize": 9999})
-      .then(res => {
-        console.log(res.data.list)
-        that.setData({ 
-          productTypeArr:res.data.list,
-          squareId: res.data.list[0].squareId
-        })
-      })
-  },
-
-  shopList(){
-    let that = this;
-    ajax.post('/app/user/punch/preInfo')
-      .then(res => {
-        
-      })
+    
   },
 
   /**
@@ -110,7 +115,7 @@ Page({
   },
 
   save(){
-    let { squareId, remark, imgList} = this.data;
+    let { squareId, remark, imgList, shopInfo} = this.data;
     if (remark.length < 15) return wx.showToast({
       title: "输入内容需15-200个字符",
       icon: 'none',
@@ -124,13 +129,14 @@ Page({
     let data = {
       content: remark,
       squareId,
-      attachmentInfoList: imgList
+      attachmentInfoList: imgList,
+      orderId: shopInfo ? shopInfo.orderId:""
     }
     console.log(data)
     ajax.post('/app/user/punch/save', data)
       .then(res => {
         console.log(res)
-        this.setData({ modal: true, couponModal:res.data})
+        this.setData({ modal: true, couponModal: Object.keys(res.data).length > 0 ? res.data : "",})
       })
   },
 

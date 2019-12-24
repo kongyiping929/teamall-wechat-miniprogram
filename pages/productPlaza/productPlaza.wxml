@@ -2,48 +2,51 @@
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 产品banner -->
     <view class="banner">
-        <image src="/assets/image/productDetails/productPlazaBanner.png"></image>
+        <image src="http://{{list.url}}"></image>
     </view>
     <!-- 产品简介 -->
-    <view class="synopsis">
-        <view>产品分类简介</view>
-        <view>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient…</view>
+    <view class="synopsis" wx:if="{{list}}">
+        <view>{{list.productTypeName}}({{list.squareName}})简介</view>
+        <view>{{list.description}}</view>
     </view>
     <!-- 打卡信息 -->
-    <view class="clockWapper {{2 === index + 1 ? 'length' : ''}}" wx:for="{{5}}" wx:key="{{index}}">
-        <view class="clockTitleBar">
+    <view class="clockWapper {{2 === index + 1 ? 'length' : ''}}"  wx:if="{{list}}" wx:for="{{myPunchList}}" wx:key="{{index}}">
+         <view class="clockTitleBar">
             <view class="clockTitleBarLeft">
-                <image src="/assets/image/find/userPhoto.png"></image>
-                <text>J***C</text>
+                <image src="{{item.headimgUrl}}"></image>
+                <text>{{item.userName}}</text>
             </view>
             <view class="clockTitleBarRight">
-                <image src="/assets/image/find/goodIcon.png"></image>
-                <text>+324</text>
+                <image src="/assets/image/find/goodIcon.png"  bindtap="checkedPunch" data-id="{{item.userPunchId}}"></image>
+                <text>+{{item.likeNum}}</text>
             </view>
         </view>
         <view class="clockContent {{contentState ? 'none' : 'text-cut' }}">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis parturient
+            {{item.content}}
             <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text>
         </view>
-        <view class="clockImg {{2 === index + 1 ? 'length' : ''}}">
-            <image src="/assets/image/find/productBg.png"></image>
-            <image src="/assets/image/find/productBg.png"></image>
-            <image src="/assets/image/find/productBg.png"></image>
+        <view class="clockImg" wx:for="{{item.imgList}}" wx:key="{{index}}">
+            <image src="http://{{item}}"></image>
         </view>
-        <view class="TorderMes" wx:if="{{2 === index + 1}}">
-            <image class="TorderMesPhoto" src="/assets/image/index/productPhoto.png"></image>
+        <view class="TorderMes" wx:if="{{item.orderInfo}}">
+            <image class="TorderMesPhoto" src="http://{{item.orderInfo.attachmentInfo}}"></image>
             <view class="TorderMesTip">
-                <view class="TorderMesTipTitle one-txt-cut">茶叶名称,太长的话就在这换行茶叶名称,太长的话就在这换行</view>
+                <view class="TorderMesTipTitle one-txt-cut">{{item.orderInfo.productName}}</view>
                 <view class="TorderMesPrice">
-                    <text>¥700.00</text>
-                    <text>¥900.00</text>
+                  <text>¥{{item.orderInfo.basePrice}}</text>
+                  <text>¥{{item.orderInfo.marketPrice }}</text>
                 </view>
                 <view class="TorderMesTipAttr">
-                    <text>一饼 , 590g , 包装1</text>
-                    <image src="/assets/image/user/downArrows.png"></image>
+                    <text>{{item.orderInfo.typeName}}</text>
+                    <!-- <image src="/assets/image/user/downArrows.png"></image> -->
                 </view>
             </view>
         </view>
     </view>
+    <view class="couponNone" wx:if="{{!list}}">
+            <view class="couponNoneBg">
+                <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+            </view>
+            <view class="couponNoneTip">暂无简介</view>
+        </view>
 </scroll-view>

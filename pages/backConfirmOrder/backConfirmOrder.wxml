@@ -2,32 +2,32 @@
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 取货方式 -->
     <view class="getMode">
-        <view class="getModeMap" bind:tap="changeAddPersonStatus" data-status="{{true}}">
-            <image src="/assets/image/user/photo.png"></image>
-            <text>千与千寻</text>
+        <view class="getModeMap" data-status="{{true}}">
+            <image src="{{list.userInfoVo.headimgUrl}}"></image>
+            <text>{{list.userInfoVo.nickName}}</text>
         </view>
     </view>
     <!-- 产品介绍 -->
     <view class="product">
         <view class="productWapper">
-            <view class="productTitle one-txt-cut">茶叶名称</view>
+            <view class="productTitle one-txt-cut">{{list.productName}}</view>
             <view class="productSelect">
-                <text>炒青茶</text>
+                <text>{{list.typeName}}</text>
             </view>
         </view>
     </view>
      <!-- 规格 -->
-    <view class="discountCoupon" bind:tap="changeCouponModal" data-status="{{true}}">
+    <view class="discountCoupon" bind:tap="changeSpecModal" data-status="{{true}}">
         <text>规格</text>
         <view>
-            <text wx:if="{{couponActive}}">-{{couponActive.subtractQuota}}</text>
+            <text wx:if="{{productSpecsItem}}">{{productSpecsItem.specName}}{{productSubdivisionSpecsItem.name&&","+productSubdivisionSpecsItem.name}}{{productPackSpecsItem.name&&","+productPackSpecsItem.name}}</text>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
     <!-- 购买数量 -->
     <view class="number">
         <text>出售</text>
-        <text>999999件 订单合计：<text>¥999</text></text>
+        <text>{{specPayNum}}件 订单合计：<text>¥{{unitPrice*specPayNum }}</text></text>
     </view>
    
     <!-- 备注 -->
@@ -56,76 +56,49 @@
         <view bindtap="submitOrder">确认发送订单</view>
     </view>
 </scroll-view>
-<!-- 优惠券模态框 -->
-<view class="couponWapper" wx:if="{{couponModal}}" bind:tap="changeCouponModal" data-status="{{false}}">
-    <view class="couponBox" catch:tap="stopEvent">
-        <view class="couponBar">
-            <text>优惠券{{coupon.lenght}}</text>
-            <image src="/assets/image/productDetails/close.png" bind:tap="changeCouponModal" data-status="{{false}}"></image>
-        </view>
-        <view class="couponList"  wx:if="{{coupon.length > 0}}">
-            <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
-                <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
-                <view class="couponItemTop">
-                    <view>
-                        <view>
-                            <text>优惠券</text>
-                            <text>x {{item.discount}}</text>
-                        </view>
-                        <view>有效期至 {{item.expTime}}</view>
-                    </view>
-                    <view>
-                      <view wx:if="{{item.useQuota>0}}">
-                          <text>{{item.useQuota}}</text>
-                          <text>折</text>
-                      </view>
-                      <view wx:if="{{item.subtractQuota>0}}">
-                          <text>{{item.useQuota>0?",再":""}}减</text>
-                          <text>{{item.subtractQuota }}元</text>
-                      </view>
-                    </view>
-                    
-                </view>
-                <view class="couponItemBottom">
-                    <text>{{item.productTypeId == "0"?"通用":productTypeId}}</text>
-                    <text>满减额度 {{item.useQuota}}元使用</text>
-                    <text data-item="{{item}}" bindtap="couponChange">立即使用</text>
-                </view>
-            </view>
-        </view>
-        <view class="couponNone" wx:else>
-            <view class="couponNoneBg">
-                <image src="/assets/image/confirmOrder/modalBg1.png"></image>
-            </view>
-            <view class="couponNoneTip">暂无可用优惠卷</view>
-            <view class="couponNoneBtn" bind:tap="changeCouponModal">不使用优惠券</view>
-        </view>
+<!-- 产品规格 -->
+<view class="specModal" bind:tap="changeSpecModal" data-status="{{false}}" wx:if="{{specModal}}" catchtouchmove="true">
+  <view class="specWapper" catch:tap="stopEvent">
+    <image src="/assets/image/productDetails/close.png" class="close" bind:tap="changeSpecModal" data-status="{{false}}"></image>
+    <view class="spec_bg">
+      <image src="http://{{list.productIconUrl}}" class="specImg"></image>
     </view>
-</view>
-<!-- 地址模态框 -->
-<view class="personModal" data-status="{{false}}" wx:if="{{addPersonStatus}}">
-    <view class="personWap" catch:tap="stop">
-        <view class="personTitle">
-            <span>收货地址</span>
-            <image src="/assets/image/productDetails/close.png" class="fr" bind:tap="changeAddPersonStatus" data-status="{{false}}"></image>
-        </view>
-        <view class="item" wx:for="{{list.userAddressList}}" wx:key="{{index}}"bind:tap="changeRecipients" data-item="{{item}}">
-          <view>
-            <text class="name">{{item.consignee}}</text>
-            <text class="phone">{{item.mobile }}</text>
-          </view>
-            <view class="info">
-              <image wx:if="{{item.defaultStatus==1}}" class="active" src="/assets/image/address/moren.png"></image>
-              <text class="address">{{item.userAddress }}</text>
-              <image class="addressImg" src="/assets/image/address/address.png" bindtap="goAddAddress"  data-item="{{item }}" ></image>
-            </view>
-        </view>
-        <view class="personNone" wx:if="{{!list.userAddressList}}">
-            <view class="personNoneBg">
-                <image src="/assets/image/confirmOrder/modalBg2.png"></image>
-            </view>
-            <view class="personNoneTip">无收货地址，请添加!</view>
-        </view>
-        <view class="personBtn" bind:tap="goAddAddress">新增地址</view>
+    <view class="specAttr">
+      <view class="specAttrPrice">¥ {{unitPrice}}</view>
+      <view class="specAttrRepertory">库存 {{productPackSpecsItem.stockNum}}</view>
+      <view class="specAttrClass one-txt-cut">
+        <text wx:if="{{(productSpecsItem && productSpecsItem !== null) || (productSubdivisionSpecsItem && productSubdivisionSpecsItem !== null) || (productPackSpecsItem && productPackSpecsItem !== null)}}">已选</text>
+        <text>{{productSpecsItem.specName}}</text>
+        <text>{{productSubdivisionSpecsItem.name}}</text>
+        <text>{{productPackSpecsItem.name}}</text>
+      </view>
     </view>
+    <view class="specSelect">
+      <view class="specSelectTitle">产品规格</view>
+      <view class="specSelectItem">
+        <text class="one-txt-cut {{disableList[index] === item.specId ? '' : 'disable'}} {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{disableList[index] === item.specId?'select':''}}" data-index="{{index}}" data-field="productSpecs">{{item.specName}}</text>
+      </view>
+    </view>
+    <view class="specSelect" wx:if="{{productSubdivisionSpecs && productSubdivisionSpecs !== '' && productSubdivisionSpecs !== null}}">
+      <view class="specSelectTitle">产品细分规格</view>
+      <view class="specSelectItem">
+        <text class="one-txt-cut {{productSubdivisionSpecsItem.id === item.id ? 'active' : ''}}" wx:for="{{productSubdivisionSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productSubdivisionSpecs">{{item.name}}</text>
+      </view>
+    </view>
+    <view class="specSelect">
+      <view class="specSelectTitle">包装类型{{item.name}}</view>
+      <view class="specSelectItem">
+        <text class="one-txt-cut  {{item.stockNum ==0?'disable':''}} {{productPackSpecsItem.id == item.id ? 'active' : ''}}" wx:for="{{productPackSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productPackSpecs">{{item.name}}</text>
+      </view>
+    </view>
+    <view class="specNumber">
+      <view>购买数量</view>
+      <view>
+        <text bind:tap="changeSpecPayNum" data-type="{{0}}">-</text>
+        <text>{{specPayNum}}</text>
+        <text bind:tap="{{productPackSpecsItem.stockNum > specPayNum?'changeSpecPayNum':''}}" data-type="{{1}}">+</text>
+      </view>
+    </view>
+    <view class="specHandle"  bind:tap="changeSpecModal" data-status="{{false}}">确认</view>
+  </view>
 </view>

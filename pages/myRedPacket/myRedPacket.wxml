@@ -6,7 +6,7 @@
             <image src="/assets/image/user/moneyIcon_2.png"></image>
             <view class="topBarMesTip">
                 <view class="topBarMesTipTitle">我的红包</view>
-                <view class="topBarMesTipPrice">¥232,343.00</view>
+                <view class="topBarMesTipPrice">¥{{withdrawBalance}}</view>
             </view>
         </view>
         <view class="topBarBtn">申请领取</view>

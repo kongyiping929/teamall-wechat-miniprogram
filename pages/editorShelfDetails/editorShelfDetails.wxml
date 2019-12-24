@@ -23,7 +23,7 @@
           <text>价格</text>
     </view>
     <view class="infoTip details" wx:for="{{item.lineList}}" wx:key="{{index}}" >
-          <text>{{item.name }}</text>
+          <text class="one-txt-cut lineName">{{item.name }}</text>
           <text>+ ¥{{item.addPrice }}</text>
     </view>
     <view class="line"></view>
@@ -39,7 +39,7 @@
           <text wx:if="{{productType==1}}">操作</text>
     </view>
     <view class="infoTip details edit" wx:for="{{item.packageList}}" wx:key="{{index}}">
-          <text>{{item.name}}</text>
+          <text class="one-txt-cut">{{item.name}}</text>
           <text>{{item.stockNum || 0}}</text>
           <text>+ ¥{{item.addPrice}}</text>
           <text class="btn" bindtap="editStock" wx:if="{{productType==1}}" data-index="{{index}}" data-productIndex="{{productIndex}}" >库存编辑</text>

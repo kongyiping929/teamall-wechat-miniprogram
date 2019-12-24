@@ -1,7 +1,7 @@
 <!-- 订单查询 -->
 <scroll-view scroll-y scroll-with-animation enable-back-to-top>
     <!-- 查询栏 -->
-    <view class="queryBar">
+    <view class="queryBar"  >
         <view class="queryBtnBox">
             <view class="{{!queryType ? 'active' : ''}}" bind:tap="changeQueryType" data-value="{{0}}">
                 查预约
@@ -16,64 +16,63 @@
         </view>
     </view>
     <!-- 预约列表 -->
-    <view class="subscribe">
+    <view class="subscribe" wx:for="{{list}}" wx:key="{{index}}" wx:if="{{queryType == 0}}">
         <view class="subscribeTimeMes">
             <image src="/assets/image/find/clock.png"></image>
-            <text>2019-03-06  晚间 7:00-9:00</text>
-            <text>待确认</text>
+            <text>{{item.appointmentTime}}  {{item.timeRangeDesc}}</text>
+            <text>{{orderStatusArr[item.orderStatus]}}</text>
         </view>
-        <view class="subscribeTitle one-txt-cut">茶叶名称</view>
+        <view class="subscribeTitle one-txt-cut">{{item.productName}}</view>
         <view class="subscribeAttr">
-            <text>一饼 , 590g , 包装1</text>
+            <text>{{item.specName}} , {{item.lineSpecName}} , {{item.packageSpecName}}</text>
             <image src="/assets/image/user/downArrows.png"></image>
         </view>
-        <view class="subscribePrice">¥700.00</view>
+        <view class="subscribePrice">¥{{item.payAmount}}</view>
         <view class="subscribeAddress">
             <image src="/assets/image/confirmMake/location.png"></image>
-            <text class="one-txt-cut">广州中山北路78号中环店</text>
+            <text class="one-txt-cut">{{item.shopName}}</text>
             <text></text>
             <text>预约人数</text>
-            <text>99人</text>
+            <text>{{item.peopleNum}}人</text>
         </view>
         <view class="subscribeNumber">
-            <text>预约创建时间: 2019-09-18</text>
-            <text>从属销售:销售 IDxxxxx</text>
+            <text>预约创建时间: {{item.createdTime}}</text>
+            <text>销售:{{item.saleUserId}}</text>
         </view>
     </view>
     <!-- 订单 -->
-    <view class="subscribe">
+    <view class="subscribe" wx:for="{{list}}" wx:key="{{index}}" wx:if="{{queryType == 1}}">
         <view class="subscribeOrderNum">
-            <text>订单编号:2019010110101021321</text>
+            <text>订单编号:{{item.orderNo}}</text>
             <text>已完成</text>
         </view>
-        <view class="subscribeTitle one-txt-cut">茶叶名称</view>
-        <view class="subscribePrice2">
-            <text>¥700.00</text>
-            <text>x 1</text>
+        <view class="subscribeTitle subscribePrice2 one-txt-cut">
+          <text>{{item.productName}}</text>
+          <text class="num">x {{item.buyNum}}</text>
         </view>
         <view class="subscribeAttr subscribeAttr2">
-            <text>一饼 , 590g , 包装1</text>
+            <text>{{item.specName}} , {{item.lineSpecName}} , {{item.packageSpecName}}</text>
             <image src="/assets/image/user/downArrows.png"></image>
         </view>
         <view class="subscribeAddress2">
-            <text>取货店铺:店铺名称</text>
-            <text>2019-09-08 18:00</text>
+            <text>取货店铺:{{item.shopName}}</text>
+            <text>{{item.createdTime}}</text>
         </view>
-        <view class="subscribeProson">
+         <view class="subscribeProson" wx:if="{{item.userAddressInfo}}">
             <image src="/assets/image/confirmMake/location.png"></image>
-            <text>冬瓜的</text>
-            <text>130xxxxxxxxxx</text>
+            <text>{{item.userAddressInfo.consignee}}</text>
+            <text>{{item.userAddressInfo.mobile}}</text>
         </view>
-        <view class="subscribeConsignee">
+        <view class="subscribeConsignee" wx:if="{{item.userAddressInfo}}">
             <text>地址</text>
-            <text>广东省 深圳市 南山区 某某街道广东省 深圳市 南山区 某某街道广东省 深圳市 南山区 某某街道</text>
+            <text>{{item.userAddressInfo.userAddress}}</text>
         </view>
         <view class="subscribeNumber2">
             <view>
                 <text>订单合计:</text>
-                <text>¥2,300</text>
+                <text>¥{{item.payAmount}}</text>
             </view>
-            <text>从属销售:销售 IDxxxxx</text>
+            <text>销售:{{item.saleUserId}}</text>
         </view>
     </view>
 </scroll-view>

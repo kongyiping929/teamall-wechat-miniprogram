@@ -42,7 +42,11 @@
     align-items: center;
     justify-content: space-between;
 }
-
+.lineName{
+  max-width: 280rpx !important;
+  text-align: left !important;
+  padding-left: 28rpx;
+}
 .type{
   color: #fff;  
   padding: 12rpx 18rpx;

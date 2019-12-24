@@ -244,9 +244,10 @@ textarea {
   padding: 11rpx 14rpx;
   line-height: 19rpx;
   height: 46rpx;
+  color: rgba(172, 187, 188, 1);
   background: rgba(243, 248, 241, 1);
   border-radius: 4rpx;
-  overflow: hidden;
+  max-width: 450rpx
 }
 
 .productSelect text {
@@ -287,6 +288,7 @@ textarea {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 999
 }
 
 .modalWapper {
@@ -414,7 +416,6 @@ textarea {
 }
 
 .modalRollTopR {
-  padding-top: 15rpx;
   height: 76rpx;
 }
 
@@ -448,4 +449,8 @@ textarea {
 
 .modalRollBottom text:first-child {
   margin-right: 16rpx;
+  max-width: 146rpx;
+}
+.subtractQuota{
+  padding-top: 4rpx
 }

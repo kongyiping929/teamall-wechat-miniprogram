@@ -51,7 +51,7 @@ Page({
 
   // 跳转提现(我的红包)
   goMyRedPacket() {
-    wx.navigateTo({ url: '/pages/myRedPacket/myRedPacket' });
+    wx.navigateTo({ url: '/pages/myRedPacket/myRedPacket?withdrawBalance=' + this.data.user.withdrawBalance });
   },
 
   // 跳转我的收藏
@@ -80,7 +80,6 @@ Page({
       .then(res => {
         console.log(res)
         that.setData({ user: res.data, phone: that.geTel(res.data.mobile) });
-        console.log(that.geTel(res.data.mobile))
       })
   },
 
@@ -112,7 +111,7 @@ Page({
    */
   geTel(tel) {
     var reg = /^(\d{2})\d{7}(\d{2})$/;
-    return tel.replace(reg, "$1*******$2");
+    return tel?tel.replace(reg, "$1*******$2"):"未绑定";
   },
   clipboard(){
     wx.setClipboardData({

@@ -148,8 +148,10 @@
 .itemPrice text:nth-child(2) {
     color: #799262;
     margin-right: 34rpx;
+    margin-left: 10rpx;
 }
 
 .itemPrice text:nth-child(4) {
     color: #ED5735;
+    margin-left: 10rpx;
 }

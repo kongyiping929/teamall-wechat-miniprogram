@@ -23,16 +23,16 @@
     <!-- 列表 -->
     <view class="list">
         <view class="listTitle">我的充值</view>
-        <view class="item" wx:for="{{10}}" wx:key="{{index}}">
+        <view class="item" wx:for="{{list}}" wx:key="{{index}}">
             <view class="itemTime">
-                <text>订单编号:  3345625457569</text>
-                <text>2019-02-24 23:32:05</text>
+                <text>订单编号:  {{item.orderNo}}</text>
+                <text>{{item.createdTime}}</text>
             </view>
             <view class="itemPrice">
                 <text>充值额度: </text>
-                <text> ¥999.99</text>
+                <text> ¥ {{item.orderAmount}}</text>
                 <text>实际支付: </text>
-                <text> ¥999.99</text>
+                <text> ¥ {{item.payAmount}}</text>
             </view>
         </view>
     </view>

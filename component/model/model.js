@@ -34,7 +34,7 @@ Component({
    */
   methods: {
     inputChange(e){
-      this.setData({ value: e.detail.value})
+      this.setData({ value: parseInt(e.detail.value) })
     },
     typeActive(e){
       const { typeList} = this.data;
@@ -50,9 +50,11 @@ Component({
       // triggerEvent函数接受三个值：事件名称、数据、选项值
       const { type, checked, showType} = this.data;
       if (type){
+        console.log(checked)
         this.triggerEvent('productEdit', { checked, showType })
       }else{
-        if (!this.data.value) return wx.showToast({
+        
+        if ((checked && parseInt(this.data.value) < 0 ) ||(checked && this.data.value==="")) return wx.showToast({
           title: "请输入值",
           icon: 'none',
           duration: 2000

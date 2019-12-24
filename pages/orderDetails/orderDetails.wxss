@@ -1,5 +1,8 @@
 /* 订单详情 */
-
+scroll-view{
+  min-height: 100vh;
+  height: 100%;
+}
 /* 顶部Bar */
 .topBar {
     display: flex;
@@ -241,7 +244,7 @@
     box-sizing: border-box;
     padding: 24rpx 30rpx 20rpx;
     background: rgba(255, 255, 255, 1);
-    margin-bottom: 140rpx;
+    margin-bottom: 440rpx;
 }
 
 .orderTile {
@@ -276,6 +279,7 @@
     padding: 0 30rpx;
     box-sizing: border-box;
 }
+
 
 .footer.status1 view:first-child {
     display: flex;

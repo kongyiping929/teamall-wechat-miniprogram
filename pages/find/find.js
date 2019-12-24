@@ -12,7 +12,6 @@ Page({
 
   // 更改文字溢出显示状态
   changeContentState(e) {
-    console.log(e.currentTarget.dataset.index);
     this.setData({ contentState: true });
   },
 
@@ -21,7 +20,7 @@ Page({
     wx.navigateTo({ url: '/pages/confirmMake/confirmMake?id=' + e.currentTarget.dataset.id })
   },
 
-  // 跳转产品微广场
+  // 跳转产品微广场 
   goProductPlaza(e) {
     wx.navigateTo({ url: '/pages/productPlaza/productPlaza?id=' + e.currentTarget.dataset.id })
   },
@@ -34,27 +33,60 @@ Page({
         this.setData({ list: res.data.list });
       })
   },
+  myappointmentList() {
+    let that = this;
+    ajax.post('/app/user/appointment/myappointment', { pageSize:1})
+      .then(res => {
+        this.setData({ myappointmentList: res.data.list });
+      }).then(()=>{
+        this.microSquareList()
+        this.myPunchList()
+      })
+  },
   myPunchList() {
     let that = this;
     const { myPunchList } = this.data
     ajax.post('/app/microSquare/findMyPunchList', { pageSize:1})
       .then(res => {
-        this.setData({ myPunchList: res.data.list });
-        return res.data.list
-      }).then((res)=>{
-        console.log(res)
-        ajax.post('/common/attachment/list', { category: 5, resourceId: res[0].userPunchId })
-          .then(res => {
-            this.setData({ img: res.data });
-          })
+        let imgList = res.data.list[0].attachmentInfo.split(",").reverse();
+        let orderInfo = res.data.list[0].orderInfo ? res.data.list[0].orderInfo:"";
+        this.setData({ myPunchList: res.data.list, imgList, orderInfo });
+      })
+  },
+  goConfirmMake(){
+    let { myappointmentList} = this.data;
+    let list = myappointmentList[0];
+    let product = {
+      productId: list.productId,
+      productTypeId: list.productTypeId,
+      shopId: app.globalData.shopId,
+      specId: list.specId,
+      specLineId: list.lineSpecId,
+      specId: list.specId,
+      specPackageId: list.packageSpecId,
+      specPayNum: list.peopleNum,
+      shopName: list.shopName,
+    }
+    wx.navigateTo({
+      url: '/pages/confirmMake/confirmMake?item=' + JSON.stringify(product)
+    });
+  },
+  checkedPunch(e){
+    let id = e.currentTarget.dataset.id
+    ajax.post('/app/product/likeUserPunch', { id })
+      .then(res => {
+        wx.showToast({
+          title: '点赞成功！',
+          icon: 'none',
+          duration: 2000
+        });
       })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.microSquareList()
-    this.myPunchList()
+    
   },
 
   /**
@@ -68,7 +100,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    
+    this.myappointmentList()
   },
 
   /**

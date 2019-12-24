@@ -6,6 +6,7 @@
     "pages/user/user",
     "pages/editPhone/editPhone",
     "pages/productType/productType",
+    "pages/productMake/productMake",
     "pages/productList/productList",
     "pages/productDetails/productDetails",
     "pages/cardRecord/cardRecord",
@@ -43,7 +44,7 @@
     }
   },
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "茶多芳",
     "navigationBarTextStyle": "black"

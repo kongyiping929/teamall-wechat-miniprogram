@@ -109,11 +109,16 @@ Component({
         },
         valChange:function (e) {
           let val=e.detail.value;
+          
+          let provinces = areaArr[val[0]];
+          let citys = provinces.children[val[1]];
+          let countys = citys.children[val[2]];
+          console.log(provinces.label, citys.label, countys.label)
             let obj={
-              province: areaArr[val[0]].label,
-              city: provinces[val[1]].label,
-              county: provinces[val[1]].children[val[2]].label,
-              id: [areaArr[val[0]].value, provinces[val[1]].value, provinces[val[1]].children[val[2]].value]
+              province: provinces.label,
+              city: citys.label,
+              county: countys.label,
+              id: [provinces.value, citys.value, countys.value]
             };
             this.setData(obj);
             this.triggerEvent('change',obj);
@@ -125,7 +130,7 @@ Component({
       ajax.post('/common/address/province/city/district', {})
         .then(res => {
           areaArr = res.data
-          console.log(areaArr)
+          
           let col1 = getProvinces();
           let provinceIndex = getIndex(col1, province);
           let col2 = getCities(provinceIndex);

@@ -16,19 +16,13 @@ Page({
     allShopList: '',
   },
 
-  // 初始化
-  init() {
-    ajax.post('/app/index/findAllShop')
-      .then(res => {
-        console.log('列表')
-        console.log(res)
-      })
-  },
-
   // 选择店铺
   selectStore(e) {
-    ajax.post('/app/index/updCurrentShop', { id: e.currentTarget.dataset.id})
+    ajax.post('/app/index/updCurrentShop', { id: e.currentTarget.dataset.item.shopId})
       .then(res => {
+        wx.setStorageSync('SHOP', e.currentTarget.dataset.item)
+        app.globalData.shopId = e.currentTarget.dataset.item.shopId;
+        app.globalData.shop = e.currentTarget.dataset.item;
         wx.switchTab({ url: `/pages/index/index` })
       })
     
@@ -66,7 +60,8 @@ Page({
   },
   // 初始化
   init() {
-    let { latitude, longitude } = app.globalData;
+    let latitude = wx.getStorageSync('latitude')
+    let longitude = wx.getStorageSync('longitude')
     let { cityName } = this.data;
     let that = this;
     ajax.post('/app/index/findNearbyShop', { latitude, longitude, cityName })

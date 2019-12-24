@@ -8,11 +8,11 @@
           <text>预约开关：</text>
           <switch class="wx-switch-input" checked="{{checked}}" bindchange="switchChange"/>
         </view>
-        <input class='input_show1' bindinput='inputChange' wx:if="{{checked}}" value='{{modalMsg}}'  placeholder='输入预约价格'></input>
+        <input class='input_show1' type="number" bindinput='inputChange' wx:if="{{checked}}" value='{{modalMsg}}'  placeholder='输入预约价格'></input>
       </view>
       <view wx:if='{{showStock}}'>
         <text class="data">当前库存：<text>{{data.stockNum || 0}}</text></text>
-        <input class='input_show1' bindinput='inputChange' value='{{modalMsg}}'  placeholder='输入库存'></input>
+        <input class='input_show1' type="number" bindinput='inputChange' value='{{modalMsg}}'  placeholder='输入库存'></input>
       </view>
     </view>
     <view class='content' wx:if='{{type}}'>
@@ -25,7 +25,7 @@
       </view>
       <view class="box">
         <text>在首页显示：</text>
-        <switch class="wx-switch-input" checked="{{checked}}" bindchange="switch1Change"/>
+        <switch class="wx-switch-input" checked="{{checked}}" bindchange="switchChange"/>
       </view>
     </view>
     <view class='btn1'>

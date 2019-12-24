@@ -1,28 +1,32 @@
 // pages/confirmOrder/confirmOrder.js
 const app = getApp()
 const ajax = require('../../assets/js/ajax.js');
+const dateTimePicker = require('../../assets/js/dateTimePicker');
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    list:"",
+    list: "",
     remark: "", // 备注
-    coupon: null,//优惠券
-    couponActive:null,
-    couponModal: false, // 优惠券模态框 true 显示 false 隐藏
+    dateTime: null, // 选择的日期
+    dateTimeYTD: '', // 年月日
+    dateTimeArray: null, // 日期列表
     addPersonStatus: false, // 添加地址模态框
     passenger: [], // 旅客信息
     travellerPerson: [], // 收件人列表
     consignee: null, // 收件人地址对象
-    item:"",//规格参数
-    receiveType :1,//取货方式
-    payChannel :1,//支付默认微信
+    item: "",//规格参数
+    specPayNum: 1, // 购买数量
+    receiveType: 1,//取货方式
+    payChannel: 1,//支付默认微信
     imgList: [
       "/assets/image/confirmMake/selectActive.png",
       "/assets/image/confirmMake/select.png",
-    ]
+    ],
+    disableList:[],
+    status:false,//是否可预约
   },
 
   // 更改备注
@@ -35,9 +39,10 @@ Page({
     this.setData({ couponModal: e.currentTarget.dataset.status });
   },
 
-  couponChange(e){
+  couponChange(e) {
     this.setData({ couponActive: e.currentTarget.dataset.item, couponModal: false });
   },
+
 
   // 跳转添加地址
   goAddAddress(e) {
@@ -61,10 +66,10 @@ Page({
     if (status) {
       // ajax.post('/app/address/getlist')
       //   .then(res => {
-          this.setData({
-            addPersonStatus: status,
-            // travellerPerson: res.returnData
-          })
+      this.setData({
+        addPersonStatus: status,
+        // travellerPerson: res.returnData
+      })
       //   })
     } else {
       this.setData({
@@ -72,99 +77,183 @@ Page({
       })
     }
   },
+  stopEvent(e) { }, // 防止冒泡
 
-  stopEvent(e) {}, // 防止冒泡
-
-  init(){
-    const { item: { productId , shopId, specId, specLineId, specPackageId }} = this.data;
-    ajax.post('/app/product/getOrderConfirmInfo', { productId, shopId, specId, specLineId, specPackageId })
+  init() {
+    let obj = dateTimePicker.dateTimePicker();
+    let dateTimeYTD = dateTimePicker.getDateTimeYTD(obj.dateTime);
+    const { productId, userId } = this.data;
+    ajax.post('/app/user/manage/getshopproductinfo', { productId, userId, shopId: "1197444188149604353" })
       .then(res => {
-        let consignee = "";
-        res.data.userAddressList.filter((v,i)=>{
-          v.defaultStatus == 1 ? consignee=v : "";
-        })
-        this.setData({ list: res.data, consignee, coupon:res.data.userCouponList})
+        this.setData({ list: res.data })
+        this.specList()
       })
+    this.setData({
+      dateTime: obj.dateTime,
+      dateTimeArray: obj.dateTimeArray,
+      dateTimeYTD
+    });
   },
 
+  // 显示/隐藏产品规格模态框
+  changeSpecModal(e) {
+    let { status } = e.currentTarget.dataset;
+    if (this.data.status){
+      this.setData({ specModal: status });
+    } else {
+      wx.showToast({
+        title: '该产品暂不提供预约体验服务',
+        icon: 'none',
+        duration: 2000
+      });
+    }
+    
+
+  },
+  //产品规格列表
+  specList() {
+    const { list } = this.data;
+    ajax.post('/app/product/findSpecInfo', { id: list.productId })
+      .then(res => {
+        let data = res.data.list[0];
+        let list = res.data.list;
+        let status = false;
+        let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
+        let productPackSpecsItem = null;
+        let unitPrice = parseFloat(data.basePrice) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0)
+        let disableList = new Set();
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].appointmentStatus == 1) { this.setData({ status: true }); }
+          // for (let y = 0; y < list[i].packageList.length; y++) {
+          //   if (list[i].packageList[y].stockNum > 0) {
+          //     disableList.add(list[i].specId)
+          //   }
+          // }
+        }
+        this.setData({
+          specList: res.data.list,
+          productSpecs: res.data.list,
+          productSubdivisionSpecs: data.lineList,
+          productPackSpecs: data.packageList,
+          productSpecsItem: data,
+          productPackSpecsItem,
+          productSubdivisionSpecsItem,
+          unitPrice,
+          disableList: Array.from(disableList)
+        });
+      })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({ item: JSON.parse(options.item) })
-    console.log(JSON.parse(options.item))
+    this.setData({ productId: options.productId, userId: options.userId });
     this.init();
   },
-
-  changPayChannel(){
-    this.setData({ payChannel: this.data.payChannel==0?1:0})
-  },
-
-  changReceiveType(){
-    this.setData({ receiveType: this.data.receiveType==0?1:0})
-  },
-
-  submitOrder(){
-    const { consignee, couponActive, payChannel, receiveType, item: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId, remark } } = this.data;
-    let data = {
-      buyNum: specPayNum,
-      initiationChannel :2,
-      payChannel: payChannel+1,
-      productId,
-      productTypeId,
-      punchStatus: 1,
-      receiveType: receiveType+1,
-      shopId ,
-      specId ,
-      specLineId ,
-      specPackageId ,
-      userAddressInfo: receiveType == 1 ? consignee : {},
-      couponId: couponActive && (couponActive.id || ''),
-      remark
+  // 加减产品购买数量 type 0 减 1 加
+  changeSpecPayNum(e) {
+    let {
+      type
+    } = e.currentTarget.dataset;
+    let {
+      specPayNum
+    } = this.data;
+    if (type === 0) {
+      if (specPayNum - 1 === 0) return;
+      this.setData({
+        specPayNum: --specPayNum
+      });
+    } else {
+      this.setData({
+        specPayNum: ++specPayNum
+      });
     }
-    ajax.post('/app/user/productorder/saveorder', data)
+  },
+  changPayChannel() {
+    this.setData({ payChannel: this.data.payChannel == 0 ? 1 : 0 })
+  },
+
+  changReceiveType() {
+    this.setData({ receiveType: this.data.receiveType == 0 ? 1 : 0 })
+  },
+
+  submitOrder() {
+    const { dateTimeYTD, dateTime, payChannel, remark, productSpecsItem, productPackSpecsItem, productSubdivisionSpecsItem, userId, productId, list,specPayNum } = this.data;
+    let data = {
+      payChannel: payChannel + 1,
+      productId,
+      productTypeId: list.productTypeId,
+      shopId: app.globalData.shopId,
+      specId: productSpecsItem.specId,
+      specLineId: productSubdivisionSpecsItem.id,
+      userId,
+      buyNum: specPayNum,
+      remark,
+      appointmentTime: dateTimeYTD,
+      timeRange: list.timeRangeList[dateTime[1]].dictValue,
+      freeSheet :2
+    }
+    ajax.post('/app/user/manage/sendAppointOrder', data)
       .then(res => {
-        console.log(payChannel, payChannel == 0)
-        if (!payChannel == 0){
-        wx.requestPayment({
-          timeStamp: res.data.timeStamp,
-          nonceStr: res.data.nonceStr,
-          package: res.data.package,
-          signType: res.data.signType,
-          paySign: res.data.paySign,
-          success: function (res) {
-            console.log(res,res.data)
-            wx.showToast({
-              title: '订单支付成功',
-              icon: 'none',
-              duration: 2000
-            });
-            setTimeout(() => {
-              wx.navigateTo({ url: '/pages/myReserve/myReserve?id=1'  })
-            }, 800);
-          },
-          fail: function (res) {
-            wx.showToast({
-              title: '订单支付失败',
-              icon: 'none',
-              duration: 2000
-            });
-          }
-        })}else{
-          console.log(res)
-          wx.showToast({
-            title: '订单支付成功',
-            icon: 'none',
-            duration: 2000
-          });
-          setTimeout(() => {
-            wx.navigateTo({ url: '/pages/myReserve/myReserve?id=1' })
-          }, 800);
-        }
-        
+        wx.showToast({
+          title: '订单确认成功',
+          icon: 'none',
+          duration: 2000
+        });
+        setTimeout(() => {
+          wx.navigateBack({
+            delta: 2,
+          })
+        }, 800);
+
       })
   },
 
+  // 选择器
+  select(e) {
+    let { index, field } = e.currentTarget.dataset;
+    let unitPrice = 0;
+    let {
+      productPackSpecs,
+      productSpecs,
+      productSubdivisionSpecs,
+      productPackSpecsItem,
+      productSpecsItem,
+      productSubdivisionSpecsItem,
+      urltype
+    } = this.data;
+    this.setData({ specPayNum: 1 })
+    if (field === 'productSpecs') {
+      let list = productSpecs[index];
+      let productSubdivisionSpecsItem = list.lineList.length > 0 ? list.lineList[0] : null;
+      let productPackSpecsItem = null;
+      unitPrice = parseFloat(productSpecs[index].basePrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      console.log(productSpecs[index].basePrice, productPackSpecsItem, productSubdivisionSpecsItem)
+
+      this.setData({
+        productSpecsItem: list,
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+        productSubdivisionSpecs: list.lineList,
+        productSubdivisionSpecsItem,
+        productPackSpecsItem,
+        productPackSpecs: list.packageList,
+      });
+    }
+    if (field === 'productSubdivisionSpecs') {
+      unitPrice = parseFloat(productSubdivisionSpecs[index].addPrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0);
+      this.setData({
+        productSubdivisionSpecsItem: productSubdivisionSpecs.length > 0 ? productSubdivisionSpecs[index] : [],
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+      });
+    }
+    if (field === 'productPackSpecs') {
+      unitPrice = parseFloat(productPackSpecs[index].addPrice) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      this.setData({
+        productPackSpecsItem: productPackSpecs[index],
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+      });
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

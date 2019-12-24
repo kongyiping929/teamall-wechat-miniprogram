@@ -23,7 +23,8 @@ Page({
    */
   data: {
     orderStatusArr, // 订单状态
-    list:""
+    list:"",
+    withdrawBalance:0
   },
 
   // 初始化
@@ -74,7 +75,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init()
+    this.init();
+    this.setData({ withdrawBalance: options.withdrawBalance})
   },
 
   /**

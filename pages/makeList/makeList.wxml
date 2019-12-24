@@ -4,15 +4,15 @@
     <view class="order" wx:for="{{list}}" wx:key="{{index}}">
         <view class="orderTime">
             <image src="/assets/image/find/clock.png"></image>
-            <text>2019-03-06  晚间 7:00-9:00</text>
+            <text>{{item.appointmentTime}}  {{item.timeRange}}</text>
         </view>
         <view class="orderMes">
             <image class="orderMesPhoto" src="http://{{item.url}}"></image>
             <view class="orderMesTip">
                 <view class="orderMesTipTitle one-txt-cut">{{item.productName}}</view>
                 <view class="orderMesTipAttr">
-                    <text>一饼 , 590g , {{item.specName}}</text>
-                    <image src="/assets/image/user/downArrows.png"></image>
+                    <text>{{item.specName}}{{item.lineSpecName&&","+item.lineSpecName}}{{item.packageSpecName&&","+item.packageSpecName}}</text>
+                    <!-- <image src="/assets/image/user/downArrows.png"></image> -->
                 </view>
             </view>
         </view>
@@ -29,7 +29,7 @@
         </view>
         <view class="orderPay">
             <view>预约创建时间: {{item.createdTime}}</view>
-            <view class="{{item.orderStatus % 2 === 0 ? 'none' : ''}}">去支付</view>
+            <view class="{{item.orderStatus % 2 === 0 ? 'none' : ''}}" data-item="{{item}}" bindtap="{{item.orderStatus==1?'goConfirmMake':''}}">{{orderStatusArr[item.orderStatus ]}}</view>
         </view>
     </view>
 </scroll-view>

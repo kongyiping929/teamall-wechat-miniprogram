@@ -27,8 +27,10 @@ Page({
   },
 
   goOrder() { 
+    console.log(this.data.type)
     wx.navigateTo({
-      url: 'pages/backConfirmOrder/backConfirmOrder',
+      url: this.data.type == 1?'pages/backConfirmOrder/backConfirmOrder':
+        'pages/backConfirmMake/backConfirmMake',
     })
   },
 
@@ -36,6 +38,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    console.log(options.type)
     this.setData({
       type: options.type,
       userId: options.userId 

@@ -1,0 +1,7 @@
+    <!-- 微广场列表 -->
+<view class="productIcon">
+    <view class="productIconItem" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{item.squareId}}">
+        <image src="http://{{item.url}}"></image>
+        <view class="one-txt-cut">{{item.squareName}}</view>
+    </view>
+</view>

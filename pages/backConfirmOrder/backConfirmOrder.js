@@ -17,12 +17,14 @@ Page({
     travellerPerson: [], // 收件人列表
     consignee: null, // 收件人地址对象
     item:"",//规格参数
+    specPayNum: 1, // 购买数量
     receiveType :1,//取货方式
     payChannel :1,//支付默认微信
     imgList: [
       "/assets/image/confirmMake/selectActive.png",
       "/assets/image/confirmMake/select.png",
-    ]
+    ],
+    disableList:[]
   },
 
   // 更改备注
@@ -38,6 +40,7 @@ Page({
   couponChange(e){
     this.setData({ couponActive: e.currentTarget.dataset.item, couponModal: false });
   },
+
 
   // 跳转添加地址
   goAddAddress(e) {
@@ -61,10 +64,10 @@ Page({
     if (status) {
       // ajax.post('/app/address/getlist')
       //   .then(res => {
-          this.setData({
-            addPersonStatus: status,
-            // travellerPerson: res.returnData
-          })
+      this.setData({
+        addPersonStatus: status,
+        // travellerPerson: res.returnData
+      })
       //   })
     } else {
       this.setData({
@@ -72,7 +75,6 @@ Page({
       })
     }
   },
-
   stopEvent(e) {}, // 防止冒泡
 
   init(){
@@ -80,9 +82,50 @@ Page({
     ajax.post('/app/user/manage/getshopproductinfo', { productId, userId, shopId: "1197444188149604353" })
       .then(res => {
         this.setData({ list: res.data})
+        this.specList()
       })
   },
 
+  // 显示/隐藏产品规格模态框
+  changeSpecModal(e) {
+    let { status } = e.currentTarget.dataset;
+    this.setData({ specModal: status});
+    
+  },
+  //产品规格列表
+  specList() {
+    const { list } = this.data;
+    ajax.post('/app/product/findSpecInfo', { id:list.productId })
+      .then(res => {
+        let data = res.data.list[0];
+        let list = res.data.list;
+        let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
+        let productPackSpecsItem = null;
+        let unitPrice = parseFloat(data.basePrice) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0)
+        let disableList = new Set();
+        for (let i = 0; i < list.length; i++) {
+          for (let y = 0; y < list[i].packageList.length; y++) {
+            if (list[i].packageList[y].stockNum > 0) {
+              disableList.add(list[i].specId)
+              if (!productPackSpecsItem) {
+                productPackSpecsItem = list[i].packageList[y];
+              }
+            }
+          }
+        }
+        this.setData({
+          specList: res.data.list,
+          productSpecs: res.data.list,
+          productSubdivisionSpecs: data.lineList,
+          productPackSpecs: data.packageList,
+          productSpecsItem: data,
+          productPackSpecsItem,
+          productSubdivisionSpecsItem,
+          unitPrice,
+          disableList: Array.from(disableList)
+        });
+      })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -90,7 +133,25 @@ Page({
     this.setData({ productId: options.productId, userId: options.userId });
     this.init();
   },
-
+  // 加减产品购买数量 type 0 减 1 加
+  changeSpecPayNum(e) {
+    let {
+      type
+    } = e.currentTarget.dataset;
+    let {
+      specPayNum
+    } = this.data;
+    if (type === 0) {
+      if (specPayNum - 1 === 0) return;
+      this.setData({
+        specPayNum: --specPayNum
+      });
+    } else {
+      this.setData({
+        specPayNum: ++specPayNum
+      });
+    }
+  },
   changPayChannel(){
     this.setData({ payChannel: this.data.payChannel==0?1:0})
   },
@@ -100,66 +161,82 @@ Page({
   },
 
   submitOrder(){
-    const { consignee, couponActive, payChannel, receiveType, item: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId, remark } } = this.data;
+    const { payChannel, remark, productSpecsItem, productPackSpecsItem, productSubdivisionSpecsItem, userId, productId, list, specPayNum} = this.data;
     let data = {
-      buyNum: specPayNum,
-      initiationChannel :2,
       payChannel: payChannel+1,
       productId,
-      productTypeId,
-      punchStatus: 1,
-      receiveType: receiveType+1,
-      shopId ,
-      specId ,
-      specLineId ,
-      specPackageId ,
-      userAddressInfo: receiveType == 1 ? consignee : {},
-      couponId: couponActive && (couponActive.id || ''),
+      productTypeId: list.productTypeId,
+      shopId: app.globalData.shopId,
+      specId: productSpecsItem.specId ,
+      specLineId:  productSubdivisionSpecsItem.id,
+      specPackageId: productPackSpecsItem.id,
+      userId,
+      buyNum: specPayNum,
+      receiveType :1,
       remark
     }
-    ajax.post('/app/user/productorder/saveorder', data)
+    ajax.post('/app/user/manage/sendOrder', data)
       .then(res => {
-        console.log(payChannel, payChannel == 0)
-        if (!payChannel == 0){
-        wx.requestPayment({
-          timeStamp: res.data.timeStamp,
-          nonceStr: res.data.nonceStr,
-          package: res.data.package,
-          signType: res.data.signType,
-          paySign: res.data.paySign,
-          success: function (res) {
-            console.log(res,res.data)
-            wx.showToast({
-              title: '订单支付成功',
-              icon: 'none',
-              duration: 2000
-            });
-            setTimeout(() => {
-              wx.navigateTo({ url: '/pages/myReserve/myReserve?id=1'  })
-            }, 800);
-          },
-          fail: function (res) {
-            wx.showToast({
-              title: '订单支付失败',
-              icon: 'none',
-              duration: 2000
-            });
-          }
-        })}else{
-          console.log(res)
           wx.showToast({
-            title: '订单支付成功',
+            title: '订单确认成功',
             icon: 'none',
             duration: 2000
           });
           setTimeout(() => {
-            wx.navigateTo({ url: '/pages/myReserve/myReserve?id=1' })
+            wx.navigateBack({
+              delta: 2,
+            })
           }, 800);
-        }
+        
         
       })
   },
 
+  // 选择器
+  select(e) {
+    let { index, field } = e.currentTarget.dataset;
+    let unitPrice = 0;
+    let {
+      productPackSpecs,
+      productSpecs,
+      productSubdivisionSpecs,
+      productPackSpecsItem,
+      productSpecsItem,
+      productSubdivisionSpecsItem,
+      urltype
+    } = this.data;
+    this.setData({ specPayNum: 1 })
+    if (field === 'productSpecs') {
+      let list = productSpecs[index];
+      let productSubdivisionSpecsItem = list.lineList.length > 0 ? list.lineList[0] : null;
+      let productPackSpecsItem = urltype == 2 ? list.packageList.length > 0 ? list.packageList[0].stockNum > 0 ? list.packageList[0] : null : null : null;
+      unitPrice = parseFloat(productSpecs[index].basePrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      console.log(productSpecs[index].basePrice, productPackSpecsItem, productSubdivisionSpecsItem)
+
+      this.setData({
+        productSpecsItem: list,
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+        productSubdivisionSpecs: list.lineList,
+        productSubdivisionSpecsItem,
+        productPackSpecsItem,
+        productPackSpecs: list.packageList,
+      });
+    }
+    if (field === 'productSubdivisionSpecs') {
+      unitPrice = parseFloat(productSubdivisionSpecs[index].addPrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0);
+      this.setData({
+        productSubdivisionSpecsItem: productSubdivisionSpecs.length > 0 ? productSubdivisionSpecs[index] : [],
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+      });
+    }
+    if (field === 'productPackSpecs') {
+      unitPrice = parseFloat(productPackSpecs[index].addPrice) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      this.setData({
+        productPackSpecsItem: productPackSpecs[index],
+        unitPrice: parseFloat(unitPrice).toFixed(2),
+      });
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

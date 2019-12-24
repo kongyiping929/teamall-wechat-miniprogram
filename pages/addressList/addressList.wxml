@@ -5,7 +5,7 @@
       <text class="phone">{{item.mobile }}</text>
     </view>
       <view class="info">
-        <image wx:if="{{item.defaultStatus==1}}" class="active" src="/assets/image/address/moren.png"></image>
+        <image wx:if="{{item.defaultStatus==1}}" class="active" src="/assets/image/address/moren@2x.png"></image>
         <text class="address">{{item.detailAddress }}</text>
         <image class="addressImg" src="/assets/image/address/address.png"></image>
       </view>

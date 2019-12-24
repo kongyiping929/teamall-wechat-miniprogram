@@ -97,7 +97,7 @@ page {
 }
 
 .orderAddress text:nth-child(2) {
-    width: 261rpx;
+    max-width: 261rpx;
     font-size: 22rpx;
     font-weight: 400;
     color: rgba(85, 98, 102, 1);

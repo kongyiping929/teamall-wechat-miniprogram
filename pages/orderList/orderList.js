@@ -16,22 +16,24 @@ Page({
     orderStatusArr, // 订单状态
     orderStatusBtn,//订单按钮
     id: '', // 状态id
-    list:[],
+    list:'',
+    pageNum :1
   },
 
   init() {
-    const { id } = this.data;
-    ajax.post('/app/user/productorder/myorder', { orderStatus: id })
+    this.setData({ pageNum:1 })
+    const { id, pageNum  } = this.data;
+    ajax.post('/app/user/productorder/myorder', { orderStatus: id, pageNum  })
       .then(res => {
+        wx.hideNavigationBarLoading();
+        wx.stopPullDownRefresh();
         let list = res.data.list;
         for(let k in list){
           if (list[k].userAddressInfo){
-            console.log(list[k].userAddressInfo,JSON.parse(list[k].userAddressInfo))
             list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
           }
         }
         this.setData({ list })
-        console.log(res.data.list)
       })
   },
 
@@ -75,7 +77,6 @@ Page({
 
   // 跳转订单详情
   goOrderDetails(e) {
-    console.log(e.currentTarget.dataset.status, e.currentTarget.dataset.id)
     wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=${e.currentTarget.dataset.status}&id=${e.currentTarget.dataset.id}` })
   },
 
@@ -84,7 +85,7 @@ Page({
    */
   onLoad: function (options) {
     this.setData({ id: options.id })
-    this.init();
+    
   },
 
   /**
@@ -98,7 +99,34 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.init();
+  },
 
+  /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+  onPullDownRefresh: function () {
+    wx.showNavigationBarLoading() 
+    this.init();
+  },
+
+  /**
+    * 页面上拉触底事件的处理函数
+    */
+  onReachBottom: function () {
+    let that = this;
+    this.setData({ pageNum: this.data.pageNum+1 })
+    const { id, pageNum } = this.data;
+    ajax.post('/app/user/productorder/myorder', { orderStatus: id, pageNum })
+      .then(res => {
+        let list = res.data.list;
+        for (let k in list) {
+          if (list[k].userAddressInfo) {
+            list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
+          }
+        }
+        this.setData({ list: [...this.data.list, ...list] })
+      })
   },
 
   /**
@@ -112,27 +140,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    wx.switchTab({ url: '/pages/user/user' });
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

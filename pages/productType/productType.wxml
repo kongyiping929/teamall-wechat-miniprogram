@@ -6,9 +6,9 @@
     </view>
     <!-- 产品列表 -->
     <view class="productIcon">
-        <view class="productIconItem" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{item.productTypeId}}">
+        <view class="productIconItem" wx:for="{{type==1?list:list.list}}" wx:key="{{index}}" bind:tap="goProductPlaza" data-id="{{type==1?item.productTypeId:item.squareId}}">
             <image src="http://{{item.url}}"></image>
-            <view class="one-txt-cut">{{item.typeName}}</view>
+            <view class="one-txt-cut">{{type==1?item.typeName:item.squareName}}</view>
         </view>
     </view>
 </scroll-view>
