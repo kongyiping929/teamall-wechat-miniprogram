@@ -39,7 +39,7 @@
     <view class="product" wx:if="{{shopInfo}}">
         <view class="productName">打卡产品</view>
         <view class="productMes">
-            <image class="productPhoto" src="/assets/image/index/productPhoto.png"></image>
+            <image class="productPhoto" src="http://{{shopInfo.url}}"></image>
             <view class="productWapper">
                 <view class="productTitle one-txt-cut">{{shopInfo.productName}}</view>
                 <view class="productPrice">
@@ -48,7 +48,7 @@
                 </view>
                 <view class="productSelect one-txt-cut">
                     <text>{{shopInfo.specInfo}}</text>
-                    <image src="/assets/image/user/downArrows.png"></image>
+                    <!-- <image src="/assets/image/user/downArrows.png"></image> -->
                 </view>
             </view>
         </view>
@@ -57,40 +57,42 @@
     <view class="btn" bind:tap="save" data-status="{{true}}">打卡</view>
 </scroll-view>
 <!-- 打卡成功模态框 -->
-<view class="modal" wx:if="{{modal}}">
-    <view class="modalWapper">
-        <view class="modalTitle">打卡成功!</view>
-        <view class="modalMes" wx:if="{{!couponModal}}">
-            <view class="modalMesBg">
-                <image src="/assets/image/dayCard/modalBg.png"></image>
-            </view>
-            <view class="modalMesTip">打卡姿势不对,尽然没捞到优惠券!</view>
-        </view>
-        <view class="modalRollBox" wx:else>
-            <view class="modalRoll">
-                <image src="/assets/image/dayCard/bg.png"></image>
-                <view class="modalRollTop">
-                    <view class="modalRollTopL">
-                        <view>优惠券</view>
-                        <view>有效期至{{couponModal.expTime}}</view>
-                    </view>
-                    <view class="modalRollTopR discount">
-                        <text>{{couponModal.discount*10}}</text>
-                        <text>折</text>
-                    </view>
-                    <view class="modalRollTopR subtractQuota" wx:if="{{couponModal.subtractQuota>0}}">
-                        <text>{{couponModal.discount>0?",再":""}}减</text>
-                        <text>{{couponModal.subtractQuota }}元</text>
-                    </view>
-                </view>
-                <view class="modalRollBottom">
-                    <text class="one-txt-cut">{{couponModal.productTypeId == "0"?"通用":couponModal.productTypeId}}</text>
-                    <text>满减额度 {{couponModal.useQuota}}元使用</text>
-                </view>
-            </view>
-        </view>
-        <view class="modalFooter">
-            <text bind:tap="changeModal" data-status="{{false}}" data-confirm="{{true}}">确定</text>
-        </view>
-    </view>
-</view>
+<cover-view class="modal" wx:if="{{modal}}">
+    <cover-view class="modalWapper">
+        <cover-view class="modalTitle">打卡成功!</cover-view>
+        <cover-view class="modalMes" wx:if="{{!couponModal}}">
+            <cover-view class="modalMesBg">
+                <cover-image src="/assets/image/dayCard/modalBg.png"></cover-image>
+            </cover-view>
+            <cover-view class="modalMesTip">打卡姿势不对,尽然没捞到优惠券!</cover-view>
+        </cover-view>
+        <cover-view class="modalRollBox" wx:else>
+            <cover-view class="modalRoll">
+                <cover-image class="bgImg" src="/assets/image/dayCard/bg.png"></cover-image>
+                <cover-view class="modalRollTop">
+                    <cover-view class="modalRollTopL">
+                        <cover-view class="title">优惠券</cover-view>
+                        <cover-view class="time">有效期至{{couponModal.expTime}}</cover-view>
+                    </cover-view>
+                    <cover-view>
+                      <cover-view class="modalRollTopR discount">
+                          <cover-view class="num">{{couponModal.discount*10}}</cover-view>
+                          <cover-view class="tip">折</cover-view>
+                      </cover-view>
+                      <cover-view class="modalRollTopR subtractQuota" wx:if="{{couponModal.subtractQuota>0}}">
+                          <cover-view class="num">{{couponModal.discount>0?",再":""}}减</cover-view>
+                          <cover-view class="tip">{{couponModal.subtractQuota }}元</cover-view>
+                      </cover-view>
+                    </cover-view>
+                </cover-view>
+                <cover-view class="modalRollBottom">
+                    <cover-view class="one-txt-cut" style="margin-right: 10rpx;">{{couponModal.productTypeId == "0"?"通用":couponModal.productTypeId}}</cover-view>
+                    <cover-view  class="modalQuota">满减额度 {{couponModal.useQuota}}元使用</cover-view>
+                </cover-view>
+            </cover-view>
+        </cover-view>
+        <cover-view class="modalFooter">
+            <cover-view class="confirm" bind:tap="changeModal" data-status="{{false}}" data-confirm="{{true}}">确定</cover-view>
+        </cover-view>
+    </cover-view>
+</cover-view>

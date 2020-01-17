@@ -25,14 +25,14 @@
                 <text>发货店铺</text>
                 <text>{{list.shopName}}</text>
             </view>
-            <!-- <view class="addressStoreItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
+            <view class="addressStoreItem" wx:if="{{list.expressCompany}}">
                 <text>快递公司</text>
-                <text>中通</text>
+                <text>{{list.expressCompany}}</text>
             </view>
-            <view class="addressStoreItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
+            <view class="addressStoreItem" wx:if="{{list.expressNumber}}">
                 <text>快递单号</text>
-                <text>325456</text>
-            </view> -->
+                <text>{{list.expressNumber }}</text>
+            </view>
         </view>
     </view>
     <!-- 产品介绍 -->
@@ -40,9 +40,9 @@
         <image class="productPhoto" src="http://{{list.url}}"></image>
         <view class="productWapper">
             <view class="productTitle one-txt-cut">{{list.productName}}</view>
-            <view class="productPrice">¥{{list.payAmount}}</view>
+            <view class="productPrice">¥{{list.unitPrice}}</view>
             <view class="productSelect">
-                <text>{{list.specName}} , {{list.lineSpecName}} , {{list.packageSpecName}}</text>
+                <text>{{list.specName}} {{list.lineSpecName&&","+list.lineSpecName}}{{list.packageSpecName&&","+list.packageSpecName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
             </view>
         </view>
@@ -83,8 +83,8 @@
         <view class="orderItem" wx:if="{{status - 0 !== 1}}">
             支付时间:  {{list.payTime}}
         </view>
-        <view class="orderItem" wx:if="{{status - 0 > 2 && status - 0 < 5}}">
-            发货时间:  2019-02-24 23:32:05
+        <view class="orderItem" wx:if="{{status - 0 > 2 && status - 0 < 5 && list.sendTime }}">
+            发货时间:  {{list.sendTime }}
         </view>
         <view class="orderItem" wx:if="{{status - 0 === 4}}">
             收货时间:  {{list.receiveTime}}
@@ -92,8 +92,8 @@
         <view class="orderItem" wx:if="{{status - 0 === 5 || status - 0 === 6 || status - 0 === 7}}">
             退款申请时间:  {{list.refundApplyTime}}
         </view>
-        <view class="orderItem" wx:if="{{status - 0 === 6 || status - 0 === 7}}">
-            退款处理时间:  2019-02-24 23:32:05
+        <view class="orderItem" wx:if="{{(status - 0 === 6 || status - 0 === 7)&& list.refundTime }}">
+            退款处理时间:  {{list.refundTime }}
         </view>
     </view>
     <!-- 底部 -->
@@ -102,6 +102,7 @@
             <text>共计{{list.buyNum}}件,合计:</text>
             <text>￥{{list.payAmount}}</text>
         </view>
+        <view bind:tap="cancelOrder" class="cancel" data-orderNo="{{list.orderNo}}">取消订单</view>
         <view bindtap="submitOrder">支付</view>
     </view>
     <view class="footer status{{status}}" wx:elif="{{status - 0 === 2 || status - 0 === 3}}">
@@ -109,6 +110,7 @@
             <image src="/assets/image/productDetails/service.png"></image>
             <view>客服</view>
         </view>
+        <button open-type='contact'>111</button>
         <view class="{{status - 0 === 2 ? 'footerBtn2' : 'footerBtn3'}}" data-status="{{status}}"  bindtap="confirmOrder">
             {{status - 0 === 2 ? '申请退款' : '确认收货'}}
         </view>
@@ -117,8 +119,8 @@
         <view class="footerIcon" bind:tap="changeServiceModal" data-status="{{true}}">
             <image src="/assets/image/productDetails/service.png"></image>
             <view>客服</view>
-            
         </view>
+        <button open-type='contact'>111</button>
     </view>
     <view class="footer status{{status}}" wx:elif="{{status - 0 === 5 || status - 0 === 6 || status - 0 === 7}}">
         <view class="footerIcon" bind:tap="changeServiceModal" data-status="{{true}}">
@@ -126,7 +128,7 @@
             <view>客服</view>
         </view>
         <button open-type='contact'>111</button>
-        <view class="footerBtn2" wx:if="{{status - 0 === 5}}" bindtap="cancelOrder">
+        <view class="footerBtn2" wx:if="{{status - 0 === 5}}" bindtap="cancelConfirm">
             取消申请
         </view>
     </view>

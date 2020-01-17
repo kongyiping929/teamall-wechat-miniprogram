@@ -9,27 +9,27 @@
                 <view class="topBarMesTipPrice">¥{{withdrawBalance}}</view>
             </view>
         </view>
-        <view class="topBarBtn">申请领取</view>
+        <view class="topBarBtn" bindtap="save">申请领取</view>
     </view>
     <!-- 列表 -->
     <view class="list">
         <view class="listTitle">红包领取记录</view>
         <view class="item" wx:for="{{list}}" wx:key="{{index}}">
             <view class="itemTime">
-                <text>订单编号: 3345625457569</text>
-                <text>2019-02-24 23:32:05</text>
+                <text>订单编号: {{item.applyNo}}</text>
+                <text>{{item.createdTime}}</text>
             </view>
             <view class="itemMes">
                 <view class="itemMesPrice">
                     <view class="itemMesPriceAdd">
-                        <text>充值额度: </text>
-                        <text>¥999.99</text>
+                        <text>领取红包: </text>
+                        <text>¥{{item.withdrawQuota}}</text>
                     </view>
                     <view class="itemMesPriceminus">
-                        手续费: - ¥1.00
+                        手续费: - ¥{{item.serviceFee}}
                     </view>
                 </view>
-                <view class="itemMesStatus {{orderStatusArr[index].class}}">{{orderStatusArr[index].text}}</view>
+                <view class="itemMesStatus {{orderStatusArr[item.status-1].class}}">{{item.statusDesc}}</view>
             </view>
         </view>
     </view>

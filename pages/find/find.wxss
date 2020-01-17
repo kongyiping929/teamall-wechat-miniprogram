@@ -434,3 +434,7 @@ page {
     font-weight: 400;
     color:rgba(172,187,188,1);
 }
+.orderPay view:last-child.none {
+    background-color: #D7E0E0;
+    color: rgba(172, 187, 188, 1);
+}

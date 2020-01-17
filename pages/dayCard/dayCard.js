@@ -23,10 +23,10 @@ Page({
 
   // 筛选器
   bindPickerChange: function (e) {
-    console.log(e)
+    const { productTypeArr} = this.data;
     this.setData({
       productTypeIndex: e.detail.value,
-      productId: e.target.dataset.id
+      squareId: productTypeArr[e.detail.value].squareId
     })
   },
 
@@ -77,7 +77,6 @@ Page({
     let that = this;
     ajax.post('/app/user/punch/preInfo',{})
       .then(res => {
-        console.log(Object.keys(res.data).length)
         that.setData({
           shopInfo: Object.keys(res.data).length > 0 ? res.data:"" ,
         }, () => { console.log(""?true:false)})
@@ -87,20 +86,21 @@ Page({
           .then(res => {
             let productTypeArr= res.data.list
             if (Object.keys(shopInfo).length > 0){
-              console.log(shopInfo)
               for (let i = 0; i < productTypeArr.length; i++) {
                 if(productTypeArr[i].squareId == shopInfo.squareId){
                   that.setData({
-                    productTypeIndex: i
+                    productTypeArr,
+                    productTypeIndex: i,
+                    squareId: shopInfo.squareId
                   })
                 }
               }
+            }else{
+              that.setData({
+                productTypeArr,
+                squareId: res.data.list[0].squareId
+              })
             }
-            
-            that.setData({
-              productTypeArr,
-              squareId: res.data.list[0].squareId
-            })
           })
       })
     
@@ -132,7 +132,6 @@ Page({
       attachmentInfoList: imgList,
       orderId: shopInfo ? shopInfo.orderId:""
     }
-    console.log(data)
     ajax.post('/app/user/punch/save', data)
       .then(res => {
         console.log(res)

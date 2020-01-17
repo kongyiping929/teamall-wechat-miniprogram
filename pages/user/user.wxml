@@ -6,7 +6,7 @@
             <image class="userInfo_photo" src="{{user.headimgUrl}}"></image>
             <view class="userInfo_attribute">
                 <view class="userInfo_attribute_name">{{user.nickName}}</view>
-                <view class="userInfo_attribute_level">Lv.1</view>
+                <view class="userInfo_attribute_level">Lv.{{user.userLevel}}</view>
             </view>
             <view class="userInfo_code">
                 <text>邀请码: </text>
@@ -15,7 +15,7 @@
             </view>
         </view>
         <view class="userParams">
-            <view class="userParamsAccount one-txt-cut" style="width: 224rpx;">
+            <view class="userParamsAccount one-txt-cut" style="width: 266rpx;">
                 <text>用户ID</text>
                 <text>{{user.userId}}</text>
             </view>
@@ -40,7 +40,7 @@
         <view class="price_item" style="margin-left: 30rpx;">
             <view class="price_item_bar">
                 <text>我的红包</text>
-                <text class="redPacket" wx:if="{{canDraw}}" bind:tap="goMyRedPacket">提取</text>
+                <text class="redPacket" bind:tap="goMyRedPacket">提取</text>
             </view>
             <view class="price_balance">¥{{user.withdrawBalance}}</view>
         </view>
@@ -108,7 +108,7 @@
                 <image src="/assets/image/tabBar/rightArrows.png"></image>
             </view>
         </view>
-        <view class="selectItem" bind:tap="goAdminister">
+        <view class="selectItem" bind:tap="goAdminister" wx:if="{{user.userType!=1}}">
             <view class="selectItemLeft">管理模块</view>
             <view class="selectItemRight">
                 <image src="/assets/image/tabBar/rightArrows.png"></image>

@@ -1,28 +1,26 @@
 const app = getApp();
-//const URL = 'http://api.teafunshop.com/cy';
-const URL = 'http://119.23.79.12:7001/cy';
+const URL = 'https://api.teafunshop.com/cy';
+//const URL = 'http://119.23.79.12:7001/cy';
 
 let token = wx.getStorageSync('TOKEN')
 const openid = wx.getStorageSync('OPENID')
 let isLoading = true;
-let tiem = "";
+let time = "";
 let post = (url, data, toast) => new Promise(reslove => {
   let token = wx.getStorageSync('TOKEN');
   const openid = wx.getStorageSync('OPENID');
-  clearTimeout(tiem)
-  console.log(isLoading)
-  
+  clearTimeout(time)
   const app = getApp();
   if (isLoading){
     wx.showLoading({
       title: '加载中...',
-      mask: true
+      mask: true,
     });
     isLoading = false;
   }
-   tiem = setTimeout(()=>{
-     isLoading = true;
-   },1500)
+  time = setTimeout(() => {
+    isLoading = true;
+  }, 1500)
   
   wx.getSetting({
     success: (res) => {
@@ -60,18 +58,24 @@ let post = (url, data, toast) => new Promise(reslove => {
                   })
                 }
               })
-              
             }
-
             // 请求异常的提示语
             if (res.data.responseBody.code !== '1' && res.data.responseBody.code !== '-110113') {
-              return wx.showToast({
+              if (res.data.responseBody.code == "-200101") {//下架的产品
+                return reslove(res.data.responseBody);
+              }
+              if (res.data.responseBody.code == "-200112") {//有未付款的订单
+                return reslove(res.data.responseBody);
+              }
+              if (res.data.responseBody.code === '-200113') {//有未付款的预约订单
+                return reslove(res.data.responseBody);
+              }
+               return wx.showToast({
                 title: res.data.responseBody.message,
                 icon: 'none',
                 duration: 2000
               });
             }
-            wx.hideLoading();
             // 返回数据
             reslove(res.data.responseBody);
           },
@@ -81,6 +85,9 @@ let post = (url, data, toast) => new Promise(reslove => {
               icon: 'none',
               duration: 2000
             })
+          },
+          complete() {
+            wx.hideLoading();
           }
         })
       }
@@ -106,6 +113,7 @@ let wxRelogin = (url, data) => new Promise(reslove => {
           url: '/pages/getUserInfo/getUserInfo'
         })
       }
+      
       token = res.data.responseBody.data.loginToken;
       wx.setStorageSync('TOKEN', res.data.responseBody.data.loginToken)
       reslove(res.data.responseBody);

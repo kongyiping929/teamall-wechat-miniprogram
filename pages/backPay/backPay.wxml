@@ -1,5 +1,5 @@
 <!-- 订单查询 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+<scroll-view scroll-y scroll-with-animation enable-back-to-top  wx:if="{{list.length>0}}">
     <!-- 预约列表 -->
     <view class="subscribe"  wx:for="{{list}}" wx:key="{{index}}">
         <view class="subscribeTimeMes">
@@ -35,4 +35,10 @@
         </view>
     </view>
 </scroll-view>
+<view class="couponNone" wx:else>
+    <view class="couponNoneBg">
+      <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+    </view>
+    <view class="couponNoneTip">暂无订单</view>
+  </view>
 <showModel showModalPay="{{showModalPay}}" bind:payEdit="payEdit" bind:hideModel="hideModel" ></showModel>

@@ -23,27 +23,35 @@ Page({
       "/assets/image/confirmMake/selectActive.png",
       "/assets/image/confirmMake/select.png",
     ],
-    price:0
+    price:0,
+    couponPrice:0,
+    refresh:true
   },
 
   // 更改备注
   changeRemark(e) {
+    console.log(e, e.detail.value)
     this.setData({ remark: e.detail.value });
   },
 
   // 显示隐藏优惠券模态框
   changeCouponModal(e) {
-    this.setData({ couponModal: e.currentTarget.dataset.status });
+    let {status} = e.currentTarget.dataset;
+    this.setData({ couponModal: status });
   },
-
+  cancelCouponModal(e) {
+    let { status } = e.currentTarget.dataset;
+    if (!status) { this.setData({ couponActive: null, couponModal: false }) }
+  },
   couponChange(e){
+    const { price} = this.data;
     let item = e.currentTarget.dataset.item
-    if (this.data.price < item.useQuota) return wx.showToast({
+    if (price < item.useQuota) return wx.showToast({
       title: '不满足优惠金额！',
       icon: 'none',
       duration: 2000
     });
-    this.setData({ couponActive: item, couponModal: false });
+    this.setData({ couponActive: item, couponModal: false, couponPrice: parseFloat(price - price * (item.discount || 1) - (item.subtractQuota || 0)).toFixed(2) });
   },
 
   // 跳转添加地址
@@ -65,20 +73,11 @@ Page({
   // 显示/隐藏地址模态框
   changeAddPersonStatus(e) {
     let status = e.currentTarget.dataset.status;
-    if (status) {
-      // ajax.post('/app/address/getlist')
-      //   .then(res => {
-          this.setData({
-            addPersonStatus: status,
-            // travellerPerson: res.returnData
-          })
-      //   })
-    } else {
-      this.setData({
-        addPersonStatus: status
-      })
-    }
+    this.setData({
+      addPersonStatus: status,
+    })
   },
+  
 
   stopEvent(e) {}, // 防止冒泡
 
@@ -86,11 +85,23 @@ Page({
     const { items: { productId, shopId, specId, specLineId, specPackageId, specPayNum}} = this.data;
     ajax.post('/app/product/getOrderConfirmInfo', { productId, shopId, specId, specLineId, specPackageId })
       .then(res => {
-        let consignee = "";
-        res.data.userAddressList.filter((v,i)=>{
-          v.defaultStatus == 1 ? consignee=v : "";
-        })
-        this.setData({ list: res.data, consignee, coupon: res.data.userCouponList, price: res.data.unitPrice*specPayNum})
+        if (res.code == "-200112") {
+          wx.showToast({
+            title: res.message,
+            icon: 'none',
+            duration: 2000
+          });
+          setTimeout(() => {
+            wx.navigateTo({ url: '/pages/orderList/orderList?id=1' });
+          }, 800);
+        } else{
+          let consignee = "";
+          res.data && res.data.userAddressList.filter((v, i) => {
+            v.defaultStatus == 1 ? consignee = v : "";
+          })
+          this.setData({ list: res.data, consignee, coupon: res.data.userCouponList, price: parseFloat(res.data.unitPrice * specPayNum).toFixed(2)  })
+        }
+        
       })
   },
 
@@ -99,8 +110,6 @@ Page({
    */
   onLoad: function (options) {
     this.setData({ items: JSON.parse(options.item) })
-    console.log(JSON.parse(options.item))
-    
   },
 
   changPayChannel(){
@@ -112,7 +121,8 @@ Page({
   },
 
   submitOrder(){
-    const { consignee, couponActive, payChannel, receiveType, items: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId, remark } } = this.data;
+    let that = this;
+    const { consignee, couponActive, payChannel, receiveType, items: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId }, remark} = this.data;
     let data = {
       buyNum: specPayNum,
       initiationChannel :2,
@@ -126,9 +136,10 @@ Page({
       specLineId ,
       specPackageId ,
       userAddressInfo: receiveType == 1 ? consignee : {},
-      couponId: couponActive && (couponActive.id || '') || "",
+      couponId: couponActive && (couponActive.userCouponId || '') || "",
       remark
     }
+    console.log(data)
     ajax.post('/app/user/productorder/saveorder', data)
       .then(res => {
         console.log(payChannel, payChannel == 1)
@@ -151,14 +162,16 @@ Page({
               //wx.navigateTo({ url: '/pages/orderList/orderList?id=2' });
             }, 800);
           },
-          fail: function (res) {
+          fail: function (result) {
+            that.setData({ refresh:false})
             wx.showToast({
               title: '订单支付失败',
               icon: 'none',
               duration: 2000
             });
             setTimeout(() => {
-              wx.navigateTo({ url: '/pages/orderList/orderList?id=1' });
+              wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=1&id=${res.data.id}` })
+              //wx.navigateTo({ url: '/pages/orderList/orderList?id=1' });
             }, 800);
           }
         })}else{
@@ -194,7 +207,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.init();
+    this.data.refresh?this.init():"";
   },
 
   /**

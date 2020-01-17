@@ -7,8 +7,8 @@
                 <image src="{{item.headimgUrl}}"></image>
                 <text>{{item.userName}}</text>
             </view>
-            <view class="clockTitleBarRight">
-                <image src="/assets/image/find/goodIcon.png"></image>
+            <view class="clockTitleBarRight" bindtap="{{userPunch?'':'checkedPunch'}}" data-index="{{index}}" data-id="{{item.userPunchId}}">
+                <image src="{{userPunchIndex==index?userPunchListImg[0]:userPunchListImg[1]}}"></image>
                 <text>+{{item.likeNum}}</text>
             </view>
         </view>
@@ -19,7 +19,7 @@
         <view class="clockImg">
             <image  wx:for="{{item.imgList}}" wx:key="{{index}}" wx:if="{{item}}" src="http://{{item}}"></image>
         </view>
-        <view class="TorderMes" wx:if="{{item.orderInfo}}">
+        <view class="TorderMes" wx:if="{{!options.productId && item.orderInfo}}">
             <image class="TorderMesPhoto" src="http://{{item.orderInfo.attachmentInfo}}"></image>
             <view class="TorderMesTip">
                 <view class="TorderMesTipTitle one-txt-cut">{{item.orderInfo.productName}}</view>
@@ -29,7 +29,6 @@
                 </view>
                 <view class="TorderMesTipAttr">
                     <text>{{item.orderInfo.typeName}}</text>
-                    <!-- <image src="/assets/image/user/downArrows.png"></image> -->
                 </view>
             </view>
         </view>

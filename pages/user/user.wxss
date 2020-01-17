@@ -110,7 +110,7 @@ page {
 
 .userParamsAccount text:last-child {
   color: #fff;
-  width: 200rpx;
+  width: 140rpx;
   display: inline-block;
 }
 

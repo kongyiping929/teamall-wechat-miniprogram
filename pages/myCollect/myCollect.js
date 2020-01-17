@@ -39,6 +39,7 @@ Page({
     const { keyword } = this.data
     ajax.post('/app/user/collection/list', {})
       .then(res => {
+        wx.stopPullDownRefresh();
         this.setData({ list: res.data.list });
       })
   },
@@ -47,7 +48,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init()
+    
   },
 
   /**
@@ -61,7 +62,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.init()
   },
 
   /**

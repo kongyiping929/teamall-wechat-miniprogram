@@ -83,7 +83,7 @@ Page({
     let obj = dateTimePicker.dateTimePicker();
     let dateTimeYTD = dateTimePicker.getDateTimeYTD(obj.dateTime);
     const { productId, userId } = this.data;
-    ajax.post('/app/user/manage/getshopproductinfo', { productId, userId, shopId: "1197444188149604353" })
+    ajax.post('/app/user/manage/getshopproductinfo', { productId, userId, shopId: app.globalData.shopId  })
       .then(res => {
         this.setData({ list: res.data })
         this.specList()
@@ -98,7 +98,7 @@ Page({
   // 显示/隐藏产品规格模态框
   changeSpecModal(e) {
     let { status } = e.currentTarget.dataset;
-    if (this.data.status){
+    if (this.data.productSpecsItem) {
       this.setData({ specModal: status });
     } else {
       wx.showToast({
@@ -107,39 +107,28 @@ Page({
         duration: 2000
       });
     }
-    
-
   },
   //产品规格列表
   specList() {
     const { list } = this.data;
     ajax.post('/app/product/findSpecInfo', { id: list.productId })
       .then(res => {
-        let data = res.data.list[0];
+        let data = null;
         let list = res.data.list;
         let status = false;
-        let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
-        let productPackSpecsItem = null;
-        let unitPrice = parseFloat(data.basePrice) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0)
-        let disableList = new Set();
+        let productSubdivisionSpecsItem = null;
         for (let i = 0; i < list.length; i++) {
-          if (list[i].appointmentStatus == 1) { this.setData({ status: true }); }
-          // for (let y = 0; y < list[i].packageList.length; y++) {
-          //   if (list[i].packageList[y].stockNum > 0) {
-          //     disableList.add(list[i].specId)
-          //   }
-          // }
+          if (list[i].appointmentStatus == 1 && !status) { 
+            status = true; data = list[i] ;
+            productSubdivisionSpecsItem = list[i].lineList.length > 0 ? list[i].lineList[0] : null;
+          }
         }
         this.setData({
           specList: res.data.list,
           productSpecs: res.data.list,
           productSubdivisionSpecs: data.lineList,
-          productPackSpecs: data.packageList,
           productSpecsItem: data,
-          productPackSpecsItem,
           productSubdivisionSpecsItem,
-          unitPrice,
-          disableList: Array.from(disableList)
         });
       })
   },
@@ -169,8 +158,9 @@ Page({
       });
     }
   },
-  changPayChannel() {
-    this.setData({ payChannel: this.data.payChannel == 0 ? 1 : 0 })
+  changPayChannel(e) {
+    console.log(e)
+    this.setData({ payChannel: e.currentTarget.dataset.type })
   },
 
   changReceiveType() {
@@ -178,9 +168,17 @@ Page({
   },
 
   submitOrder() {
+    if (!this.data.productSpecsItem) {
+      wx.showToast({
+        title: '该产品暂不提供预约体验服务',
+        icon: 'none',
+        duration: 2000
+      });
+      return false;
+    }
     const { dateTimeYTD, dateTime, payChannel, remark, productSpecsItem, productPackSpecsItem, productSubdivisionSpecsItem, userId, productId, list,specPayNum } = this.data;
     let data = {
-      payChannel: payChannel + 1,
+      payChannel: payChannel + 1 == 2?2:1,
       productId,
       productTypeId: list.productTypeId,
       shopId: app.globalData.shopId,
@@ -191,7 +189,7 @@ Page({
       remark,
       appointmentTime: dateTimeYTD,
       timeRange: list.timeRangeList[dateTime[1]].dictValue,
-      freeSheet :2
+      freeSheet:payChannel==2?1:2
     }
     ajax.post('/app/user/manage/sendAppointOrder', data)
       .then(res => {
@@ -227,12 +225,11 @@ Page({
       let list = productSpecs[index];
       let productSubdivisionSpecsItem = list.lineList.length > 0 ? list.lineList[0] : null;
       let productPackSpecsItem = null;
-      unitPrice = parseFloat(productSpecs[index].basePrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
-      console.log(productSpecs[index].basePrice, productPackSpecsItem, productSubdivisionSpecsItem)
+      unitPrice = (parseFloat(productSpecs[index].basePrice)*100 + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice)*100 : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice)*100 : 0))/100;
 
       this.setData({
         productSpecsItem: list,
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
         productSubdivisionSpecs: list.lineList,
         productSubdivisionSpecsItem,
         productPackSpecsItem,

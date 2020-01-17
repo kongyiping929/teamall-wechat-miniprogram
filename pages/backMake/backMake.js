@@ -9,13 +9,16 @@ Page({
    */
   data: {
     orderStatusArr,
-    orderNo: ""
+    orderNo: "",
+    pageNum: 1
   },
 
   init() {
-    const { id } = this.data;
-    ajax.post('/app/user/manage/getappointment', { shopId: app.globalData.shopId })
+    const { pageNum } = this.data;
+    ajax.post('/app/user/manage/getappointment', { shopId: app.globalData.shopId, pageNum })
       .then(res => {
+        wx.hideNavigationBarLoading();
+        wx.stopPullDownRefresh();
         let list = res.data.list;
         this.setData({ list })
       })
@@ -56,7 +59,7 @@ Page({
       content: '请确认预约订单内容,点击确认后将发起退款!',
       confirmText: "确认退款",
       success(res) {
-        ajax.post('/app/user/manage/refundappoint', {
+        ajax.post('/app/user/manage/cancelorder', {
           orderNo: e.currentTarget.dataset.orderno 
         })
           .then(res => {
@@ -112,20 +115,24 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    wx.showNavigationBarLoading();
+    this.setData({ pageNum: 1 })
+    this.init();
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    let that = this;
+    this.setData({ pageNum: this.data.pageNum + 1 })
+    const { pageNum } = this.data;
+    ajax.post('/app/user/manage/getappointment', { shopId: app.globalData.shopId, pageNum })
+      .then(res => {
+        let list = res.data.list;
+        this.setData({ list: [...that.data.list, ...list] })
+      })
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
 
-  }
 })

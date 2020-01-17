@@ -3,11 +3,6 @@
 page {
   padding-top: 20rpx;
 }
-scroll-view {
-  width: 100%;
-  height: 100vh;
-  min-height: 100vh;
-}
 
 /* 取货方式 */
 
@@ -596,7 +591,9 @@ scroll-view {
   height: 31rpx;
   padding: 31rpx 34rpx 26rpx;
 }
-
+.specScroll{
+  height: 580rpx;
+}
 .item {
   position: relative;
   font-size: 24rpx;

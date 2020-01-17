@@ -49,8 +49,8 @@ Page({
     let url = typeId == "" ? '/app/index/findProductList': '/app/index/findProductList'
     ajax.post(url,data)
       .then(res => {
+        wx.stopPullDownRefresh();
         this.setData({list: res.data.list})
-        console.log(res)
       })
   },
 

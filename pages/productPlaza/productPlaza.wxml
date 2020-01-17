@@ -25,8 +25,8 @@
             {{item.content}}
             <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text>
         </view>
-        <view class="clockImg" wx:for="{{item.imgList}}" wx:key="{{index}}">
-            <image src="http://{{item}}"></image>
+        <view class="clockImg">
+            <image  wx:for="{{item.imgList}}" wx:key="{{index}}" src="http://{{item}}"></image>
         </view>
         <view class="TorderMes" wx:if="{{item.orderInfo}}">
             <image class="TorderMesPhoto" src="http://{{item.orderInfo.attachmentInfo}}"></image>

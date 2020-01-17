@@ -16,7 +16,7 @@ Page({
   init() {
     let that = this;
     ajax.post('/app/user/manage/getproduct', {
-        shopId: "1197444188149604353"
+      shopId: app.globalData.shopId
       })
       .then(res => {
         that.setData({

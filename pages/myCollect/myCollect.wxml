@@ -1,5 +1,5 @@
 <!-- 我的收藏 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+<scroll-view scroll-y scroll-with-animation enable-back-to-top wx:if="{{list.length > 0}}">
   <!-- 列表 -->
   <view class="list">
     <view class="item" wx:for="{{list}}" wx:key="{{index}}" bind:tap="goProductDetails" data-orderid="{{item.productId}}">
@@ -19,3 +19,9 @@
     </view>
   </view>
 </scroll-view>
+  <view class="couponNone" wx:else>
+    <view class="couponNoneBg">
+      <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+    </view>
+    <view class="couponNoneTip">暂无收藏</view>
+  </view>

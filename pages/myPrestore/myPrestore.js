@@ -24,10 +24,11 @@ Page({
 
   init() {
     let { typeId, searchType, productTypeId } = this.data;
-  
     let that = this;
     ajax.post('/app/user/recharge/getdata', {})
       .then(res => {
+        wx.hideNavigationBarLoading();
+        wx.stopPullDownRefresh();
         this.setData({ selectArr: res.data.dictQuotaListVo, list: res.data.page.list, prechargeBalance: res.data.prechargeBalance })
         console.log(res)
       })
@@ -73,7 +74,7 @@ Page({
           },
           fail: function (res) {
             wx.showToast({
-              title: '订单支付失败',
+              title: '已取消支付',
               icon: 'none',
               duration: 2000
             });
@@ -156,7 +157,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.init();
+    wx.showNavigationBarLoading() 
   },
 
   /**
@@ -165,11 +167,4 @@ Page({
   onReachBottom: function () {
 
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

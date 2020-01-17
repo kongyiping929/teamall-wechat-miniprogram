@@ -21,7 +21,10 @@ Page({
       "/assets/image/confirmMake/selectActive.png",
       "/assets/image/confirmMake/select.png",
     ],
-    price: 0
+    price: 0,
+    refresh: true,
+    couponPrice:0,
+    refresh: true
   },
 
   // 初始化时间
@@ -31,7 +34,17 @@ Page({
     const { items: { productId, shopId, specId, specLineId, specPackageId, specPayNum} } = this.data;
     ajax.post('/app/product/getAppointmentOrderConfirmInfo', { productId, shopId, specId, specLineId, specPackageId })
       .then(res => {
-        this.setData({ list: res.data, masterWorkerArr: res.data.teaArtList, coupon: res.data.userCouponList, price: res.data.unitPrice * specPayNum })
+        if (res.code == "-200113") {
+          wx.showToast({
+            title: res.message,
+            icon: 'none',
+            duration: 2000
+          });
+          setTimeout(() => {
+            wx.navigateTo({ url: '/pages/makeList/makeList' });
+          }, 800);
+        } 
+        this.setData({ list: res.data, masterWorkerArr: res.data.teaArtList, coupon: res.data.userCouponList, price: parseFloat(res.data.unitPrice * specPayNum).toFixed(2) })
       })
     this.setData({
       dateTime: obj.dateTime,
@@ -56,9 +69,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(JSON.parse(options.item))
+    console.log(options)
     this.setData({ items: JSON.parse(options.item) })
-    this.initTime();
+    this.data.refresh ? this.initTime() : "";
   },
 
   // 更改年月日
@@ -107,20 +120,22 @@ Page({
   },
   couponChange(e) {
     let item = e.currentTarget.dataset.item
-    if (this.data.price < item.useQuota) return wx.showToast({
+    const { price}= this.data;
+    if (price < item.useQuota) return wx.showToast({
       title: '不满足优惠金额！',
       icon: 'none',
       duration: 2000
     });
-    this.setData({ couponActive: item, couponModal: false });
+    this.setData({ couponActive: item, couponModal: false, couponPrice: parseFloat(price - price * (item.discount || 1) - (item.subtractQuota || 0)).toFixed(2) });
   },
   stopEvent(e) {}, // 防止冒泡
 
   // 提交预约
   confirmMake(e) {
-    const { dateTimeYTD, masterWorkerArr, masterWorker, consignee, payChannel, list, items: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId }, dateTime, couponActive } = this.data;
-    console.log(list.timeRangeList, dateTime[1])
+    let that = this;
+    const { dateTimeYTD, masterWorkerArr, masterWorker, consignee, payChannel, list, items: { specPayNum, productId, productTypeId, shopId, specId, specLineId, specPackageId }, dateTime, couponActive, remark } = this.data;
     let data = {
+      id: this.data.items.id ? this.data.items.id:"",
       appointmentTime: dateTimeYTD,
       peopleNum : specPayNum,
       initiationChannel: 2,
@@ -133,9 +148,9 @@ Page({
       specLineId,
       specPackageId,
       timeRange: list.timeRangeList[dateTime[1]].dictValue,
-      couponId: couponActive && (couponActive.id || '') || "",
+      couponId: couponActive && (couponActive.couponId || '') || "",
+      remark
     }
-    console.log(data, list.dateList)
     ajax.post('/app/user/appointment/saveappointment', data)
       .then(res => {
         if (!payChannel == 0) {
@@ -159,6 +174,7 @@ Page({
             }, 800);
           },
           fail: function (res) {
+            that.setData({ refresh: false })
             wx.showToast({
               title: '订单支付失败',
               icon: 'none',
@@ -186,6 +202,11 @@ Page({
 
   changPayChannel() {
     this.setData({ payChannel: this.data.payChannel == 0 ? 1 : 0 })
+  },
+
+  geTel(tel) {
+    var reg = /^(\d{2})\d{7}(\d{2})$/;
+    return tel ? tel.replace(reg, "$1*******$2") : "未绑定";
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

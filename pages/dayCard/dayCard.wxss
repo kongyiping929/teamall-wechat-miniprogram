@@ -340,6 +340,7 @@ textarea {
   display: flex;
   align-items: center;
   height: 92rpx;
+  justify-content: center
 }
 
 .modalFooter text:first-child, .modalFooter text:last-child {
@@ -354,7 +355,7 @@ textarea {
   color: rgba(85, 98, 102, 1);
 }
 
-.modalFooter text:last-child {
+.modalFooter .confirm {
   font-size: 34rpx;
   font-weight: 600;
   color: #799262;
@@ -382,7 +383,7 @@ textarea {
   padding-right: 54rpx;
 }
 
-.modalRoll image {
+.modalRoll .bgImg {
   position: absolute;
   top: 0;
   left: 0;
@@ -398,7 +399,7 @@ textarea {
   margin-bottom: 36rpx;
 }
 
-.modalRollTopL view:first-child {
+.modalRollTopL .title {
   height: 40rpx;
   font-size: 28rpx;
   font-weight: 500;
@@ -407,35 +408,43 @@ textarea {
   margin-bottom: 8rpx;
 }
 
-.modalRollTopL view:last-child {
+.modalRollTopL .time {
   height: 34rpx;
   font-size: 22rpx;
   font-weight: 400;
   line-height: 34rpx;
   color: rgba(172, 187, 188, 1);
+  min-width: 220rpx;
+}
+.modalRollBottom .modalQuota {
+  min-width: 280rpx;
 }
 
 .modalRollTopR {
+  display: inline-block;
   height: 76rpx;
 }
 
-.modalRollTopR text:first-child {
+.modalRollTopR .num {
   font-size: 22rpx;
   height: 76rpx;
   line-height: 76rpx;
   color: rgba(237, 87, 53, 1);
 }
 
-.discount text:first-child {
+.discount .num {
+  display: inline-block;
   font-size: 36rpx;
   font-weight: 400;
   padding-top: 8rpx;
 }
 
-.modalRollTopR text:last-child {
+.modalRollTopR .tip {
+  display: inline-block;
   font-size: 22rpx;
   font-weight: 400;
   color: #ed5735;
+  line-height: 44rpx;
 }
 
 .modalRollBottom {
@@ -447,10 +456,14 @@ textarea {
   color: rgba(172, 187, 188, 1);
 }
 
-.modalRollBottom text:first-child {
+.modalRollBottom .confirm {
   margin-right: 16rpx;
   max-width: 146rpx;
 }
 .subtractQuota{
-  padding-top: 4rpx
+  padding-top: 4rpx;
+}
+.subtractQuota .num{
+  display: inline-block;
+  padding-top: 12rpx;
 }

@@ -18,6 +18,7 @@ Page({
     const { keyword, pageNum } = this.data
     ajax.post('/app/user/appointment/myappointment', { pageNum })
       .then(res => {
+        wx.stopPullDownRefresh();
         this.setData({ list: res.data.list });
       })
   },

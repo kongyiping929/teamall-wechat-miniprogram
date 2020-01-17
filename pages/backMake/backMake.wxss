@@ -101,13 +101,14 @@
   font-weight: 400;
   color: rgba(85, 98, 102, 1);
   margin-right: 6rpx;
+  min-width: 150rpx;
 }
 
 .subscribeAddress text:nth-child(3) {
   width: 1rpx;
   height: 34rpx;
   background-color: rgba(215, 224, 224, 1);
-  margin-right: 10rpx;
+  margin-right: 40rpx;
 }
 
 .subscribeAddress text:nth-child(4) {
@@ -156,7 +157,7 @@
   text-align: center;
 }
 
-.subscribeNumber view:last-child {
+.subscribeNumber .cancel {
   width: 160rpx;
   height: 60rpx;
   background: rgba(247, 55, 2, 1);

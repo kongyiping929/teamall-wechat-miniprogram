@@ -13,67 +13,104 @@ Component({
    */
   data: {
     isHiddenMask: false,
-    company:"",
-    orderNo:"",
-    refundValue:"",
-    payValue:""
+    company: "",
+    orderNo: "",
+    refundValue: "",
+    payValue: ""
   },
 
   /**
    * 组件的方法列表
    */
   methods: {
-    companyInput(e){
-      this.setData({ company: e.detail.value})
+    companyInput(e) {
+      this.setData({
+        company: e.detail.value
+      })
     },
-    orderNoInput(e){
-      this.setData({ orderNo: e.detail.value})
+    orderNoInput(e) {
+      this.setData({
+        orderNo: e.detail.value
+      })
     },
-    refundInput(e){
-      this.setData({ refundValue: e.detail.value})
+    refundInput(e) {
+      this.setData({
+        refundValue: e.detail.value
+      })
     },
-    payInput(e){
-      this.setData({ payValue: e.detail.value})
+    payInput(e) {
+      this.setData({
+        payValue: e.detail.value
+      })
     },
-    typeActive(e){
-      const { typeList} = this.data;
+    typeActive(e) {
+      const {
+        typeList
+      } = this.data;
       let list = typeList;
-      list.forEach((v,i)=>{
+      list.forEach((v, i) => {
         v.active = false
       })
       list[e.target.dataset.index].active = true;
-      this.setData({ typeList: list, showType: e.target.dataset.index+1 })
+      this.setData({
+        typeList: list,
+        showType: e.target.dataset.index + 1
+      })
     },
     // 单击了 actionsheet 事件
-    Sure: function (e) {
+    Sure: function(e) {
       // triggerEvent函数接受三个值：事件名称、数据、选项值
-      const { showModalDelive, showModalPay, orderNo, company, refundValue, payValue} = this.data;
-      if (showModalDelive){
-        this.triggerEvent('deliverEdit', { orderNo, company })
+      const {
+        showModalDelive,
+        showModalPay,
+        orderNo,
+        company,
+        refundValue,
+        payValue
+      } = this.data;
+      if (showModalDelive) {
+        this.triggerEvent('deliverEdit', {
+          orderNo,
+          company
+        })
       }
-      if (showModalPay){
-        console.log(payValue)
+      if (showModalPay) {
         if (!payValue) return wx.showToast({
           title: "请输入价格",
           icon: 'none',
           duration: 2000
         });
-        this.triggerEvent('payEdit', { payValue })
+        this.triggerEvent('payEdit', {
+          payValue
+        })
       }
-      
+      this.setData({
+        company: "",
+        orderNo: "",
+        refundValue: "",
+        payValue: ""
+      })
     },
 
     // 取消 actionsheet 事件
-    cancel: function () {
+    cancel: function() {
       this.triggerEvent('hideModel', {})
+      this.setData({
+        company: "",
+        orderNo: "",
+        refundValue: "",
+        payValue: ""
+      })
     },
     // 开关
-    switchChange: function () {
-      this.setData({ checked: !this.data.checked })
+    switchChange: function() {
+      this.setData({
+        checked: !this.data.checked
+      })
     },
 
     /// 创建 actionsheet 动画
-    createAnimation: function (state) {
+    createAnimation: function(state) {
       // 1 创建动画实例
       var animation = wx.createAnimation({
         duration: 200, // 动画时长
@@ -101,7 +138,7 @@ Component({
       }
 
       // 5 设置定时器到指定时候后，执行第二组动画
-      setTimeout(function () {
+      setTimeout(function() {
         animation.translateY(0).step();
 
         // 显示/关闭抽屉
@@ -119,7 +156,7 @@ Component({
     },
 
     /// 占位事件，不用管理
-    prev: function () {
+    prev: function() {
       // 截取蒙层下的滑动事件，蒙层下的view不能滑动
     }
   }

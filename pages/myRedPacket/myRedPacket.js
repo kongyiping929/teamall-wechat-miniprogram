@@ -33,7 +33,23 @@ Page({
     let that = this;
     ajax.post('/app/redPackage/findList', {})
       .then(res => {
+        wx.stopPullDownRefresh();
         this.setData({ list:res.data.list})
+      })
+  },
+
+  save() {
+    let that = this;
+    ajax.post('/app/redPackage/save', {})
+      .then(res => {
+        wx.showModal({
+          title: '提示',
+          content: '红包领取额度:¥' + res.data.withdrawBalance + ',提现手续费:¥' + res.data.withdrawFee + ',手续费比例:' + res.data.withdrawFeeRadio*100  + '%,申请发出,请耐心等待.',
+          confirmText:  "确认",
+          showCancel:false
+        })
+        that.init();
+        that.setData({ withdrawBalance: 0 })
       })
   },
 
@@ -111,7 +127,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.init()
   },
 
   /**

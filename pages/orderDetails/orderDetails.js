@@ -12,6 +12,7 @@ Page({
     orderStatusList, // 订单状态列表
     status: '0', // 订单状态 1 待支付 2 待发货 3 卖家已发货 4 交易成功 5 退货申请中 6 退款成功 7 退款失败
     service: false, // 客服模态框
+    btnChecked:false,//销毁页面跳转
   },
 
   // 阻止冒泡
@@ -43,8 +44,10 @@ Page({
   },
 
   submitOrder() {
-    const { consignee, couponActive, productTypeId, payChannel, receiveType, buyNum, productId, shopId, specId, specLineId, specPackageId, remark, userAddressInfo  } = this.data.list;
+    let that = this;
+    const { id,consignee, couponActive, productTypeId, payChannel, receiveType, buyNum, productId, shopId, specId, specLineId, specPackageId, remark, userAddressInfo  } = this.data.list;
     let data = {
+      id,
       buyNum,
       initiationChannel: 2,
       payChannel,
@@ -62,8 +65,7 @@ Page({
     }
     ajax.post('/app/user/productorder/saveorder', data)
       .then(res => {
-        console.log(payChannel, payChannel == 0)
-        if (!payChannel == 0) {
+        if (payChannel == 2) {
           wx.requestPayment({
             timeStamp: res.data.timeStamp,
             nonceStr: res.data.nonceStr,
@@ -78,7 +80,8 @@ Page({
                 duration: 2000
               });
               setTimeout(() => {
-                wx.navigateTo({ url: '/pages/orderList/orderList?id=2' })
+                that.setData({ status: 2 }, () => that.init());
+                //wx.navigateTo({ url: '/pages/orderList/orderList?id=2' })
               }, 800);
             },
             fail: function (res) {
@@ -97,28 +100,30 @@ Page({
             duration: 2000
           });
           setTimeout(() => {
-            wx.navigateTo({ url: '/pages/orderList/orderList?id=2' })
+            that.setData({ status: 2 }, () => that.init());
+            //wx.navigateTo({ url: '/pages/orderList/orderList?id=2' })
           }, 800);
         }
 
       })
   },
 
-  confirmOrder(e){ 
+  confirmOrder(e) {
     let status = e.currentTarget.dataset.status;
     const { id } = this.data.list;
     let pages = getCurrentPages();
     let prevPage = pages[pages.length - 2];  //上一个页面
-    ajax.post('/app/user/manage/updOrderStatus', { orderId: id, optType: status==3?3:1  })
+    ajax.post('/app/user/manage/updOrderStatus', { orderId: id, optType: status == 3 ? 3 : 1 })
       .then(res => {
+        this.setData({ btnChecked:true})
         wx.showToast({
-          title: status == 3?'确认收货成功！':'申请成功！',
+          title: status == 3 ? '确认收货成功！' : '申请成功！',
           icon: 'none',
           duration: 2000
         });
         setTimeout(() => {
           prevPage.setData({
-            id: status == 3 ?4:5
+            id: status == 3 ? 4 : 5
           })
           wx.navigateBack({
             delta: 1,
@@ -127,12 +132,14 @@ Page({
       })
   },
   //取消申请退款
-  cancelOrder(e) {
+  cancelConfirm(e) {
     const { id } = this.data.list;
+    let that = this;
     let pages = getCurrentPages();
     let prevPage = pages[pages.length - 2];  //上一个页面
     ajax.post('/app/user/manage/updOrderStatus', { orderId: id, optType: 2 })
       .then(res => {
+        that.setData({ btnChecked: true })
         wx.showToast({
           title: '取消成功！',
           icon: 'none',
@@ -147,6 +154,37 @@ Page({
           })
         }, 1000);
       })
+  },
+  cancelOrder(e) {
+    let that = this;
+    let pages = getCurrentPages();
+    let prevPage = pages[pages.length - 2];  //上一个页面
+    wx.showModal({
+      title: '提示',
+      content: '确认取消该订单吗？',
+      success(res) {
+        if (res.confirm) {
+          ajax.post('/app/user/productorder/cancel', { orderNo: e.currentTarget.dataset.orderno })
+            .then(res => {
+              that.setData({ btnChecked: true })
+              wx.showToast({
+                title: '取消成功！',
+                icon: 'none',
+                duration: 2000,
+              });
+              setTimeout(() => {
+                prevPage.setData({
+                  id: 1
+                })
+                wx.navigateBack({
+                  delta: 1,
+                })
+              }, 1000);
+            })
+        }
+      }
+    })
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -175,9 +213,12 @@ Page({
   onUnload: function () {
     let pages = getCurrentPages();
     let prevPage = pages[pages.length - 2];  //上一个页面
-    console.log(prevPage, prevPage.route =='pages/orderList/orderList')
+    prevPage.setData({
+      refresh: false
+    })
+    let index = [1,4,5,4,2]
     if (prevPage.route != 'pages/orderList/orderList'){
-      wx.navigateTo({ url: '/pages/orderList/orderList?id=' + this.data.status });
+      wx.navigateTo({ url: `/pages/orderList/orderList?id=${ this.data.btnChecked?index[this.data.status]: this.data.status }`});
     }
   },
 

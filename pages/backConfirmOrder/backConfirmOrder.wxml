@@ -20,14 +20,14 @@
     <view class="discountCoupon" bind:tap="changeSpecModal" data-status="{{true}}">
         <text>规格</text>
         <view>
-            <text wx:if="{{productSpecsItem}}">{{productSpecsItem.specName}}{{productSubdivisionSpecsItem.name&&","+productSubdivisionSpecsItem.name}}{{productPackSpecsItem.name&&","+productPackSpecsItem.name}}</text>
+            <text class="one-txt-cut" wx:if="{{productSpecsItem}}">{{productSpecsItem.specName}}{{productSubdivisionSpecsItem.name&&","+productSubdivisionSpecsItem.name}}{{productPackSpecsItem.name&&","+productPackSpecsItem.name}}</text>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
     <!-- 购买数量 -->
     <view class="number">
         <text>出售</text>
-        <text>{{specPayNum}}件 订单合计：<text>¥{{unitPrice*specPayNum }}</text></text>
+        <text>{{specPayNum}}人 订单合计：<text>¥{{unitPrice*specPayNum }}</text></text>
     </view>
    
     <!-- 备注 -->
@@ -58,7 +58,8 @@
 </scroll-view>
 <!-- 产品规格 -->
 <view class="specModal" bind:tap="changeSpecModal" data-status="{{false}}" wx:if="{{specModal}}" catchtouchmove="true">
-  <view class="specWapper" catch:tap="stopEvent">
+  <view class="specWapper" catch:tap="stopEvent"  animation="{{animationData}}">
+  <scroll-view scroll-y class="specScroll">
     <image src="/assets/image/productDetails/close.png" class="close" bind:tap="changeSpecModal" data-status="{{false}}"></image>
     <view class="spec_bg">
       <image src="http://{{list.productIconUrl}}" class="specImg"></image>
@@ -76,10 +77,10 @@
     <view class="specSelect">
       <view class="specSelectTitle">产品规格</view>
       <view class="specSelectItem">
-        <text class="one-txt-cut {{disableList[index] === item.specId ? '' : 'disable'}} {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{disableList[index] === item.specId?'select':''}}" data-index="{{index}}" data-field="productSpecs">{{item.specName}}</text>
+        <text class="one-txt-cut {{item.disable ? 'disable' : ''}} {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{item.disable?'':'select'}}" data-index="{{index}}" data-field="productSpecs">{{item.specName}}</text>
       </view>
     </view>
-    <view class="specSelect" wx:if="{{productSubdivisionSpecs && productSubdivisionSpecs !== '' && productSubdivisionSpecs !== null}}">
+    <view class="specSelect" wx:if="{{productSubdivisionSpecs && productSubdivisionSpecs.length > 0}}">
       <view class="specSelectTitle">产品细分规格</view>
       <view class="specSelectItem">
         <text class="one-txt-cut {{productSubdivisionSpecsItem.id === item.id ? 'active' : ''}}" wx:for="{{productSubdivisionSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productSubdivisionSpecs">{{item.name}}</text>
@@ -91,6 +92,7 @@
         <text class="one-txt-cut  {{item.stockNum ==0?'disable':''}} {{productPackSpecsItem.id == item.id ? 'active' : ''}}" wx:for="{{productPackSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productPackSpecs">{{item.name}}</text>
       </view>
     </view>
+    </scroll-view>
     <view class="specNumber">
       <view>购买数量</view>
       <view>

@@ -11,7 +11,7 @@
     <!-- 店铺 -->
     <view class="store">
         <text>预约接单</text>
-        <switch checked="{{list.appointmentStatus}}" bindchange="switch1Change"/>
+        <switch checked="{{list.appointmentStatus == 1?true:false}}" bindchange="switch1Change"/>
     </view>
     <!-- 操作 -->
     <view class="operate">

@@ -34,7 +34,7 @@ Component({
    */
   methods: {
     inputChange(e){
-      this.setData({ value: parseInt(e.detail.value) })
+      this.setData({ value: parseFloat(e.detail.value) })
     },
     typeActive(e){
       const { typeList} = this.data;

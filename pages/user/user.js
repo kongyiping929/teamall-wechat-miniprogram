@@ -99,7 +99,6 @@ Page({
       specLineId: productSubdivisionSpecsItem.id,
       specPackageId: productPackSpecsItem.id,
     }
-    console.log(product)
     wx.navigateTo({
       url: urltype === 1 ? '/pages/confirmMake/confirmMake' :
         '/pages/confirmOrder/confirmOrder?item=' + JSON.stringify(product)

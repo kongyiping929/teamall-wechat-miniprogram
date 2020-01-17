@@ -25,7 +25,7 @@ Page({
             longitude: app.globalData.longitude,
           }
           wx.request({
-            url: 'http://119.23.79.12:7001/cy'+'/app/common/wxlogin' ,
+            url: 'https://api.teafunshop.com/cy'+'/app/common/wxlogin' ,
             data: parame,
             method: 'POST',
             success(res) {

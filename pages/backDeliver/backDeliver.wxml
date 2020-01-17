@@ -3,7 +3,7 @@
   <text class="radius">!</text>
   <text>发货时请注意取货店铺,发货确认后将扣取发货店铺的库存,请联系发货店铺销售进行发货,发货后再进行发货操作!</text>
 </view>
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+<scroll-view scroll-y scroll-with-animation enable-back-to-top  wx:if="{{list.length>0}}">
     <!-- 预约列表 -->
     <view class="subscribe" wx:for="{{list}}" wx:key="{{index}}">
         <view class="subscribeTimeMes">
@@ -40,4 +40,10 @@
         </view>
     </view>
 </scroll-view>
+<view class="couponNone" wx:else>
+    <view class="couponNoneBg">
+      <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+    </view>
+    <view class="couponNoneTip">暂无发货</view>
+  </view>
 <showModel showModalDelive="{{showModalDelive}}" bind:deliverEdit="deliverEdit" bind:hideModel="hideModel" ></showModel>

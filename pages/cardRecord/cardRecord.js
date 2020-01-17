@@ -7,12 +7,18 @@ Page({
    * 页面的初始数据 
    */
   data: {
-    contentState:true
+    contentState:true,
+    userPunchIndex: -1,
+    userPunchListImg: [
+      "/assets/image/find/goodIconSelect.png",
+      "/assets/image/find/goodIcon.png",
+    ],
   },
   myPunchList() {
     let that = this;
-    const { myPunchList } = this.data
-    ajax.post('/app/microSquare/findMyPunchList', { })
+    const { myPunchList, options } = this.data
+    let url = options.productId ? '/app/product/findUserPunchList' : '/app/microSquare/findMyPunchList'
+    ajax.post(url, {productId:options.productId? options.productId:'' })
       .then(res => {
         let myPunchList = res.data.list
         myPunchList.filter((v, i) => {
@@ -26,7 +32,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options)
+    this.setData({options:options})
     this.myPunchList()
+  },
+
+  checkedPunch(e) {
+    let id = e.currentTarget.dataset.id;
+    let index = e.currentTarget.dataset.index;
+    let { myPunchList } = this.data;
+    ajax.post('/app/product/likeUserPunch', { id })
+      .then(res => {
+        myPunchList[index].likeNum += 1;
+        this.setData({ myPunchList, userPunchIndex: index })
+        wx.showToast({
+          title: '点赞成功！',
+          icon: 'none',
+          duration: 2000
+        });
+      })
   },
 
   /**

@@ -168,10 +168,10 @@ scroll-view {
   display: inline-block;
   box-sizing: border-box;
   padding: 11rpx 14rpx;
-  line-height: 24rpx;
-  height: 46rpx;
+  height: 50rpx;
   background: rgba(243, 248, 241, 1);
   border-radius: 4rpx;
+  overflow: hidden
 }
 
 .productSelect text {
@@ -179,6 +179,8 @@ scroll-view {
   font-weight: 400;
   color: rgba(172, 187, 188, 1);
   margin-right: 4rpx;
+  display: block;
+  max-width: 66vw;
 }
 
 .productSelect image {
@@ -385,6 +387,7 @@ scroll-view {
   font-weight: 400;
   line-height: 34rpx;
   color: rgba(172, 187, 188, 1);
+  max-width: 250rpx;
 }
 
 .couponItemTop view:last-child{
@@ -458,7 +461,7 @@ scroll-view {
 .couponNoneBtn {
   width: 690rpx;
   height: 88rpx;
-  background: rgba(121, 146, 98, 1);
+  background: #EB5735;
   border-radius: 88rpx;
   margin-bottom: 30rpx;
   text-align: center;

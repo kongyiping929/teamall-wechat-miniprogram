@@ -31,7 +31,7 @@ Page({
   },
   // 更改查询类型
   changeQueryType(e) {
-    this.setData({ queryType: e.currentTarget.dataset.value,list:"" })
+    this.setData({ queryType: e.currentTarget.dataset.value, list: "", keyword: '' })
   },
 
   /**

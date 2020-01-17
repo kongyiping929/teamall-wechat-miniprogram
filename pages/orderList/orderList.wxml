@@ -14,7 +14,7 @@
             <view class="itemMesDes">
                 <view class="itemMesDesTitle one-txt-cut">{{item.productName  }}</view>
                 <view class="itemMesDesPrice">
-                    <text>¥{{item.payAmount}}</text>
+                    <text>¥{{item.marketPrice}}</text>
                     <text>x {{item.buyNum}}</text>
                 </view>
                 <view class="itemMesDesAttr">
@@ -42,11 +42,12 @@
                 <text>订单合计:</text>
                 <text>¥{{item.payAmount}}</text>
             </view>
-            <view class="itemBottomR1 {{id == 4 ? 'id4' : ''}}" wx:if="{{id == 1 || id == 4}}">
+            <view class="itemBottomR2 {{id == 4 ? 'id4' : ''}}" wx:if="{{id == 1 || id == 4}}">
+                <text bind:tap="cancelOrder" data-orderNo="{{item.orderNo}}" wx:if="{{id == 1}}">取消订单</text>
                 <text bind:tap="goOrderDetails" data-status="{{id}}" data-id="{{item.id}}">{{orderStatusArr[id-0]}}</text>
             </view>
             <view class="itemBottomR2" wx:elif="{{id == 2 || id == 3}}">
-                <text>联系客服</text>
+                <text bind:tap="goOrderDetails" data-status="{{id}}" data-id="{{item.id}}">联系客服</text>
                 <text bind:tap="goOrderDetails" data-status="{{id}}" data-id="{{item.id}}">{{orderStatusBtn[id-0]}}</text>
             </view>
             <view class="itemBottomR5" wx:else>

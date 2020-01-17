@@ -23,7 +23,7 @@
         <image class="productPhoto" src="http://{{list.url}}"></image>
         <view class="productWapper">
             <view class="productTitle one-txt-cut">{{list.specName}}</view>
-            <view class="productPrice">¥{{price}}</view>
+            <view class="productPrice">¥{{list.unitPrice}}</view>
             <view class="productSelect">
                 <text>{{list.specName}},{{list.specLineName}}</text>
                 <image src="/assets/image/user/downArrows.png"></image>
@@ -64,7 +64,7 @@
      <view class="discountCoupon" bind:tap="changeCouponModal" data-status="{{true}}">
         <text>优惠券</text>
         <view>
-            <text wx:if="{{couponActive}}">-{{price - price*(couponActive.discount || 1)-(couponActive.subtractQuota||0)}}</text>
+            <text wx:if="{{couponActive}}">-{{couponPrice}}</text>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
@@ -88,7 +88,7 @@
     <!-- 底部 -->
     <view class="footer">
         <view>
-            <text>共计{{item.specPayNum}}人,合计:</text>
+            <text>共计{{items.specPayNum}}人,合计:</text>
             <text>￥{{price*(couponActive.discount || 1)-(couponActive.subtractQuota||0)}}</text>
         </view>
         <view bind:tap="confirmMake">提交预约</view>
@@ -103,7 +103,7 @@
         </view>
         <view class="couponList"  wx:if="{{coupon.length > 0}}">
             <view class="couponItem" wx:for="{{coupon}}" wx:index="{{index}}">
-                <image class="active" wx:if="{{couponActive.id == item.id}}" src="/assets/image/confirmOrder/active.png"></image>
+                <image class="active" wx:if="{{couponActive.couponId == item.couponId}}" src="/assets/image/confirmOrder/active.png"></image>
                 <view class="couponItemTop">
                     <view>
                         <view>
@@ -135,7 +135,7 @@
                 <image src="/assets/image/confirmOrder/modalBg1.png"></image>
             </view>
             <view class="couponNoneTip">暂无可用优惠卷</view>
-            <view class="couponNoneBtn">不使用优惠券</view>
+            <view class="couponNoneBtn" data-status="{{false}}"  bind:tap="changeCouponModal">不使用优惠券</view>
         </view>
     </view>
 </view>

@@ -1,12 +1,14 @@
 // pages/find/find.js
 const app = getApp()
 const ajax = require('../../assets/js/ajax.js');
+const orderStatusArr = ['', '去支付', '待确认', '待服务', '已完成', '退款成功', '退款失败', '已取消'];
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    orderStatusArr,
     contentState: true // 文字溢出显示状态 true 显示 false 隐藏
   },
 
@@ -15,7 +17,7 @@ Page({
     this.setData({ contentState: true });
   },
 
-  // 去支付-跳转确认预约页面
+  
   goConfirmMake(e) {
     wx.navigateTo({ url: '/pages/confirmMake/confirmMake?id=' + e.currentTarget.dataset.id })
   },
@@ -53,10 +55,12 @@ Page({
         this.setData({ myPunchList: res.data.list, imgList, orderInfo });
       })
   },
+  // 去支付-跳转确认预约页面
   goConfirmMake(){
     let { myappointmentList} = this.data;
     let list = myappointmentList[0];
     let product = {
+      id:list.id,
       productId: list.productId,
       productTypeId: list.productTypeId,
       shopId: app.globalData.shopId,

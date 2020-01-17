@@ -24,7 +24,7 @@ Page({
   microSquareList() {
     let that = this;
     const { id } = this.data
-    ajax.post('/app/microSquare/findMyPunchList', { squareId :id})
+    ajax.post('/app/microSquare/findMicroSquarePunchList', { squareId :id})
       .then(res => {
         let myPunchList = res.data.list
         myPunchList.filter((v, i) => {

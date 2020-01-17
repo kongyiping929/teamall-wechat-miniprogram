@@ -26,6 +26,12 @@
             </view>
           </view>
         </navigator>
+        <view class="couponNone"  wx:if="{{!product.list.length>0}}">
+          <view class="couponNoneBg">
+            <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+          </view>
+          <view class="couponNoneTip">暂无产品</view>
+        </view>
     </view>
    
 </scroll-view>

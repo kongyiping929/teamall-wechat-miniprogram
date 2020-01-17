@@ -15,6 +15,14 @@ Page({
   // 更改预约接单
   switch1Change(e) {
     this.setData({ switch1Checked: e.detail.value })
+    ajax.post('/app/user/manage/updAppointmentStatus', { appointmentStatus: e.detail.value?1:2 })
+      .then(res => {
+        wx.showToast({
+          title: '已更新',
+          icon: 'none',
+          duration: 2000
+        });
+      })
   },
 
   showModal() {
@@ -37,7 +45,7 @@ Page({
 
   shopList() {
     let that = this;
-    ajax.post('/app/user/manage/manageshop', { })
+    ajax.post('/app/user/manage/manageshop', {})
       .then(res => {
         this.setData({ shopList:res.data});
       })

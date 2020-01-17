@@ -78,7 +78,7 @@ Page({
     ajax.post('/app/user/address/saveOrEdit', data)
       .then(res => {
         wx.showToast({
-          title: `${id === '无' ? '新增成功' : '修改成功'}`,
+          title: `${!id ? '添加成功' : '修改成功'}`,
           icon: 'none',
           duration: 2000
         })

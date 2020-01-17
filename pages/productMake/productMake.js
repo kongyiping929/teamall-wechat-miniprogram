@@ -30,7 +30,7 @@ Page({
     let { type } = this.data;
     let that = this;
     let url = "/app/microSquare/findMicroSquareList"
-    ajax.post(url,{})
+    ajax.post(url, { pageSize:999})
       .then(res => {
         this.setData({ list: res.data.list });
       })

@@ -29,6 +29,7 @@ Page({
         wx.stopPullDownRefresh();
         let list = res.data.list;
         for(let k in list){
+          list[k].price =list[k].payAmount/list[k].buyNum
           if (list[k].userAddressInfo){
             list[k].userAddressInfo = JSON.parse(list[k].userAddressInfo)
           }
@@ -80,12 +81,35 @@ Page({
     wx.navigateTo({ url: `/pages/orderDetails/orderDetails?pageid=${e.currentTarget.dataset.status}&id=${e.currentTarget.dataset.id}` })
   },
 
+  cancelOrder(e){
+    let that = this;
+    wx.showModal({
+      title: '提示',
+      content: '确认取消该订单吗？',
+      success(res) {
+        if (res.confirm) {
+          ajax.post('/app/user/productorder/cancel', { orderNo: e.currentTarget.dataset.orderno })
+            .then(res => {
+              wx.showToast({
+                title: '取消成功！',
+                icon: 'none',
+                duration: 2000,
+                success(res) {
+                  that.init();
+                }
+              });
+            })
+        } 
+      }
+    })
+    
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     this.setData({ id: options.id })
-    
   },
 
   /**
@@ -140,6 +164,11 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    const pages = getCurrentPages()
+    var prevPage = pages[pages.length - 2];
+    prevPage.setData({
+      refresh: false
+    })
     wx.switchTab({ url: '/pages/user/user' });
   },
 })

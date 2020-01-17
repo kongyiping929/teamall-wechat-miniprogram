@@ -61,11 +61,13 @@ page {
 
 .orderMesTipAttr {
     display: inline-block;
-    height: 46rpx;
+    height: 45rpx;
     background: rgba(243, 248, 241, 1);
     border-radius: 8rpx;
     padding: 8rpx 14rpx 0;
-    line-height: 30rpx
+    line-height: 30rpx;
+    overflow: hidden;
+
 }
 
 .orderMesTipAttr text {

@@ -6,7 +6,7 @@
       <view>
         <text class="data">发货时请确认快递公司及单号</text>
         <input class='input_show1' placeholder-class="place-holder" bindinput='companyInput' value='{{company}}'  placeholder='输入快递公司'></input>
-        <input class='input_show1' type="number" placeholder-class="place-holder" bindinput='orderNoInput' value='{{orderNo}}'  placeholder='输入快递单号'></input>
+        <input class='input_show1' placeholder-class="place-holder" bindinput='orderNoInput' value='{{orderNo}}'  placeholder='输入快递单号'></input>
       </view>
     </view>
     <view class='btn1'>

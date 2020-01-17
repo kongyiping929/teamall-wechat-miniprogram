@@ -34,7 +34,7 @@
         </view>
         <view class="orderPay">
             <view>预约创建时间: {{item.createdTime}}</view>
-            <view bind:tap="goConfirmMake" data-id="1">去支付</view>
+            <view class="{{item.orderStatus % 2 === 0 ? 'none' : ''}}"  bindtap="{{item.orderStatus==1?'goConfirmMake':''}}" data-id="1">{{orderStatusArr[item.orderStatus ]}}</view>
         </view>
     </view>
     <!-- 微广场tip -->
@@ -63,8 +63,8 @@
                 <image src="{{item.headimgUrl}}"></image>
                 <text>{{item.userName}}</text>
             </view>
-            <view class="clockTitleBarRight">
-                <image src="/assets/image/find/goodIcon.png" bindtap="checkedPunch" data-id="{{item.userPunchId}}"></image>
+            <view class="clockTitleBarRight" bindtap="checkedPunch" data-id="{{item.userPunchId}}">
+                <image src="/assets/image/find/goodIcon.png"></image>
                 <text>+{{item.likeNum}}</text>
             </view>
         </view>

@@ -1,5 +1,5 @@
 <!-- 订单查询 -->
-<scroll-view scroll-y scroll-with-animation enable-back-to-top>
+<scroll-view scroll-y scroll-with-animation enable-back-to-top wx:if="{{list.length>0}}">
     <!-- 预约列表 -->
     <view class="subscribe"  wx:for="{{list}}" wx:key="{{index}}">
         <view class="subscribeTimeMes">
@@ -10,7 +10,7 @@
         <view class="subscribeTitle one-txt-cut">{{item.productName}}</view>
         <view class="subscribeAttr">
             <text>{{item.specName}}</text>
-            <image src="/assets/image/user/downArrows.png"></image>
+            <!-- <image src="/assets/image/user/downArrows.png"></image> -->
         </view>
         <view class="subscribePrice">¥{{item.payAmount}}</view>
         <view class="subscribeAddress">
@@ -25,8 +25,14 @@
             <text>预约创建时间: </text>
             <text>{{item.createdTime}}</text>
           </view>
-            <view class="confirm" bindtap="payConfirm" data-orderStatus="{{item.orderStatus}}" data-orderNo="{{item.orderNo}}">{{item.orderStatus == 2?'确认预约':'完成服务'}}</view>
-            <!-- <view bindtap="payCancel"  data-orderNo="{{item.orderNo}}">退款</view> -->
+            <view class="confirm" bindtap="payConfirm" wx:if="{{item.orderStatus != 7 && item.orderStatus != 4}}" data-orderStatus="{{item.orderStatus}}" data-orderNo="{{item.orderNo}}">{{item.orderStatus == 2?'确认预约':'完成服务'}}</view>
+            <view bindtap="payCancel" class="cancel" wx:if="{{item.orderStatus == 2}}" data-orderNo="{{item.orderNo}}">退款</view>
         </view>
     </view>
 </scroll-view>
+<view class="couponNone" wx:else>
+    <view class="couponNoneBg">
+      <image src="/assets/image/confirmOrder/modalBg1.png"></image>
+    </view>
+    <view class="couponNoneTip">暂无预约</view>
+  </view>

@@ -438,16 +438,17 @@ button::after {
 .payAction {
   display: flex;
   align-items: center;
-  width: 472rpx;
+  width: 278rpx;
   height: 70rpx;
   background: rgba(237, 87, 53, 1);
   border-radius: 70rpx;
+  margin-left: 26vw;
 }
 
 .service {
   width: 44rpx;
   height: 74rpx;
-  margin-right: 48rpx;
+  margin-right: 56rpx;
 }
 
 .service image {
@@ -468,7 +469,7 @@ button::after {
 
 .payAction text:first-child {
   flex: 1;
-  background: linear-gradient(94deg, rgba(239, 222, 175, 1) 0%, rgba(237, 87, 53, 1) 100%);
+  /* background: linear-gradient(94deg, rgba(239, 222, 175, 1) 0%, rgba(237, 87, 53, 1) 100%); */
   border-radius: 70rpx 0rpx 0rpx 70rpx;
   height: 70rpx;
   line-height: 70rpx;
@@ -511,7 +512,7 @@ button::after {
   left: 0;
   width: 100%;
   background-color: #fff;
-  min-height: 80vh;
+  min-height: 70vh;
   transform: translateY(600px);
 }
 
@@ -524,8 +525,8 @@ button::after {
   z-index: 5;
 }
 .specScroll{
-  margin-bottom: 230rpx;
-  height: 744rpx;
+  margin-bottom: 200rpx;
+  height: 780rpx;
 }
 
 .spec_bg {
@@ -577,7 +578,7 @@ button::after {
   color: rgba(85, 98, 102, 1);
 }
 
-.specAttrClass text {
+.specAttrClass text:first-child {
   margin-right: 14rpx;
 }
 
@@ -778,7 +779,7 @@ button::after {
   font-weight: 400;
   color: #acbbbc;
   margin-bottom: 4rpx;
-  width: 600rpx;
+  width: 100rpx;
 }
 
 .detailsModal .detailsWap .detailsCon .detailsConintroduce {

@@ -27,7 +27,12 @@ Page({
       "/assets/image/productDetails/starSelect.png",
       "/assets/image/productDetails/star.png",
     ],
-    userPunchLis:"",
+    userPunchList:"",
+    userPunch:false,
+    userPunchListImg: [
+      "/assets/image/find/goodIconSelect.png",
+      "/assets/image/find/goodIcon.png",
+    ],
     animationData: {}
   },
 
@@ -42,10 +47,26 @@ Page({
     const {id} = this.data;
     ajax.post('/app/product/findInfo', { id })
       .then(res => {
-        let imgUrls = res.data.url.split(",");
-        this.setData({ list: res.data, collection: res.data.isCollection, otherParam: JSON.parse(res.data.otherParam), imgUrls });
+        if (res.code == "-200101") {
+          wx.showToast({
+            title: res.message,
+            icon: 'none',
+            duration: 2000
+          });
+          setTimeout(() => {
+            wx.navigateBack({ delta: 1 })
+          }, 500);
+        }else{
+          let imgUrls = res.data.url.split(",");
+          this.setData({ list: res.data, collection: res.data.isCollection, 
+            otherParam: JSON.parse(res.data.otherParam), imgUrls })
+        };
+        return res
       }).then(res=>{
-        this.findUserPunchList()
+        if (res.code == "1") {
+          this.findUserPunchList()
+        }
+        
       })
     this.setData({ productPackSpecs, productSpecs, productSubdivisionSpecs })
 
@@ -54,7 +75,9 @@ Page({
     const { list} = this.data;
     ajax.post('/app/product/findUserPunchList', { productId: list.productId, pageSize :1 })
       .then(res => {
-        this.setData({ userPunchLis: res.data.list });
+        let userPunchList = res.data.list[0]
+        userPunchList.imgList = userPunchList.attachmentInfo ? userPunchList.attachmentInfo.split(",").reverse() : []
+        this.setData({ userPunchList, total: res.data.total, userPunch: userPunchList.isLike });
       })
   },
 
@@ -75,13 +98,19 @@ Page({
     if (field === 'productSpecs') {
       let list = productSpecs[index];
       let productSubdivisionSpecsItem = list.lineList.length > 0 ? list.lineList[0] : null;
-      let productPackSpecsItem = urltype == 2 ? list.packageList.length > 0 ? list.packageList[0].stockNum > 0 ? list.packageList[0] : null : null : null;
-      unitPrice = parseFloat(productSpecs[index].basePrice) + (productPackSpecsItem? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
-      console.log(productSpecs[index].basePrice, productPackSpecsItem, productSubdivisionSpecsItem )
+      let productPackSpecsItem = null;
+      if (urltype == 2 && list.packageList.length > 0){
+        for (let y = 0; y < list.packageList.length; y++) {
+          if (list.packageList[y].stockNum > 0) { 
+            productPackSpecsItem ? "":productPackSpecsItem = list.packageList[y]
+          }
+        }
+      }
       
+      unitPrice = (parseFloat(productSpecs[index].basePrice)*100 + (productPackSpecsItem? parseFloat(productPackSpecsItem.addPrice)*100 : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice)*100 : 0))/100;
       this.setData({
         productSpecsItem: list,
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
         productSubdivisionSpecs: list.lineList,
         productSubdivisionSpecsItem,
         productPackSpecsItem,
@@ -89,17 +118,17 @@ Page({
       });
     }
     if (field === 'productSubdivisionSpecs') {
-      unitPrice = parseFloat(productSubdivisionSpecs[index].addPrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0);
+      unitPrice = (parseFloat(productSubdivisionSpecs[index].addPrice) * 100 + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) * 100 : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) * 100 : 0))/100;
       this.setData({
         productSubdivisionSpecsItem: productSubdivisionSpecs.length > 0 ?productSubdivisionSpecs[index]:[],
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
       });
     }
     if (field === 'productPackSpecs') {
-      unitPrice = parseFloat(productPackSpecs[index].addPrice) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      unitPrice = (parseFloat(productPackSpecs[index].addPrice) * 100 + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) * 100 : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) * 100 : 0))/100;
       this.setData({
         productPackSpecsItem: productPackSpecs[index],
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
       });
     }
   },
@@ -163,23 +192,24 @@ Page({
         let data = res.data.list[0];
         let list = res.data.list;
         let status = false;
-        let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
         let productPackSpecsItem = null;
-        let unitPrice = parseFloat(data.basePrice) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice):0) +(productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) :0)
-        let disableList = new Set();
-        for (let i = 0; i < list.length;i++){
-          if (urltype == 1){
-            if (list[i].appointmentStatus == 1) { status = true}
+        for (let i = 0; i < list.length; i++) {
+          if (urltype == 1) {
+            if (list[i].appointmentStatus == 1 && !status) { status = true; data = list[i] }
           }
           for (let y = 0; y < list[i].packageList.length; y++) {
-            if (list[i].packageList[y].stockNum>0){
-              disableList.add(list[i].specId)
-              if (!productPackSpecsItem){
-                urltype == 2 ?productPackSpecsItem = list[i].packageList[y]:"";
+            list[i].disable = true;
+            if (list[i].packageList[y].stockNum > 0) {
+              list[i].disable = false;
+              if (!productPackSpecsItem) {
+                urltype == 2 ? productPackSpecsItem = list[i].packageList[y] : "";
               }
             }
           }
         }
+        let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
+        let unitPrice = (parseFloat(data.basePrice) * 100 + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) * 100 : 0) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) * 100 :0))/100
+        
         if (status && urltype == 1){
           this.setData({ specModal: true });
         } else if (urltype == 1){
@@ -189,16 +219,16 @@ Page({
             duration: 2000
           });
         }
+        console.log(list)
         this.setData({ 
           specList: res.data.list, 
-          productSpecs: res.data.list,
+          productSpecs: list,
           productSubdivisionSpecs: data.lineList,
           productPackSpecs: data.packageList ,
           productSpecsItem: data,
           productPackSpecsItem,
           productSubdivisionSpecsItem,
-          unitPrice: parseFloat(unitPrice).toFixed(2),
-          disableList: Array.from(disableList)
+          unitPrice: unitPrice,
         });
       })
   },
@@ -306,6 +336,10 @@ Page({
     let id = e.currentTarget.dataset.id
     ajax.post('/app/product/likeUserPunch', { id })
       .then(res => {
+        let { userPunchList} = this.data;
+        let list = userPunchList;
+        list.likeNum+=1
+        this.setData({ userPunchList: list, userPunch:true})
         wx.showToast({
           title: '点赞成功！',
           icon: 'none',
@@ -335,7 +369,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.init()
+    this.init();
+    this.setData({ specModal: false });
   },
 
   /**

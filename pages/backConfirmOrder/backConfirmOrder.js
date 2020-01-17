@@ -24,7 +24,8 @@ Page({
       "/assets/image/confirmMake/selectActive.png",
       "/assets/image/confirmMake/select.png",
     ],
-    disableList:[]
+    disableList:[],
+    animationData: {}
   },
 
   // 更改备注
@@ -79,7 +80,7 @@ Page({
 
   init(){
     const { productId, userId } = this.data;
-    ajax.post('/app/user/manage/getshopproductinfo', { productId, userId, shopId: "1197444188149604353" })
+    ajax.post('/app/user/manage/getshopproductinfo', { productId, userId, shopId: app.globalData.shopId  })
       .then(res => {
         this.setData({ list: res.data})
         this.specList()
@@ -88,9 +89,33 @@ Page({
 
   // 显示/隐藏产品规格模态框
   changeSpecModal(e) {
+    let that = this;
     let { status } = e.currentTarget.dataset;
     this.setData({ specModal: status});
-    
+    var animation = wx.createAnimation({
+      duration: 600,//动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
+      timingFunction: 'ease',//动画的效果 默认值是linear
+    })
+    this.animation = animation
+    setTimeout(function () {
+      if (status) {
+        that.fadeIn();//调用显示动画
+      } else {
+        that.fadeDown();//调用显示动画
+      }
+    }, 200)
+  },
+  fadeIn: function () {
+    this.animation.translateY(0).step()
+    this.setData({
+      animationData: this.animation.export()//动画实例的export方法导出动画数据传递给组件的animation属性
+    })
+  },
+  fadeDown: function () {
+    this.animation.translateY(600).step()
+    this.setData({
+      animationData: this.animation.export(),
+    })
   },
   //产品规格列表
   specList() {
@@ -101,28 +126,27 @@ Page({
         let list = res.data.list;
         let productSubdivisionSpecsItem = data.lineList.length > 0 ? data.lineList[0] : null;
         let productPackSpecsItem = null;
-        let unitPrice = parseFloat(data.basePrice) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0)
-        let disableList = new Set();
         for (let i = 0; i < list.length; i++) {
           for (let y = 0; y < list[i].packageList.length; y++) {
+            list[i].disable = true;
             if (list[i].packageList[y].stockNum > 0) {
-              disableList.add(list[i].specId)
+              list[i].disable = false;
               if (!productPackSpecsItem) {
                 productPackSpecsItem = list[i].packageList[y];
               }
             }
           }
         }
+        let unitPrice =( parseFloat(data.basePrice)*100 + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice)*100 : 0) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice)*100 : 0))/100
         this.setData({
           specList: res.data.list,
-          productSpecs: res.data.list,
+          productSpecs:list,
           productSubdivisionSpecs: data.lineList,
           productPackSpecs: data.packageList,
           productSpecsItem: data,
           productPackSpecsItem,
           productSubdivisionSpecsItem,
           unitPrice,
-          disableList: Array.from(disableList)
         });
       })
   },
@@ -168,8 +192,8 @@ Page({
       productTypeId: list.productTypeId,
       shopId: app.globalData.shopId,
       specId: productSpecsItem.specId ,
-      specLineId:  productSubdivisionSpecsItem.id,
-      specPackageId: productPackSpecsItem.id,
+      specLineId:  productSubdivisionSpecsItem?productSubdivisionSpecsItem.id:"",
+      specPackageId: productPackSpecsItem?productPackSpecsItem.id:"",
       userId,
       buyNum: specPayNum,
       receiveType :1,
@@ -209,13 +233,19 @@ Page({
     if (field === 'productSpecs') {
       let list = productSpecs[index];
       let productSubdivisionSpecsItem = list.lineList.length > 0 ? list.lineList[0] : null;
-      let productPackSpecsItem = urltype == 2 ? list.packageList.length > 0 ? list.packageList[0].stockNum > 0 ? list.packageList[0] : null : null : null;
-      unitPrice = parseFloat(productSpecs[index].basePrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
-      console.log(productSpecs[index].basePrice, productPackSpecsItem, productSubdivisionSpecsItem)
+      let productPackSpecsItem = null ;
+      if (list.packageList.length > 0) {
+        for (let y = 0; y < list.packageList.length; y++) {
+          if (list.packageList[y].stockNum > 0) {
+            productPackSpecsItem ? "":productPackSpecsItem = list.packageList[y]
+          }
+        }
+      }
+      unitPrice = (parseFloat(productSpecs[index].basePrice)*100 + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice)*100 : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice)*100 : 0))/100;
 
       this.setData({
         productSpecsItem: list,
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
         productSubdivisionSpecs: list.lineList,
         productSubdivisionSpecsItem,
         productPackSpecsItem,
@@ -223,17 +253,17 @@ Page({
       });
     }
     if (field === 'productSubdivisionSpecs') {
-      unitPrice = parseFloat(productSubdivisionSpecs[index].addPrice) + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice) : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0);
+      unitPrice = (parseFloat(productSubdivisionSpecs[index].addPrice)*100 + (productPackSpecsItem ? parseFloat(productPackSpecsItem.addPrice)*100 : 0) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) *100: 0))/100;
       this.setData({
         productSubdivisionSpecsItem: productSubdivisionSpecs.length > 0 ? productSubdivisionSpecs[index] : [],
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
       });
     }
     if (field === 'productPackSpecs') {
-      unitPrice = parseFloat(productPackSpecs[index].addPrice) + (productSpecsItem ? parseFloat(productSpecsItem.basePrice) : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice) : 0);
+      unitPrice = (parseFloat(productPackSpecs[index].addPrice)*100 + (productSpecsItem ? parseFloat(productSpecsItem.basePrice)*100 : 0) + (productSubdivisionSpecsItem ? parseFloat(productSubdivisionSpecsItem.addPrice)*100 : 0))/100;
       this.setData({
         productPackSpecsItem: productPackSpecs[index],
-        unitPrice: parseFloat(unitPrice).toFixed(2),
+        unitPrice: unitPrice,
       });
     }
   },

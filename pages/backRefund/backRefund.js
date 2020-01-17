@@ -8,13 +8,16 @@ Page({
    */
   data: {
     showModalRefund: false,
-    orderNo: ""
+    orderNo: "",
+    pageNum: 1
   },
 
   init() {
-    const { id } = this.data;
-    ajax.post('/app/user/manage/getrefunding', { shopId: app.globalData.shopId })
+    const { pageNum } = this.data;
+    ajax.post('/app/user/manage/getrefunding', { shopId: app.globalData.shopId, pageNum  })
       .then(res => {
+        wx.hideNavigationBarLoading();
+        wx.stopPullDownRefresh();
         let list = res.data.list;
         for (let k in list) {
           if (list[k].userAddressInfo) {
@@ -25,22 +28,37 @@ Page({
       })
   },
   refundEdit(e) {
+    let that = this;
     const { orderNo } = this.data;
-    console.log(e, orderNo)
-    ajax.post('/app/user/manage/updOrderStatus', {
-      orderNo, optType: 2
-    })
-      .then(res => {
-        wx.showToast({
-          title: '退款成功',
-          icon: 'none',
-          duration: 2000
-        });
-        this.hideModel()
-        setTimeout(() => {
-          this.init()
-        }, 800);
+      wx.showModal({
+        title: '提示',
+        content: '确认退款吗？',
+        confirmText: "确认",
+        success(res) {
+          if (res.confirm) {
+            ajax.post('/app/user/manage/refundorder', { orderNo: e.currentTarget.dataset.orderno })
+              .then(res => {
+                wx.showToast({
+                  title: '退款成功！',
+                  icon: 'none',
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  that.init()
+                }, 800);
+              })
+          }
+        }
       })
+      //   wx.showToast({
+      //     title: '退款成功',
+      //     icon: 'none',
+      //     duration: 2000
+      //   });
+      //   this.hideModel()
+      //   setTimeout(() => {
+      //     this.init()
+      //   }, 800);
   },
   confirmRefund(e) {
     this.setData({ showModalRefund: true, orderNo: e.currentTarget.dataset.orderno })
@@ -88,14 +106,23 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    wx.showNavigationBarLoading();
+    this.setData({ pageNum: 1 })
+    this.init();
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    let that = this;
+    this.setData({ pageNum: this.data.pageNum + 1 })
+    const { pageNum } = this.data;
+    ajax.post('/app/user/manage/getrefunding', { shopId: app.globalData.shopId, pageNum })
+      .then(res => {
+        let list = res.data.list;
+        this.setData({ list: [...that.data.list, ...list] })
+      })
   },
 
   /**

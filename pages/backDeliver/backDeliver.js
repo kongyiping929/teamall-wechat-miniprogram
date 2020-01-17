@@ -8,13 +8,16 @@ Page({
    */
   data: {
     showModalDelive:false,
-    orderNo:""
+    orderNo: "",
+    pageNum: 1
   },
 
   init() {
-    const { id } = this.data;
-    ajax.post('/app/user/manage/getsend', { shopId: app.globalData.shopId})
+    const { pageNum } = this.data;
+    ajax.post('/app/user/manage/getsend', { shopId: app.globalData.shopId, pageNum })
       .then(res => {
+        wx.hideNavigationBarLoading();
+        wx.stopPullDownRefresh();
         let list = res.data.list;
         for (let k in list) {
           if (list[k].userAddressInfo) {
@@ -107,14 +110,23 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    wx.showNavigationBarLoading();
+    this.setData({ pageNum: 1 })
+    this.init();
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    let that = this;
+    this.setData({ pageNum: this.data.pageNum + 1 })
+    const { pageNum } = this.data;
+    ajax.post('/app/user/manage/getsend', { shopId: app.globalData.shopId, pageNum })
+      .then(res => {
+        let list = res.data.list;
+        this.setData({ list: [...that.data.list, ...list] })
+      })
   },
 
   /**

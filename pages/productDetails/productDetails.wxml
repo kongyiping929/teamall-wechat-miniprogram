@@ -49,29 +49,29 @@
     <text>{{list.shopName}}</text>
   </view>
   <!-- tips -->
-  <view class="tips" wx:if="{{userPunchLis.length >0}}">
+  <view class="tips" wx:if="{{userPunchList}}">
     <text>宝贝打卡</text>
-    <text>(打卡次数: 989)</text>
-    <navigator url="/pages/cardRecord/cardRecord" open-type="navigate" hover-class="none">查看更多</navigator>
+    <text>(打卡次数: {{total}})</text>
+    <navigator url="/pages/cardRecord/cardRecord?productId={{list.productId}}" open-type="navigate" hover-class="none">查看更多</navigator>
   </view>
   <!-- 打卡信息 -->
-  <view class="clockWapper" wx:for="{{userPunchLis}}" wx:key="{{index}}">
+  <view class="clockWapper"  wx:if="{{userPunchList}}">
     <view class="clockTitleBar">
       <view class="clockTitleBarLeft">
-        <image src="{{item.headimgUrl}}"></image>
-        <text>{{item.nickName}}</text>
+        <image src="{{userPunchList.headimgUrl}}"></image>
+        <text>{{userPunchList.nickName}}</text>
       </view>
-      <view class="clockTitleBarRight">
-        <image src="/assets/image/find/goodIcon.png" bindtap="checkedPunch" data-id="{{item.userPunchId}}"></image>
-        <text>+{{item.likeNum}}</text>
+      <view class="clockTitleBarRight" bindtap="{{userPunch?'':'checkedPunch'}}" data-id="{{userPunchList.userPunchId}}">
+        <image src="{{userPunch?userPunchListImg[0]:userPunchListImg[1]}}"></image>
+        <text>+{{userPunchList.likeNum}}</text>
       </view>
     </view>
     <view class="clockContent {{contentState ? 'none' : 'text-cut' }}">
-      {{item.content}}
+      {{userPunchList.content}}
       <!-- <text bind:tap="changeContentState" data-index="{{index}}" wx:if="{{!contentState}}">正文</text> -->
     </view>
     <view class="clockImg">
-      <image src="http://{{item.attachmentInfo}}"></image>
+      <image  wx:for="{{userPunchList.imgList}}" wx:key="{{index}}" wx:if="{{userPunchList}}" src="http://{{item}}"></image>
     </view>
   </view>
   <!-- 底部 -->
@@ -86,8 +86,8 @@
       <view>收藏</view>
     </view>
     <view class="payAction">
-      <text bind:tap="changeAppointment" data-status="{{true}}" data-urltype="{{1}}">预约体验</text>
-      <text></text>
+      <!-- <text bind:tap="changeAppointment" data-status="{{true}}" data-urltype="{{1}}">预约体验</text>
+      <text></text> -->
       <text bind:tap="changeSpecModal" data-status="{{true}}" data-urltype="{{2}}">购买</text>
     </view>
   </view>
@@ -106,9 +106,8 @@
         <view class="specAttrRepertory" wx:if="{{urltype==2}}">库存：{{productPackSpecsItem.stockNum}}</view>
         <view class="specAttrClass">
           <text wx:if="{{(productSpecsItem && productSpecsItem !== null) || (productSubdivisionSpecsItem && productSubdivisionSpecsItem !== null) || (productPackSpecsItem && productPackSpecsItem !== null)}}">已选</text>
-          <text>{{productSpecsItem.specName}}</text>
-          <text>{{productSubdivisionSpecsItem.name}}</text>
-          <text>{{productPackSpecsItem.name}}</text>
+          <text>{{'"'+productSpecsItem.specName+'"'}}</text><text>{{productSubdivisionSpecsItem?'+"'+productSubdivisionSpecsItem.name+'"':''}}</text>
+          <text>{{productPackSpecsItem.name?'+"'+productPackSpecsItem.name+'"':''}}</text>
         </view>
       </view>
       <view class="specSelect">
@@ -116,7 +115,7 @@
         <view class="specSelectItem">
           <text wx:if="{{urltype==1}}" class="one-txt-cut {{item.appointmentStatus ==1? '' : 'disable'}} {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{item.appointmentStatus ==1?'select':''}}"
             data-index="{{index}}" data-field="productSpecs">{{item.specName}}</text>
-          <text wx:if="{{urltype==2}}" class="one-txt-cut {{disableList[index] === item.specId ? '' : 'disable'}}  {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{disableList[index] === item.specId?'select':''}}"
+          <text wx:if="{{urltype==2}}" class="one-txt-cut {{item.disable ? 'disable' : ''}}  {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{item.disable?'':'select'}}"
             data-index="{{index}}" data-field="productSpecs">{{item.specName}}</text>
         </view>
       </view>
@@ -150,7 +149,7 @@
 <view class="detailsModal" bind:tap="changeDetailsModal" data-status="{{false}}" wx:if="{{detailsModal}}" catchtouchmove="true">
   <view class="detailsWap" catch:tap="stopEvent">
     <view class="detailsWapTitle">
-      <view>产品详情</view>
+      <view>产品参数</view>
       <image src="/assets/image/productDetails/close.png" class="fr" bind:tap="changeDetailsModal" data-status="{{false}}"></image>
     </view>
     <view class="detailsCon">
@@ -170,7 +169,7 @@
       </view>
       <view class="detailsConintroduce txt-cut">
         <view class="detailsConDes">说明 :</view>
-        <view>
+        <view style="width: 80%;">
           <span>{{list.description}}</span>
           <br />
         </view>

@@ -21,7 +21,7 @@
     <view class="discountCoupon" bind:tap="changeSpecModal" data-status="{{true}}">
         <text>规格</text>
         <view>
-            <text wx:if="{{productSpecsItem}}">{{productSpecsItem.specName}},{{productSubdivisionSpecsItem.name}}</text>
+            <text wx:if="{{productSpecsItem}}">{{productSpecsItem.specName}}{{productSubdivisionSpecsItem.name&&","+productSubdivisionSpecsItem.name}}</text>
             <image src="/assets/image/productDetails/more.png"></image>
         </view>
     </view>
@@ -39,8 +39,8 @@
     </view>
     <!-- 购买数量 -->
     <view class="number">
-        <text>出售</text>
-        <text>{{specPayNum}}件 订单合计：<text>¥{{unitPrice*specPayNum}}</text></text>
+        <text>预约到店人数</text>
+        <text>{{specPayNum}}件 订单合计：<text>¥{{productSpecsItem.appointmentPrice || 0}}</text></text>
     </view>
    
     <!-- 备注 -->
@@ -52,20 +52,20 @@
     <view class="pay">
         <view class="payTitle">支付选择</view>
         <view class="payMode">
-            <view bindtap="changPayChannel">
+            <view bindtap="changPayChannel" data-type="0">
                 <image src="{{payChannel == 0?imgList[0]:imgList[1]}}"></image>
                 <text>预存支付</text>
             </view>
         </view>
         <view class="payMode">
-            <view  bindtap="changPayChannel">
+            <view  bindtap="changPayChannel" data-type="1">
                 <image src="{{payChannel == 1?imgList[0]:imgList[1]}}"></image>
                 <text>微信支付</text>
             </view>
         </view>
         <view class="payMode">
-            <view  bindtap="changPayChannel">
-                <image src="{{payChannel == 2?imgList[0]:imgList[2]}}"></image>
+            <view  bindtap="changPayChannel" data-type="2">
+                <image src="{{payChannel == 2?imgList[0]:imgList[1]}}"></image>
                 <text>免单</text>
             </view>
         </view>
@@ -102,12 +102,13 @@
 <!-- 产品规格 -->
 <view class="specModal" bind:tap="changeSpecModal" data-status="{{false}}" wx:if="{{specModal}}" catchtouchmove="true">
   <view class="specWapper" catch:tap="stopEvent">
+  <scroll-view scroll-y class="specScroll">
     <image src="/assets/image/productDetails/close.png" class="close" bind:tap="changeSpecModal" data-status="{{false}}"></image>
     <view class="spec_bg">
       <image src="http://{{list.productIconUrl}}" class="specImg"></image>
     </view>
     <view class="specAttr">
-      <view class="specAttrPrice">¥ {{unitPrice}}</view>
+      <view class="specAttrPrice">¥ {{productSpecsItem.appointmentPrice}}</view>
       <view class="specAttrClass one-txt-cut">
         <text wx:if="{{(productSpecsItem && productSpecsItem !== null) || (productSubdivisionSpecsItem && productSubdivisionSpecsItem !== null) || (productPackSpecsItem && productPackSpecsItem !== null)}}">已选</text>
         <text>{{productSpecsItem.specName}}</text>
@@ -120,14 +121,15 @@
         <text class="one-txt-cut  {{item.appointmentStatus ==1? '' : 'disable'}} {{item.specId === productSpecsItem.specId ? 'active' : ''}}" wx:for="{{productSpecs}}" wx:key="{{item.specId}}" bind:tap="{{item.appointmentStatus ==1?'select':''}}" data-index="{{index}}" data-field="productSpecs">{{item.specName}}</text>
       </view>
     </view>
-    <view class="specSelect" wx:if="{{productSubdivisionSpecs && productSubdivisionSpecs !== '' && productSubdivisionSpecs !== null}}">
+    <view class="specSelect" wx:if="{{productSubdivisionSpecs && productSubdivisionSpecs.length > 0}}">
       <view class="specSelectTitle">产品细分规格</view>
       <view class="specSelectItem">
         <text class="one-txt-cut {{productSubdivisionSpecsItem.id === item.id ? 'active' : ''}}" wx:for="{{productSubdivisionSpecs}}" wx:key="{{item.specId}}" bind:tap="select" data-index="{{index}}" data-field="productSubdivisionSpecs">{{item.name}}</text>
       </view>
     </view>
+    </scroll-view>
      <view class="specNumber">
-      <view>购买数量</view>
+      <view>预约人数</view>
       <view>
         <text bind:tap="changeSpecPayNum" data-type="{{0}}">-</text>
         <text>{{specPayNum}}</text>
